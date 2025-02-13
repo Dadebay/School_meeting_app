@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "926138764046",
+    "project_id": "okul-com-tm",
+    "storage_bucket": "okul-com-tm.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:926138764046:android:d23ec9d404a53bab86a55f",
+        "android_client_info": {
+          "package_name": "com.gurbanov.okul"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDeaYQT1hNzharebV7InS50Bksdo0Choxk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
