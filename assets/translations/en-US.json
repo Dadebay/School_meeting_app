@@ -1,3 +1,16 @@
 {
-    "test": "test"
+    "splash_title": "Empowering Educators Seamless Collaboration for School Meetings",
+    "splash_subtitle": "The platform that strengthens communication and streamlines meetings for teachers.",
+    "splash_button": "Get Started",
+    "planning":"Planning",
+    "location":"Location",
+    "teacher":"Teacher",
+    "classmates":"Classmates",
+    "description":"Description",
+    "reschedule":"Reschedule",
+    "reschedule_lesson":"Reschedule lesson",
+    "select_time":"Select time",
+    "select_date":"Select date",
+    "send":"Send",
+    "cancel":"Cancel"
   }

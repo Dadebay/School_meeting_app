@@ -17,7 +17,11 @@ dependencies:
   equatable: 
   intl:
   kartal: ^4.1.0
+  auto_route:
 
+  #animations
+  lottie:
+  iconly:
 
   #Firebase
   firebase_core:
@@ -27,14 +31,20 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  #Lints
   very_good_analysis: ^7.0.0  
   flutter_lints: ^4.0.0
   
+  #dart run build_runner watch
+  build_runner:
+  auto_route_generator:
+
 flutter:
   assets:
     - assets/fonts/
     - assets/icons/
     - assets/images/
+    - assets/lottie/
     - assets/translations/
 
 

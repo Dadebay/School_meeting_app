@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kartal/kartal.dart';
-import 'package:okul_com_tm/feature/home/service/calendar_notifier.dart';
+import 'package:okul_com_tm/feature/home/service/calendar_provider.dart';
 import 'package:okul_com_tm/product/constants/index.dart';
 import 'package:okul_com_tm/product/sizes/widget_sizes.dart';
 
-/// 📌 **Takvim Slider Widget'ı**
 class CalendarSlider extends ConsumerWidget {
   const CalendarSlider({super.key});
 
