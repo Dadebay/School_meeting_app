@@ -5,6 +5,7 @@ version: 1.0.0+1
 
 environment:
   sdk: ^3.5.4
+  flutter: 3.24.0
 dependencies:
   flutter:
     sdk: flutter
@@ -13,8 +14,14 @@ dependencies:
   cupertino_icons: ^1.0.8
   easy_localization: ^3.0.7+1
   flutter_riverpod: ^2.6.1
+  equatable: 
+  intl:
   kartal: ^4.1.0
-  change_app_package_name: ^1.4.0
+
+
+  #Firebase
+  firebase_core:
+  firebase_messaging:
 
 
 dev_dependencies:
@@ -24,4 +31,25 @@ dev_dependencies:
   flutter_lints: ^4.0.0
   
 flutter:
+  assets:
+    - assets/fonts/
+    - assets/icons/
+    - assets/images/
+    - assets/translations/
+
+
+  fonts:
+    - family: PlusJakartaSans
+      fonts:
+        - asset: assets/fonts/PlusJakartaSans-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/PlusJakartaSans-SemiBold.ttf
+          weight: 600  
+        - asset: assets/fonts/PlusJakartaSans-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/PlusJakartaSans-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/PlusJakartaSans-Light.ttf
+          weight: 300
+        
   uses-material-design: true

@@ -65,4 +65,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'okul-com-tm.firebasestorage.app',
     iosBundleId: 'com.gurbanov.okul',
   );
+
 }
