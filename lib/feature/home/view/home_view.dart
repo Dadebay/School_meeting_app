@@ -8,8 +8,6 @@ import 'package:okul_com_tm/product/sizes/widget_sizes.dart';
 
 @RoutePage()
 class HomeView extends StatelessWidget {
-  const HomeView({super.key});
-
   @override
   Widget build(BuildContext context) {
     return NestedScrollView(

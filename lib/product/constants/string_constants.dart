@@ -20,4 +20,22 @@ class StringConstants {
   static String selectDate = 'select_date'.tr();
   static String send = 'send'.tr();
   static String cancel = 'cancel'.tr();
+
+  // login sign up texts
+  static String loginTitle = 'login_title'.tr();
+  static String loginSubtitle = 'login_subtitle'.tr();
+  static String login = 'log_in'.tr();
+  static String textfieldError = 'errorEmpty'.tr();
+  static String forgotPassword = 'forgot_password'.tr();
+  static String username = 'username'.tr();
+  static String passwordTitle = 'parol'.tr();
+  static String agree = 'agree'.tr();
+
+  static String emailAddress = 'emailAddress'.tr();
+  static String addMeeting = 'add_meeting'.tr();
+  static String news = 'News'.tr();
+  static String logOut = 'logOut'.tr();
+  static String logOutTitle = 'log_out_title'.tr();
+  static String yes = 'yes'.tr();
+  static String no = 'no'.tr();
 }

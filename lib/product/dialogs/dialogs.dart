@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconly/iconly.dart';
@@ -9,6 +10,66 @@ import 'package:okul_com_tm/product/constants/string_constants.dart';
 import 'package:okul_com_tm/product/widgets/custom_button.dart';
 
 class Dialogs {
+  static dynamic logOut({required Function() onYestapped, required BuildContext context}) {
+    // ignore: inference_failure_on_function_invocation
+    return showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc) {
+          return Container(
+            decoration: const BoxDecoration(color: Colors.white),
+            child: Wrap(
+              alignment: WrapAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const SizedBox.shrink(),
+                      Text(
+                        StringConstants.logOut,
+                        style: context.general.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Padding(
+                          padding: context.padding.onlyRightLow,
+                          child: const Icon(CupertinoIcons.xmark_circle, color: ColorConstants.blackColor),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: context.padding.normal,
+                  child: Text(
+                    StringConstants.logOutTitle,
+                    textAlign: TextAlign.center,
+                    style: context.general.textTheme.bodyLarge!.copyWith(color: ColorConstants.blackColor, fontSize: 19),
+                  ),
+                ),
+                Padding(
+                  padding: context.padding.normal,
+                  child: CustomButton(text: 'yes', mini: true, onPressed: () {}, showBorderStyle: true),
+                ),
+                Padding(
+                  padding: context.padding.normal.copyWith(top: 0),
+                  child: CustomButton(
+                      text: 'no',
+                      mini: true,
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      showBorderStyle: false),
+                ),
+              ],
+            ),
+          );
+        });
+  }
+
   void showRescheduleDialog(BuildContext context, WidgetRef ref) {
     final rescheduleNotifier = ref.read(rescheduleProvider.notifier);
 

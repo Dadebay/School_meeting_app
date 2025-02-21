@@ -16,4 +16,5 @@ class ColorConstants {
   static const Color purpleColorwithOpacity = Color(0xffe6cefe);
   static const Color greyColorwithOpacity = Color(0xfff2f5fc);
   static const Color redColorwithOpacity = Color(0x00ff7272);
+  static const Color redColor = Colors.red;
 }

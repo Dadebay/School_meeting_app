@@ -4,9 +4,12 @@ import 'package:kartal/kartal.dart';
 import 'package:okul_com_tm/product/constants/index.dart';
 import 'package:okul_com_tm/product/sizes/image_sizes.dart';
 
+import '../../../product/dialogs/dialogs.dart';
+
 class ProfilSliverAppBar extends StatelessWidget {
-  const ProfilSliverAppBar({super.key, required this.innerBoxIsScrolled});
+  const ProfilSliverAppBar({super.key, required this.innerBoxIsScrolled, required this.isTeacher});
   final bool innerBoxIsScrolled;
+  final bool isTeacher;
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
@@ -33,7 +36,9 @@ class ProfilSliverAppBar extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Dialogs.logOut(onYestapped: () {}, context: context);
+            },
             icon: Icon(
               IconlyLight.logout,
               color: ColorConstants.greyColor,
@@ -70,7 +75,7 @@ class ProfilSliverAppBar extends StatelessWidget {
             Container(
               decoration: BoxDecoration(
                 borderRadius: context.border.normalBorderRadius,
-                color: ColorConstants.greyColorwithOpacity,
+                color: ColorConstants.primaryBlueColor,
               ),
               padding: context.padding.low,
               child: Row(
@@ -89,8 +94,8 @@ class ProfilSliverAppBar extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    "Student",
-                    style: context.general.textTheme.labelLarge!.copyWith(fontWeight: FontWeight.bold),
+                    isTeacher ? "Teacher" : "Student",
+                    style: context.general.textTheme.labelLarge!.copyWith(fontWeight: FontWeight.bold, color: isTeacher ? ColorConstants.whiteColor : ColorConstants.primaryBlueColor),
                   ),
                 ],
               ),

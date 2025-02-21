@@ -5,17 +5,22 @@ import 'package:okul_com_tm/feature/profil/components/sliver_app_bar.dart';
 
 @RoutePage()
 class UserProfilView extends StatelessWidget {
-  const UserProfilView({super.key});
-
+  const UserProfilView({super.key, required this.isTeacher});
+  final bool isTeacher;
   @override
   Widget build(BuildContext context) {
     return NestedScrollView(
       headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
         return <Widget>[
-          ProfilSliverAppBar(innerBoxIsScrolled: innerBoxIsScrolled),
+          ProfilSliverAppBar(
+            innerBoxIsScrolled: innerBoxIsScrolled,
+            isTeacher: isTeacher,
+          ),
         ];
       },
-      body: PageButtons(),
+      body: PageButtons(
+        isTeacher: isTeacher,
+      ),
     );
   }
 }

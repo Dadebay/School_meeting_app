@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+final rescheduleProvider = StateNotifierProvider<RescheduleNotifier, RescheduleState>(
+  (ref) => RescheduleNotifier(),
+);
+
 class RescheduleState {
   DateTime? selectedDate;
   TimeOfDay? selectedTime;
@@ -20,7 +24,6 @@ class RescheduleNotifier extends StateNotifier<RescheduleState> {
   RescheduleNotifier() : super(RescheduleState());
 
   void setDate(DateTime date) {
-    print(date);
     state = state.setDate(selectedDate: date);
   }
 
@@ -28,7 +31,3 @@ class RescheduleNotifier extends StateNotifier<RescheduleState> {
     state = state.setDate(selectedTime: time);
   }
 }
-
-final rescheduleProvider = StateNotifierProvider<RescheduleNotifier, RescheduleState>(
-  (ref) => RescheduleNotifier(),
-);

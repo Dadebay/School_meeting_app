@@ -12,5 +12,22 @@
     "select_time":"Select time",
     "select_date":"Select date",
     "send":"Send",
-    "cancel":"Cancel"
+    "cancel":"Cancel",
+    "agree":"Agree",
+    
+    "login_title":"Welcome to Your School Meeting Hub",
+    "login_subtitle":"Please sign in to schedule and manage your meetings effortlessly.",
+    "logI_in":"Log in",
+    "forgot_password":"Forgot password",
+    "username":"Username",
+    "parol":"Password",
+    "emailAddress":"Email",
+    "add_meeting":"Add Meeting",
+    "news":"News",
+    "logOut": "Logout",
+    "log_out_title": "Are you sure you want to log out?",
+    "yes": "Yes",
+    "no": "No",
+    "":""
+
   }

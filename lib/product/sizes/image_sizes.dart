@@ -4,6 +4,7 @@ enum ImageSizes {
   medium(96),
   normal(80),
   small(64),
+  mini(32),
   ;
 
   final double value;

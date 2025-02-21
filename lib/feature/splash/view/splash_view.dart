@@ -56,7 +56,7 @@ class SplashView extends StatelessWidget {
                   CustomButton(
                     text: StringConstants.splashButton,
                     onPressed: () {
-                      context.navigateNamedTo('/bottomNavBar');
+                      context.navigateNamedTo('/login');
                     },
                   ),
                 ],

@@ -1,34 +1,26 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
-import 'package:iconly/iconly.dart';
 import 'package:kartal/kartal.dart';
 import 'package:okul_com_tm/product/constants/color_constants.dart';
 import 'package:okul_com_tm/product/sizes/widget_sizes.dart';
 
 class CustomBottomNavBar extends StatelessWidget {
   final int currentIndex;
+  final List<IconData> unselectedIcons;
+  final List<IconData> selectedIcons;
   final Function(int) onTap;
 
   const CustomBottomNavBar({
     required this.currentIndex,
     required this.onTap,
     super.key,
+    required this.unselectedIcons,
+    required this.selectedIcons,
   });
 
   @override
   Widget build(BuildContext context) {
-    final items = [
-      IconlyLight.home,
-      IconlyLight.discovery,
-      IconlyLight.profile,
-    ];
-    final selectedItem = [
-      IconlyBold.home,
-      IconlyBold.discovery,
-      IconlyBold.profile,
-    ];
-
     return Container(
       margin: const EdgeInsets.only(bottom: 25, left: 30, right: 30),
       height: WidgetSizes.iconContainerSize.value,
@@ -45,7 +37,7 @@ class CustomBottomNavBar extends StatelessWidget {
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: List.generate(items.length, (index) {
+        children: List.generate(selectedIcons.length, (index) {
           final isSelected = index == currentIndex;
           return TweenAnimationBuilder<double>(
             tween: Tween(begin: isSelected ? 0.0 : 1.0, end: isSelected ? 1.0 : 0.0),
@@ -60,7 +52,7 @@ class CustomBottomNavBar extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(
-                      isSelected ? selectedItem[index] : items[index],
+                      isSelected ? selectedIcons[index] : unselectedIcons[index],
                       color: Color.lerp(unselectedColor, selectedColor, value),
                     ),
                     const SizedBox(height: 5),
