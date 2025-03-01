@@ -1,5 +1,6 @@
 enum ImageSizes {
   high(256),
+  high2x(200),
   large(128),
   medium(96),
   normal(80),

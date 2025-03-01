@@ -1,21 +1,26 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconly/iconly.dart';
 import 'package:kartal/kartal.dart';
 import 'package:okul_com_tm/core/routes/route.gr.dart';
+import 'package:okul_com_tm/feature/login/service/auth_provider.dart';
+import 'package:okul_com_tm/feature/splash/service/fcm_provider.dart';
 import 'package:okul_com_tm/product/constants/index.dart';
+import 'package:okul_com_tm/product/constants/widgets.dart';
 import 'package:okul_com_tm/product/sizes/image_sizes.dart';
 import 'package:okul_com_tm/product/widgets/custom_button.dart';
 import 'package:okul_com_tm/product/widgets/custom_text_field.dart';
 
 @RoutePage()
-class LoginView extends StatelessWidget {
+class LoginView extends ConsumerWidget {
   TextEditingController userNameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   FocusNode userNameFocusNode = FocusNode();
   FocusNode passwordFocusNode = FocusNode();
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       body: Stack(children: [
         Positioned.fill(
@@ -46,9 +51,9 @@ class LoginView extends StatelessWidget {
                   Padding(
                     padding: context.padding.verticalNormal,
                     child: CustomTextField(
-                      labelName: StringConstants.emailAddress,
+                      labelName: StringConstants.username,
                       controller: userNameController,
-                      prefixIcon: IconlyLight.message,
+                      prefixIcon: IconlyLight.profile,
                       focusNode: userNameFocusNode,
                       requestfocusNode: passwordFocusNode,
                     ),
@@ -67,14 +72,22 @@ class LoginView extends StatelessWidget {
                       text: StringConstants.agree,
                       mini: true,
                       removeShadow: true,
-                      onPressed: () {
-                        context.navigateTo(BottomNavBar(isTeacher: false));
+                      onPressed: () async {
+                        final username = userNameController.text;
+                        final password = passwordController.text;
+                        await ref.read(authProvider.notifier).login(username, password);
+                        if (ref.read(authProvider).isLoggedIn) {
+                          await FCMService.postFCMToken();
+                          context.navigateTo(BottomNavBar());
+                        } else {
+                          CustomSnackbar.showCustomSnackbar(context, "Error", "Please check your username and password", ColorConstants.redColor);
+                        }
                       },
                     ),
                   ),
                   TextButton(
                       onPressed: () {
-                        context.navigateTo(BottomNavBar(isTeacher: true));
+                        CustomSnackbar.showCustomSnackbar(context, "Contact", "Please contect School admin to reset your password", ColorConstants.redColor);
                       },
                       child: Text(StringConstants.forgotPassword, style: context.general.textTheme.bodyLarge?.copyWith(color: ColorConstants.greyColor)))
                 ],

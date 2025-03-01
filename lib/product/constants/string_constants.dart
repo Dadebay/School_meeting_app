@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 @immutable
 class StringConstants {
   const StringConstants._();
-  static const String appName = 'Okul.com.tm';
+  static const String appName = 'Music Academy';
   static const String joinLesson = 'Join lesson';
   static String splashTitle = 'splash_title'.tr();
   static String splashSubtitle = 'splash_subtitle'.tr();
@@ -38,4 +38,7 @@ class StringConstants {
   static String logOutTitle = 'log_out_title'.tr();
   static String yes = 'yes'.tr();
   static String no = 'no'.tr();
+  static String noConnectionTitle = ''.tr();
+  static String noConnectionSubtitle = ''.tr();
+  static String onRetry = ''.tr();
 }

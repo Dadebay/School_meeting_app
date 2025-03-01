@@ -18,9 +18,13 @@ dependencies:
   intl:
   kartal: ^4.1.0
   auto_route:
+  flutter_secure_storage:
+  awesome_notifications: 
+  flutter_local_notifications: ^18.0.1
+  cached_network_image: ^3.2.3
 
   #animations
-  lottie:
+  lottie: ^3.2.0
   iconly:
 
   #Firebase

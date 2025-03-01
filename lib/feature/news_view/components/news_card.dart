@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:kartal/kartal.dart';
 import 'package:okul_com_tm/core/routes/route.gr.dart';
 import 'package:okul_com_tm/feature/news_view/model/news_model.dart';
-import 'package:okul_com_tm/product/sizes/widget_sizes.dart';
+import 'package:okul_com_tm/product/widgets/widgets.dart';
 
 class NewsCard extends StatelessWidget {
   const NewsCard({required this.newsModel, super.key});
@@ -28,12 +28,7 @@ class NewsCard extends StatelessWidget {
               tag: newsModel.title,
               child: ClipRRect(
                 borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
-                child: Image.asset(
-                  newsModel.image,
-                  height: WidgetSizes.customToolBarHeight.value,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                ),
+                child: CustomWidgets.imageWidget(newsModel.img),
               ),
             ),
             Padding(
@@ -49,7 +44,7 @@ class NewsCard extends StatelessWidget {
                   ),
                   SizedBox(height: 10),
                   Text(
-                    newsModel.description,
+                    newsModel.content,
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
                     style: context.general.textTheme.bodyMedium?.copyWith(

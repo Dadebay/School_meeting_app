@@ -5,6 +5,7 @@ import 'package:kartal/kartal.dart';
 import 'package:okul_com_tm/feature/news_view/model/news_model.dart';
 import 'package:okul_com_tm/product/constants/color_constants.dart';
 import 'package:okul_com_tm/product/constants/string_constants.dart';
+import 'package:okul_com_tm/product/widgets/widgets.dart';
 
 @RoutePage()
 class NewsProfileView extends StatelessWidget {
@@ -36,12 +37,7 @@ class NewsProfileView extends StatelessWidget {
           children: [
             Hero(
               tag: newsModel.title,
-              child: Image.asset(
-                newsModel.image,
-                width: double.infinity,
-                height: 300,
-                fit: BoxFit.cover,
-              ),
+              child: CustomWidgets.imageWidget(newsModel.img),
             ),
             Padding(
               padding: context.padding.normal,
@@ -63,7 +59,7 @@ class NewsProfileView extends StatelessWidget {
                   ),
                   SizedBox(height: 20),
                   Text(
-                    newsModel.description,
+                    newsModel.content,
                     style: context.general.textTheme.bodyLarge,
                   ),
                 ],

@@ -13,8 +13,6 @@ import '../../news_view/view/news_view.dart';
 
 @RoutePage()
 class BottomNavBar extends StatefulWidget {
-  BottomNavBar({super.key, required this.isTeacher});
-  final bool isTeacher;
   @override
   State<BottomNavBar> createState() => _BottomNavBarState();
 }
@@ -23,11 +21,10 @@ class _BottomNavBarState extends State<BottomNavBar> {
   int selectedIndex = 0;
   List<IconData> studentIcons = [IconlyLight.home, IconlyLight.discovery, IconlyLight.profile];
   List<IconData> studentSelectedIcons = [IconlyBold.home, IconlyBold.discovery, IconlyBold.profile];
+  final List<Widget> pages = [HomeView(), NewsView(), UserProfilView(isTeacher: false)];
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> pages = [HomeView(), NewsView(), UserProfilView(isTeacher: widget.isTeacher)];
-
     return Scaffold(
         extendBody: true,
         appBar: selectedIndex == 1
@@ -45,8 +42,9 @@ class _BottomNavBarState extends State<BottomNavBar> {
           selectedIcons: studentSelectedIcons,
           unselectedIcons: studentIcons,
           currentIndex: selectedIndex,
-          onTap: (index) {
+          onTap: (index) async {
             selectedIndex = index;
+
             setState(() {});
           },
         ));

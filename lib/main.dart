@@ -20,13 +20,31 @@ Future<void> main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   final _appRouter = AppRouter();
+  @override
+  void initState() {
+    super.initState();
+    AppStartInit.getNotification();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
       title: StringConstants.appName,
+      builder: (context, child) => MediaQuery(
+        data: MediaQuery.of(context).copyWith(
+          textScaler: TextScaler.linear(1.0),
+        ),
+        child: child!,
+      ),
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
       locale: context.locale,

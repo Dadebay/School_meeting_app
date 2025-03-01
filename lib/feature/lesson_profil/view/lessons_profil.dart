@@ -62,7 +62,7 @@ class LessonsProfil extends ConsumerWidget {
               ),
             ),
           ),
-          CustomIcons(lessonModel: lessonModel),
+          CustomIconButton(lessonModel: lessonModel),
           Padding(
             padding: context.padding.verticalMedium,
             child: Text(

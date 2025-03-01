@@ -1,3 +1,5 @@
+// ignore_for_file: inference_failure_on_function_return_type
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,11 +8,83 @@ import 'package:iconly/iconly.dart';
 import 'package:kartal/kartal.dart';
 import 'package:okul_com_tm/feature/lesson_profil/service/lesson_provider.dart';
 import 'package:okul_com_tm/product/constants/color_constants.dart';
+import 'package:okul_com_tm/product/constants/icon_constants.dart';
 import 'package:okul_com_tm/product/constants/string_constants.dart';
+import 'package:okul_com_tm/product/sizes/image_sizes.dart';
 import 'package:okul_com_tm/product/widgets/custom_button.dart';
 
 class Dialogs {
-  static dynamic logOut({required Function() onYestapped, required BuildContext context}) {
+  static void showNoConnectionDialog({
+    required VoidCallback onRetry,
+    required BuildContext context,
+  }) {
+    showDialog(
+      context: context,
+      barrierDismissible: false, // Kullanıcı dışarıya tıklayarak kapatamaz.
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: context.border.normalBorderRadius,
+          ),
+          elevation: 0.0,
+          backgroundColor: Colors.transparent,
+          child: Stack(
+            alignment: Alignment.topCenter,
+            children: <Widget>[
+              Container(
+                padding: context.padding.onlyTopNormal,
+                child: Container(
+                  padding: const EdgeInsets.only(top: 100, left: 15, right: 15),
+                  decoration: BoxDecoration(
+                    color: ColorConstants.whiteColor,
+                    borderRadius: context.border.normalBorderRadius,
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Text(
+                        StringConstants.noConnectionTitle,
+                        style: context.general.textTheme.bodyLarge,
+                      ),
+                      Padding(
+                        padding: context.padding.normal,
+                        child: Text(
+                          StringConstants.noConnectionSubtitle,
+                          textAlign: TextAlign.center,
+                          style: context.general.textTheme.bodyMedium,
+                        ),
+                      ),
+                      CustomButton(
+                          text: StringConstants.onRetry,
+                          onPressed: () {
+                            Navigator.of(context).pop(); // Diyalogu kapat.
+                            onRetry(); // Yeniden deneme işlemini çağır.
+                          }),
+                    ],
+                  ),
+                ),
+              ),
+              Positioned(
+                top: 0,
+                child: CircleAvatar(
+                  backgroundColor: ColorConstants.whiteColor,
+                  maxRadius: ImageSizes.small.value,
+                  child: ClipOval(
+                    child: Image.asset(
+                      IconConstants.noConnection,
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  static logOut({required Function() onYestapped, required BuildContext context}) {
     // ignore: inference_failure_on_function_invocation
     return showModalBottomSheet(
         context: context,

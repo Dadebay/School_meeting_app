@@ -14,7 +14,7 @@ class SplashView extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          _gradientColor(),
+          ColorConstants.gradientColor(),
           Align(
             alignment: Alignment.topCenter,
             child: Lottie.asset(
@@ -64,24 +64,6 @@ class SplashView extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Positioned _gradientColor() {
-    return Positioned.fill(
-      child: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              ColorConstants.whiteColor,
-              ColorConstants.primaryBlueColor,
-            ],
-            stops: [0, 0.5],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-        ),
       ),
     );
   }

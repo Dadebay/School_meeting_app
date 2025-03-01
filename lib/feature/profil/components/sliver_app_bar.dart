@@ -95,7 +95,7 @@ class ProfilSliverAppBar extends StatelessWidget {
                   ),
                   Text(
                     isTeacher ? "Teacher" : "Student",
-                    style: context.general.textTheme.labelLarge!.copyWith(fontWeight: FontWeight.bold, color: isTeacher ? ColorConstants.whiteColor : ColorConstants.primaryBlueColor),
+                    style: context.general.textTheme.labelLarge!.copyWith(fontWeight: FontWeight.bold, color: isTeacher ? ColorConstants.whiteColor : ColorConstants.blackColor),
                   ),
                 ],
               ),
