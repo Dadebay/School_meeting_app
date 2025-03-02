@@ -1,10 +1,10 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:iconly/iconly.dart';
 import 'package:kartal/kartal.dart';
 import 'package:okul_com_tm/feature/news_view/model/news_model.dart';
-import 'package:okul_com_tm/product/constants/color_constants.dart';
 import 'package:okul_com_tm/product/constants/string_constants.dart';
+import 'package:okul_com_tm/product/sizes/image_sizes.dart';
+import 'package:okul_com_tm/product/widgets/custom_app_bar.dart';
 import 'package:okul_com_tm/product/widgets/widgets.dart';
 
 @RoutePage()
@@ -15,29 +15,14 @@ class NewsProfileView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: ColorConstants.primaryBlueColor,
-        leading: IconButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            icon: Icon(
-              IconlyLight.arrow_left_circle,
-              color: ColorConstants.whiteColor,
-            )),
-        title: Text(
-          StringConstants.news,
-          style: context.general.textTheme.headlineMedium!.copyWith(color: ColorConstants.whiteColor, fontWeight: FontWeight.bold),
-        ),
-      ),
+      appBar: CustomAppBar(title: StringConstants.news, showBackButton: true),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Hero(
               tag: newsModel.title,
-              child: CustomWidgets.imageWidget(newsModel.img),
+              child: Container(height: ImageSizes.high.value, child: CustomWidgets.imageWidget(newsModel.img)),
             ),
             Padding(
               padding: context.padding.normal,

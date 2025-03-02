@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 @immutable
@@ -33,5 +35,21 @@ class ColorConstants {
         ),
       ),
     );
+  }
+
+  static Color getRandomColor() {
+    final List<Color> colors = [
+      ColorConstants.primaryBlueColor,
+      ColorConstants.greenColor,
+      ColorConstants.purpleColor,
+      ColorConstants.greenColorwithOpacity,
+      ColorConstants.yellowColorwithOpacity,
+      ColorConstants.purpleColorwithOpacity,
+      Colors.orange,
+      Colors.deepPurple,
+      Colors.purple,
+      Colors.yellowAccent,
+    ];
+    return colors[Random().nextInt(colors.length)];
   }
 }

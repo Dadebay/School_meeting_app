@@ -5,6 +5,8 @@ import 'package:okul_com_tm/feature/home/service/calendar_provider.dart';
 import 'package:okul_com_tm/product/constants/index.dart';
 import 'package:okul_com_tm/product/sizes/widget_sizes.dart';
 
+import '../../lesson_profil/service/lessons_service.dart';
+
 class CalendarSlider extends ConsumerWidget {
   const CalendarSlider({super.key});
 
@@ -20,7 +22,9 @@ class CalendarSlider extends ConsumerWidget {
         controller: pageController,
         itemCount: 365, // Tüm yılın günleri
         onPageChanged: (index) {
-          ref.read(calendarProvider.notifier).updateSelectedDate(getDateFromIndex(index, selectedDate.year));
+          final date = getDateFromIndex(index, selectedDate.year);
+          ref.read(calendarProvider.notifier).updateSelectedDate(date);
+          ref.read(lessonProvider.notifier).fetchLessonsForDate(date);
         },
         itemBuilder: (context, index) {
           final date = getDateFromIndex(index, selectedDate.year);
@@ -30,6 +34,7 @@ class CalendarSlider extends ConsumerWidget {
             onTap: () {
               ref.read(calendarProvider.notifier).updateSelectedDate(date);
               pageController.animateToPage(index, duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
+              ref.read(lessonProvider.notifier).fetchLessonsForDate(date);
             },
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 300),

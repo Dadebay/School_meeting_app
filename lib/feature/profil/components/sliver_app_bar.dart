@@ -37,7 +37,7 @@ class ProfilSliverAppBar extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: IconButton(
             onPressed: () {
-              Dialogs.logOut(onYestapped: () {}, context: context);
+              Dialogs.logOut(context: context);
             },
             icon: Icon(
               IconlyLight.logout,

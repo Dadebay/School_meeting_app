@@ -31,8 +31,8 @@ class CustomIconButton extends StatelessWidget {
   ];
   @override
   Widget build(BuildContext context) {
-    List<String> titles = [lessonModel.date.toString(), StringConstants.location, StringConstants.teacher];
-    List<String> subTitles = [lessonModel.time.toString(), lessonModel.classLocation, lessonModel.teacher];
+    List<String> titles = [lessonModel.date.toString(), StringConstants.classroom, StringConstants.teacher];
+    List<String> subTitles = [lessonModel.startTime.toString().substring(0, 5) + " - " + lessonModel.endTime.toString().substring(0, 5), lessonModel.classroom.toString(), lessonModel.teacher.toString()];
     return Column(
         children: List.generate(icons.length, (index) {
       return Padding(

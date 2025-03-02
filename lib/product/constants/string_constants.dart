@@ -38,7 +38,10 @@ class StringConstants {
   static String logOutTitle = 'log_out_title'.tr();
   static String yes = 'yes'.tr();
   static String no = 'no'.tr();
-  static String noConnectionTitle = ''.tr();
-  static String noConnectionSubtitle = ''.tr();
-  static String onRetry = ''.tr();
+  static String noConnectionTitle = 'noConnectionTitle'.tr();
+  static String noConnectionSubtitle = 'noConnectionSubtitle'.tr();
+  static String onRetry = 'retry'.tr();
+  static String teacherLessons = 'teacherLessons'.tr();
+  static String classroom = 'classroom'.tr();
+  static String confirm = 'confirm'.tr();
 }

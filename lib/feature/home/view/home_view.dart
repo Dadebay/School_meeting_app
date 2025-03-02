@@ -1,38 +1,57 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kartal/kartal.dart';
 import 'package:okul_com_tm/feature/home/components/index.dart';
-import 'package:okul_com_tm/feature/home/model/lesson_model.dart';
+import 'package:okul_com_tm/feature/lesson_profil/service/lessons_service.dart';
 import 'package:okul_com_tm/product/constants/index.dart';
 import 'package:okul_com_tm/product/sizes/widget_sizes.dart';
+import 'package:okul_com_tm/product/widgets/widgets.dart';
 
 @RoutePage()
-class HomeView extends StatelessWidget {
+class HomeView extends ConsumerStatefulWidget {
+  const HomeView({super.key});
+
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends ConsumerState<HomeView> {
+  @override
+  void initState() {
+    super.initState();
+
+    ref.read(lessonProvider.notifier).fetchLessonsForDate(DateTime.now());
+  }
+
   @override
   Widget build(BuildContext context) {
+    final lessonState = ref.watch(lessonProvider);
+
     return NestedScrollView(
       headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
         return <Widget>[
-          _sliverAppBar(context),
+          _sliverAppBar(context, ref),
         ];
       },
-      body: ListView.builder(
-        itemCount: 20,
-        shrinkWrap: true,
-        padding: context.padding.onlyTopNormal,
-        itemExtent: WidgetSizes.lessonCardHeight.value,
-        itemBuilder: (context, index) {
-          final color = LessonModel.lessonCardColors[index % LessonModel.lessonCardColors.length];
-          return LessonCard(
-            color: color,
-            lessonModel: LessonModel.generateLessons()[index],
-          );
-        },
-      ),
+      body: lessonState.lessons.isEmpty
+          ? CustomWidgets.emptyLessons(context)
+          : ListView.builder(
+              itemCount: lessonState.lessons.length,
+              shrinkWrap: true,
+              padding: EdgeInsets.only(bottom: 120),
+              itemExtent: MediaQuery.of(context).size.height / 2,
+              itemBuilder: (context, index) {
+                final lesson = lessonState.lessons[index];
+                return LessonCard(
+                  lessonModel: lesson,
+                );
+              },
+            ),
     );
   }
 
-  SliverAppBar _sliverAppBar(BuildContext context) {
+  SliverAppBar _sliverAppBar(BuildContext context, WidgetRef ref) {
     return SliverAppBar(
       pinned: true,
       automaticallyImplyLeading: false,

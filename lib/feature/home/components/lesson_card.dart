@@ -4,16 +4,19 @@ import 'package:kartal/kartal.dart';
 import 'package:okul_com_tm/core/routes/route.gr.dart';
 import 'package:okul_com_tm/feature/home/model/lesson_model.dart';
 import 'package:okul_com_tm/product/constants/index.dart';
+import 'package:okul_com_tm/product/widgets/widgets.dart';
 
 class LessonCard extends StatelessWidget {
-  const LessonCard({required this.lessonModel, required this.color, super.key});
+  const LessonCard({required this.lessonModel, super.key});
   final LessonModel lessonModel;
-  final Color color;
   @override
   Widget build(BuildContext context) {
+    Color color = ColorConstants.getRandomColor();
     return GestureDetector(
       onTap: () {
-        context.navigateTo(LessonsProfil(lessonModel: lessonModel));
+        context.navigateTo(LessonsProfil(
+          lessonModel: lessonModel,
+        ));
       },
       child: Container(
         margin: context.padding.low,
@@ -37,6 +40,7 @@ class LessonCard extends StatelessWidget {
                   borderRadius: context.border.highBorderRadius,
                   color: color.withOpacity(.5),
                 ),
+                child: ClipRRect(borderRadius: context.border.highBorderRadius, child: CustomWidgets.imageWidget(lessonModel.img)),
               ),
             ),
             dateViewerCard(context),
@@ -47,7 +51,7 @@ class LessonCard extends StatelessWidget {
               child: Container(
                 padding: context.padding.normal,
                 decoration: BoxDecoration(
-                  color: ColorConstants.whiteColor.withOpacity(.7),
+                  color: ColorConstants.whiteColor.withOpacity(.9),
                   borderRadius: context.border.normalBorderRadius,
                 ),
                 child: Column(
@@ -55,7 +59,7 @@ class LessonCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      lessonModel.title,
+                      lessonModel.lessonName,
                       maxLines: 2,
                       style: context.general.textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.bold,
@@ -64,7 +68,7 @@ class LessonCard extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 15),
                       child: Text(
-                        lessonModel.subtitle,
+                        lessonModel.content,
                         maxLines: 3,
                         style: context.general.textTheme.bodyMedium?.copyWith(
                           fontWeight: FontWeight.w400,
@@ -120,7 +124,7 @@ class LessonCard extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              lessonModel.day,
+              DateTime.parse(lessonModel.date).day.toString(),
               style: context.general.textTheme.headlineSmall?.copyWith(
                 fontWeight: FontWeight.bold,
                 fontSize: context.general.textTheme.headlineLarge?.fontSize,
@@ -129,7 +133,7 @@ class LessonCard extends StatelessWidget {
             Padding(
               padding: context.padding.verticalLow,
               child: Text(
-                lessonModel.time.replaceAll('-', ''),
+                lessonModel.startTime.toString().substring(0, 5) + "\n" + lessonModel.endTime.toString().substring(0, 5),
                 maxLines: 2,
                 textAlign: TextAlign.center,
                 style: context.general.textTheme.bodySmall?.copyWith(

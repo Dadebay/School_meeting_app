@@ -28,6 +28,12 @@
     "log_out_title": "Are you sure you want to log out?",
     "yes": "Yes",
     "no": "No",
-    "":""
+
+    "confirm":"Confirm Lesson",
+    "classroom":"Classroom",
+    "retry":"Retry",
+    "teacherLessons":"My lesson",
+    "noConnectionTitle":" No Connection",
+    "noConnectionSubtitle":"Please check your internet connection"
 
   }

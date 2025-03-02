@@ -11,7 +11,7 @@ class FCMService {
     final url = Uri.parse(ApiConstants.fcmPost);
     String fcmToken = await FirebaseMessaging.instance.getToken() ?? '';
     final headers = {'Content-Type': 'application/x-www-form-urlencoded'};
-    final body = {'fcmToken': fcmToken};
+    final body = {'fcmtoken': fcmToken};
     final bearerToken = await AuthServiceStorage.getToken();
     if (bearerToken != null) {
       print(bearerToken);

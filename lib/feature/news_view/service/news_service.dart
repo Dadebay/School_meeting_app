@@ -10,10 +10,10 @@ class NewsService {
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
-      final List<dynamic> data = json.decode(response.body) as List<dynamic>;
-      return data.map((json) {
-        return NewsModel.fromJson(json as Map<String, dynamic>);
-      }).toList();
+      final utf8Body = utf8.decode(response.bodyBytes);
+      print('Decoded Response: $utf8Body'); // Yanıtı kontrol etmek için logla
+      final List<dynamic> data = json.decode(utf8Body) as List<dynamic>;
+      return data.map((json) => NewsModel.fromJson(json as Map<String, dynamic>)).toList();
     } else {
       throw Exception('Failed to load news');
     }

@@ -7,11 +7,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconly/iconly.dart';
 import 'package:kartal/kartal.dart';
 import 'package:okul_com_tm/feature/lesson_profil/service/lesson_provider.dart';
+import 'package:okul_com_tm/feature/login/service/auth_provider.dart';
 import 'package:okul_com_tm/product/constants/color_constants.dart';
 import 'package:okul_com_tm/product/constants/icon_constants.dart';
 import 'package:okul_com_tm/product/constants/string_constants.dart';
+import 'package:okul_com_tm/product/constants/widgets.dart';
 import 'package:okul_com_tm/product/sizes/image_sizes.dart';
 import 'package:okul_com_tm/product/widgets/custom_button.dart';
+import 'package:restart_app/restart_app.dart';
 
 class Dialogs {
   static void showNoConnectionDialog({
@@ -84,7 +87,7 @@ class Dialogs {
     );
   }
 
-  static logOut({required Function() onYestapped, required BuildContext context}) {
+  static logOut({required BuildContext context}) {
     // ignore: inference_failure_on_function_invocation
     return showModalBottomSheet(
         context: context,
@@ -126,12 +129,21 @@ class Dialogs {
                 ),
                 Padding(
                   padding: context.padding.normal,
-                  child: CustomButton(text: 'yes', mini: true, onPressed: () {}, showBorderStyle: true),
+                  child: CustomButton(
+                      text: 'yes'.tr(),
+                      mini: true,
+                      onPressed: () async {
+                        await AuthServiceStorage.clearToken();
+                        await AuthServiceStorage.clearStatus();
+                        await Restart.restartApp();
+                        CustomSnackbar.showCustomSnackbar(context, "Success", "Successfully logged out", ColorConstants.greenColor);
+                      },
+                      showBorderStyle: true),
                 ),
                 Padding(
                   padding: context.padding.normal.copyWith(top: 0),
                   child: CustomButton(
-                      text: 'no',
+                      text: 'no'.tr(),
                       mini: true,
                       onPressed: () {
                         Navigator.of(context).pop();

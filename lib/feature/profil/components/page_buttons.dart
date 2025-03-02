@@ -22,20 +22,17 @@ class PageButtons extends StatelessWidget {
   ];
 
   final List<String> teacherButtonNames = [
-    'Rooms Availability',
-    'Create lesson',
+    'My Lessons',
     "About Us",
   ];
 
   final List<IconData> teacherButtonIcons = [
-    IconlyLight.category,
-    IconlyLight.paper_plus,
+    IconlyLight.document,
     IconlyLight.info_square,
   ];
-  final List<String> teacherPages = ['/rooms', '/create_lesson'];
+  final List<String> teacherPages = ['/teacherLessons', '/create_lesson'];
 
   final List<String> studentPages = [];
-  // Doğru PageRouteInfo nesneleri ile değiştirin
 
   PageButtons({super.key, required this.isTeacher});
 

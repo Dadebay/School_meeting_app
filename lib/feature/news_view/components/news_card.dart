@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:kartal/kartal.dart';
 import 'package:okul_com_tm/core/routes/route.gr.dart';
 import 'package:okul_com_tm/feature/news_view/model/news_model.dart';
+import 'package:okul_com_tm/product/constants/index.dart';
+import 'package:okul_com_tm/product/sizes/image_sizes.dart';
 import 'package:okul_com_tm/product/widgets/widgets.dart';
 
 class NewsCard extends StatelessWidget {
@@ -17,9 +19,11 @@ class NewsCard extends StatelessWidget {
       },
       child: Card(
         margin: context.padding.low,
-        elevation: 5,
+        elevation: 2,
+        color: ColorConstants.whiteColor,
         shape: RoundedRectangleBorder(
           borderRadius: context.border.normalBorderRadius,
+          side: BorderSide(color: ColorConstants.primaryBlueColor.withOpacity(.5), width: 1),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -27,8 +31,8 @@ class NewsCard extends StatelessWidget {
             Hero(
               tag: newsModel.title,
               child: ClipRRect(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
-                child: CustomWidgets.imageWidget(newsModel.img),
+                borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
+                child: Container(height: ImageSizes.high2x.value, child: CustomWidgets.imageWidget(newsModel.img)),
               ),
             ),
             Padding(
@@ -38,6 +42,8 @@ class NewsCard extends StatelessWidget {
                 children: [
                   Text(
                     newsModel.title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                     style: context.general.textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),

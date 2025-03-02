@@ -12,12 +12,24 @@ class AuthServiceStorage {
     await _storage.write(key: 'auth_token', value: token);
   }
 
+  static Future<void> saveStatus(String token) async {
+    await _storage.write(key: 'status', value: token);
+  }
+
+  static Future<String?> getStatus() async {
+    return await _storage.read(key: 'status');
+  }
+
   static Future<String?> getToken() async {
     return await _storage.read(key: 'auth_token');
   }
 
   static Future<void> clearToken() async {
     await _storage.delete(key: 'auth_token');
+  }
+
+  static Future<void> clearStatus() async {
+    await _storage.delete(key: 'status');
   }
 }
 
@@ -57,9 +69,10 @@ class AuthNotifier extends StateNotifier<AuthState> {
       final response = await AuthService.login(username, password);
       if (response != null) {
         await AuthServiceStorage.saveToken(response['access'].toString());
+        await AuthServiceStorage.saveStatus(response['user_type'].toString());
         state = state.copyWith(isLoggedIn: true, token: response['access'].toString());
       } else {
-        // Hata durumu için uygun bir işlem yapın.
+        // Hata durumuiçin uygun bir işlem yapın.
         print('Giriş başarısız.');
       }
     } catch (e) {
