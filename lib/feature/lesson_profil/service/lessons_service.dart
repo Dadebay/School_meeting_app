@@ -1,20 +1,23 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:okul_com_tm/feature/home/model/lesson_model.dart';
-import 'package:okul_com_tm/feature/login/service/auth_provider.dart';
-import 'package:okul_com_tm/product/constants/api_constants.dart';
-import 'package:okul_com_tm/product/constants/index.dart';
-import 'package:okul_com_tm/product/constants/widgets.dart';
+import 'package:okul_com_tm/feature/profil/service/teacher_lessons_service.dart';
+import 'package:okul_com_tm/product/dialogs/dialogs.dart';
+import 'package:okul_com_tm/product/widgets/index.dart';
 
 class LessonService {
   static Future<List<LessonModel>> fetchLessonsForDate(DateTime date) async {
+    final token = await AuthServiceStorage.getToken();
+
     final url = Uri.parse(ApiConstants.getLessons);
     final response = await http.post(
       url,
-      headers: {'Content-Type': 'application/json'},
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${token}',
+      },
       body: json.encode({
         'date': '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}',
       }),
@@ -29,25 +32,81 @@ class LessonService {
     }
   }
 
-  Future<bool> confirmLesson(int lessonId, String noticeForStudents, BuildContext context) async {
+  Future<Map<String, String>> cancelLesson(int lessonId, BuildContext context) async {
     final token = await AuthServiceStorage.getToken();
+    Navigator.pop(context);
     final response = await http.post(
-      Uri.parse(ApiConstants.confirmLessons),
+      Uri.parse(ApiConstants.cancelLesson),
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
         'Authorization': 'Bearer ${token}',
       },
       body: {
         'lessonId': lessonId.toString(),
-        'noticeForStudents': noticeForStudents,
+        'description': 'I am ill and cannot attend the lesson',
+      },
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 423) {
+      final utf8Body = utf8.decode(response.bodyBytes);
+      final Map<String, dynamic> decodedData = json.decode(utf8Body)[0] as Map<String, dynamic>;
+      Dialogs.showCancelLessonDialog(
+          context: context,
+          title: decodedData['title'].toString(),
+          subtitle: decodedData['description'].toString(),
+          cancelText: StringConstants.agree,
+          ontap: () {
+            Navigator.pop(context);
+          });
+      return {};
+    } else {
+      CustomSnackbar.showCustomSnackbar(context, 'Error', 'Confirmation failed with status: ${response.statusCode}', ColorConstants.redColor);
+
+      return {};
+    }
+  }
+
+  Future<List<StudentModel>> fetchStudents(int id) async {
+    final response = await http.get(Uri.parse(ApiConstants.getLesson + id.toString()));
+
+    if (response.statusCode == 200) {
+      final utf8Body = utf8.decode(response.bodyBytes);
+      final List<dynamic> data = json.decode(utf8Body) as List<dynamic>;
+
+      return data.map((data) => StudentModel.fromJson(data as Map<String, dynamic>)).toList();
+    } else {
+      throw Exception("Failed to load students");
+    }
+  }
+
+  Future<bool> confirmLesson(int lessonId, BuildContext context) async {
+    final token = await AuthServiceStorage.getToken();
+    final response = await http.post(
+      Uri.parse(ApiConstants.confirmLesson),
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': 'Bearer $token',
+      },
+      body: {
+        'lessonId': lessonId.toString(),
       },
     );
 
     if (response.statusCode == 200) {
+      CustomSnackbar.showCustomSnackbar(
+        context,
+        'Succes',
+        'Lessons successfully confirmed',
+        ColorConstants.redColor,
+      );
       return true;
     } else {
-      CustomSnackbar.showCustomSnackbar(context, 'Error', 'Confirmation failed with status: ${response.statusCode}', ColorConstants.redColor);
-
+      CustomSnackbar.showCustomSnackbar(
+        context,
+        'Error',
+        'Request failed with status: ${response.statusCode}',
+        ColorConstants.redColor,
+      );
       return false;
     }
   }
@@ -72,33 +131,13 @@ class LessonNotifier extends StateNotifier<LessonState> {
 
   Future<void> fetchLessonsForDate(DateTime date) async {
     try {
-      print(date);
-      print('${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}');
-      final lessons = await LessonService.fetchLessonsForDate(date);
+      final String? status = await AuthServiceStorage.getStatus();
+      final lessons = status == 'teacher' ? await TeacherLessonsService.fetchMyLessons() : await LessonService.fetchLessonsForDate(date);
       state = state.copyWith(selectedDate: date, lessons: lessons);
-    } catch (e) {
-      print('Error fetching lessons: $e');
-    }
+    } catch (e) {}
   }
 }
 
 final lessonProvider = StateNotifierProvider<LessonNotifier, LessonState>((ref) {
   return LessonNotifier();
 });
-
-final studentServiceProvider = Provider((ref) => StudentService());
-
-class StudentService {
-  Future<List<StudentModel>> fetchStudents(int id) async {
-    final response = await http.get(Uri.parse(ApiConstants.getLesson + id.toString()));
-
-    if (response.statusCode == 200) {
-      final utf8Body = utf8.decode(response.bodyBytes);
-      final List<dynamic> data = json.decode(utf8Body) as List<dynamic>;
-
-      return data.map((data) => StudentModel.fromJson(data as Map<String, dynamic>)).toList();
-    } else {
-      throw Exception("Failed to load students");
-    }
-  }
-}

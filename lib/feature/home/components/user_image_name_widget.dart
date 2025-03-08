@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:kartal/kartal.dart';
-import 'package:okul_com_tm/product/constants/color_constants.dart';
-import 'package:okul_com_tm/product/constants/icon_constants.dart';
-import 'package:okul_com_tm/product/sizes/image_sizes.dart';
-import 'package:okul_com_tm/product/widgets/date_helper.dart';
+import 'package:okul_com_tm/feature/profil/service/user_update_service.dart';
+import 'package:okul_com_tm/product/widgets/index.dart';
 
-class UserNameAndImage extends StatelessWidget {
+class UserNameAndImage extends ConsumerWidget {
   const UserNameAndImage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
       padding: const EdgeInsets.only(left: 25, right: 25, bottom: 50),
       child: Row(
@@ -37,7 +34,7 @@ class UserNameAndImage extends StatelessWidget {
                         ),
                       ),
                       TextSpan(
-                        text: 'Gurbanov !',
+                        text: '${ref.watch(userUpdateProvider).username} !',
                         style: context.general.textTheme.headlineMedium?.copyWith(
                           fontWeight: FontWeight.w600,
                         ),

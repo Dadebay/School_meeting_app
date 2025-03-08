@@ -1,21 +1,22 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:kartal/kartal.dart';
 import 'package:okul_com_tm/core/routes/route.gr.dart';
 import 'package:okul_com_tm/feature/home/model/lesson_model.dart';
-import 'package:okul_com_tm/product/constants/index.dart';
-import 'package:okul_com_tm/product/widgets/widgets.dart';
+import 'package:okul_com_tm/product/widgets/index.dart';
 
 class LessonCard extends StatelessWidget {
-  const LessonCard({required this.lessonModel, super.key});
+  const LessonCard({required this.lessonModel, super.key, required this.isTeacher});
   final LessonModel lessonModel;
+  final bool isTeacher;
   @override
   Widget build(BuildContext context) {
+    print(lessonModel.teacherConfirmation);
     Color color = ColorConstants.getRandomColor();
     return GestureDetector(
       onTap: () {
         context.navigateTo(LessonsProfil(
           lessonModel: lessonModel,
+          isTeacher: isTeacher,
         ));
       },
       child: Container(
@@ -76,10 +77,17 @@ class LessonCard extends StatelessWidget {
                       ),
                     ),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        print("Asdasd");
+                        context.navigateTo(LessonsProfil(
+                          lessonModel: lessonModel,
+                          isTeacher: isTeacher,
+                        ));
+                      },
                       style: ButtonStyle(
                         padding: WidgetStateProperty.all<EdgeInsetsGeometry>(context.padding.normal),
                         elevation: WidgetStateProperty.all<double>(0),
+                        backgroundColor: WidgetStateProperty.all<Color>(lessonModel.teacherConfirmation == false ? ColorConstants.primaryBlueColor : Colors.transparent),
                         shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20),
@@ -91,10 +99,14 @@ class LessonCard extends StatelessWidget {
                         width: double.infinity,
                         alignment: Alignment.center,
                         child: Text(
-                          StringConstants.joinLesson,
+                          isTeacher
+                              ? lessonModel.teacherConfirmation == true
+                                  ? 'View lesson '
+                                  : StringConstants.confirm
+                              : StringConstants.joinLesson,
                           style: context.general.textTheme.bodyMedium?.copyWith(
                             fontWeight: FontWeight.w700,
-                            color: ColorConstants.primaryBlueColor,
+                            color: lessonModel.teacherConfirmation == false ? ColorConstants.whiteColor : ColorConstants.primaryBlueColor,
                           ),
                         ),
                       ),

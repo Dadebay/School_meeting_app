@@ -1,17 +1,18 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:iconly/iconly.dart';
-import 'package:kartal/kartal.dart';
-import 'package:okul_com_tm/product/constants/index.dart';
-import 'package:okul_com_tm/product/sizes/image_sizes.dart';
+import 'package:okul_com_tm/feature/profil/service/user_update_service.dart';
+import 'package:okul_com_tm/product/widgets/index.dart';
 
 import '../../../product/dialogs/dialogs.dart';
 
-class ProfilSliverAppBar extends StatelessWidget {
+class ProfilSliverAppBar extends ConsumerWidget {
   const ProfilSliverAppBar({super.key, required this.innerBoxIsScrolled, required this.isTeacher});
   final bool innerBoxIsScrolled;
   final bool isTeacher;
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final userModel = ref.read(userUpdateProvider);
     return SliverAppBar(
       pinned: true,
       automaticallyImplyLeading: false,
@@ -21,12 +22,14 @@ class ProfilSliverAppBar extends StatelessWidget {
       backgroundColor: ColorConstants.whiteColor,
       title: innerBoxIsScrolled
           ? Text(
-              "D.Gurbanov",
+              userModel.username,
               style: context.general.textTheme.titleLarge!.copyWith(fontWeight: FontWeight.bold),
             )
           : null,
       leading: IconButton(
-        onPressed: () {},
+        onPressed: () {
+          context.navigateNamedTo('/updateProfile');
+        },
         icon: Icon(
           IconlyLight.edit_square,
           color: ColorConstants.greyColor,
@@ -34,7 +37,7 @@ class ProfilSliverAppBar extends StatelessWidget {
       ),
       actions: [
         Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: context.padding.low,
           child: IconButton(
             onPressed: () {
               Dialogs.logOut(context: context);
@@ -61,14 +64,21 @@ class ProfilSliverAppBar extends StatelessWidget {
                 color: ColorConstants.primaryBlueColor.withOpacity(.1),
                 border: Border.all(color: ColorConstants.blueColorwithOpacity),
               ),
-              child: Image.asset(
-                IconConstants.user1,
+              child: CachedNetworkImage(
+                imageUrl: ApiConstants.imageURL + userModel.imagePath,
+                imageBuilder: (context, imageProvider) => Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(image: imageProvider),
+                  ),
+                ),
+                placeholder: (context, url) => CustomWidgets.loader(),
+                errorWidget: (context, url, error) => Icon(Icons.error),
               ),
             ),
             Padding(
               padding: context.padding.normal,
               child: Text(
-                "D.Gurbanov",
+                userModel.username,
                 style: context.general.textTheme.headlineMedium!.copyWith(fontWeight: FontWeight.bold),
               ),
             ),
@@ -95,7 +105,7 @@ class ProfilSliverAppBar extends StatelessWidget {
                   ),
                   Text(
                     isTeacher ? "Teacher" : "Student",
-                    style: context.general.textTheme.labelLarge!.copyWith(fontWeight: FontWeight.bold, color: isTeacher ? ColorConstants.whiteColor : ColorConstants.blackColor),
+                    style: context.general.textTheme.labelLarge!.copyWith(fontWeight: FontWeight.bold, color: ColorConstants.whiteColor),
                   ),
                 ],
               ),

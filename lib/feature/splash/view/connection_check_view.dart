@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kartal/kartal.dart';
 import 'package:okul_com_tm/feature/login/service/auth_provider.dart';
+import 'package:okul_com_tm/feature/profil/service/user_update_service.dart';
 import 'package:okul_com_tm/product/constants/color_constants.dart';
 import 'package:okul_com_tm/product/constants/icon_constants.dart';
 import 'package:okul_com_tm/product/dialogs/dialogs.dart';
@@ -39,6 +40,8 @@ class _ConnectionCheckViewState extends ConsumerState<ConnectionCheckView> {
         } else if (!isLoggedIn) {
           context.router.replaceNamed('/login');
         } else {
+          final userProvider = ref.read(userUpdateProvider.notifier);
+          userProvider.getUserProfile();
           context.router.replaceNamed('/bottomNavBar');
         }
       }

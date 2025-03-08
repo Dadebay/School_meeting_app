@@ -1,11 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:kartal/kartal.dart';
 import 'package:okul_com_tm/core/routes/route.gr.dart';
 import 'package:okul_com_tm/feature/news_view/model/news_model.dart';
-import 'package:okul_com_tm/product/constants/index.dart';
-import 'package:okul_com_tm/product/sizes/image_sizes.dart';
-import 'package:okul_com_tm/product/widgets/widgets.dart';
+import 'package:okul_com_tm/product/widgets/index.dart';
 
 class NewsCard extends StatelessWidget {
   const NewsCard({required this.newsModel, super.key});
@@ -32,7 +29,7 @@ class NewsCard extends StatelessWidget {
               tag: newsModel.title,
               child: ClipRRect(
                 borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
-                child: Container(height: ImageSizes.high2x.value, child: CustomWidgets.imageWidget(newsModel.img)),
+                child: Container(height: ImageSizes.high2x.value, alignment: Alignment.center, child: CustomWidgets.imageWidget(newsModel.img)),
               ),
             ),
             Padding(

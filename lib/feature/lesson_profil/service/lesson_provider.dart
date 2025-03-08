@@ -12,7 +12,6 @@ class RescheduleState {
   RescheduleState({this.selectedDate, this.selectedTime});
 
   RescheduleState setDate({DateTime? selectedDate, TimeOfDay? selectedTime}) {
-    print(selectedDate);
     return RescheduleState(
       selectedDate: selectedDate ?? this.selectedDate,
       selectedTime: selectedTime ?? this.selectedTime,

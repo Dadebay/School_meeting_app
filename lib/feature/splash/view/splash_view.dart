@@ -1,9 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:kartal/kartal.dart';
-import 'package:lottie/lottie.dart';
-import 'package:okul_com_tm/product/constants/index.dart';
-import 'package:okul_com_tm/product/widgets/custom_button.dart';
+import 'package:okul_com_tm/product/widgets/index.dart';
 
 @RoutePage()
 class SplashView extends StatelessWidget {
@@ -17,11 +14,11 @@ class SplashView extends StatelessWidget {
           ColorConstants.gradientColor(),
           Align(
             alignment: Alignment.topCenter,
-            child: Lottie.asset(
-              IconConstants.splashLottie,
+            child: Image.asset(
+              IconConstants.splashLoad,
               height: MediaQuery.of(context).size.height / 1.5,
               width: double.infinity,
-              animate: true,
+              // animate: true,
             ),
           ),
           Align(

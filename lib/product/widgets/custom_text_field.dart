@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kartal/kartal.dart';
-import 'package:okul_com_tm/product/constants/index.dart';
-import 'package:okul_com_tm/product/sizes/image_sizes.dart';
+import 'package:okul_com_tm/product/widgets/index.dart';
 
 class CustomTextField extends StatelessWidget {
   final String labelName;
@@ -10,6 +8,7 @@ class CustomTextField extends StatelessWidget {
   final FocusNode requestfocusNode;
   final IconData? prefixIcon;
   final int? maxLine;
+  final bool? enabled;
   const CustomTextField({
     required this.labelName,
     required this.controller,
@@ -17,16 +16,17 @@ class CustomTextField extends StatelessWidget {
     required this.requestfocusNode,
     this.maxLine,
     this.prefixIcon,
+    this.enabled,
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    print(prefixIcon);
     return Container(
       width: MediaQuery.of(context).size.width,
       padding: EdgeInsets.only(top: 15),
       child: TextFormField(
+        enabled: enabled ?? true,
         controller: controller,
         validator: (value) {
           if (value == null || value.isEmpty) {

@@ -71,13 +71,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
         await AuthServiceStorage.saveToken(response['access'].toString());
         await AuthServiceStorage.saveStatus(response['user_type'].toString());
         state = state.copyWith(isLoggedIn: true, token: response['access'].toString());
-      } else {
-        // Hata durumuiçin uygun bir işlem yapın.
-        print('Giriş başarısız.');
-      }
-    } catch (e) {
-      print('Hata oluştu: $e');
-    }
+      } else {}
+    } catch (e) {}
   }
 
   Future<void> logout() async {
@@ -104,12 +99,6 @@ class AuthService {
         'password': password,
       }),
     );
-
-    print('URL: $url');
-    print('Username: $username');
-    print('Password: $password');
-    print('Response Body: ${response.body}');
-    print('Status Code: ${response.statusCode}');
 
     if (response.statusCode == 200) {
       return json.decode(response.body) as Map<String, dynamic>;

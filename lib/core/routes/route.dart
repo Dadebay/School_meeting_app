@@ -17,10 +17,9 @@ class AppRouter extends RootStackRouter {
         AutoRoute(path: '/splash', page: SplashView.page),
         AutoRoute(path: '/connectionCheckPage', page: ConnectionCheckView.page, initial: true),
         AutoRoute(path: '/news', page: NewsView.page),
-        AutoRoute(path: '/rooms', page: RoomsAvailabilityView.page),
-        AutoRoute(path: '/create_lesson', page: CreateLessonView.page),
         AutoRoute(path: '/newsProfile', page: NewsProfileView.page),
-        AutoRoute(path: '/teacherLessons', page: TeacherLessonsView.page),
+        AutoRoute(path: '/updateProfile', page: UserUpdateProfile.page),
+        // AutoRoute(path: '/setFreeTime', page: FreeTimePage.page),
       ];
 
   @override

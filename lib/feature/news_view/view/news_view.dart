@@ -24,7 +24,7 @@ class NewsView extends StatelessWidget {
           final newsList = snapshot.data!;
           return ListView.builder(
             itemCount: newsList.length,
-            padding: context.padding.onlyTopNormal,
+            padding: context.padding.onlyBottomHigh,
             shrinkWrap: true,
             physics: BouncingScrollPhysics(),
             itemBuilder: (context, index) {

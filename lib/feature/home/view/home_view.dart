@@ -1,17 +1,14 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kartal/kartal.dart';
 import 'package:okul_com_tm/feature/home/components/index.dart';
 import 'package:okul_com_tm/feature/lesson_profil/service/lessons_service.dart';
-import 'package:okul_com_tm/product/constants/index.dart';
 import 'package:okul_com_tm/product/sizes/widget_sizes.dart';
-import 'package:okul_com_tm/product/widgets/widgets.dart';
+import 'package:okul_com_tm/product/widgets/index.dart';
 
 @RoutePage()
 class HomeView extends ConsumerStatefulWidget {
-  const HomeView({super.key});
-
+  const HomeView({required this.isTeacher});
+  final bool isTeacher;
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _HomeViewState();
 }
@@ -20,18 +17,16 @@ class _HomeViewState extends ConsumerState<HomeView> {
   @override
   void initState() {
     super.initState();
-
     ref.read(lessonProvider.notifier).fetchLessonsForDate(DateTime.now());
   }
 
   @override
   Widget build(BuildContext context) {
     final lessonState = ref.watch(lessonProvider);
-
     return NestedScrollView(
       headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
         return <Widget>[
-          _sliverAppBar(context, ref),
+          _sliverAppBar(context),
         ];
       },
       body: lessonState.lessons.isEmpty
@@ -45,13 +40,14 @@ class _HomeViewState extends ConsumerState<HomeView> {
                 final lesson = lessonState.lessons[index];
                 return LessonCard(
                   lessonModel: lesson,
+                  isTeacher: widget.isTeacher,
                 );
               },
             ),
     );
   }
 
-  SliverAppBar _sliverAppBar(BuildContext context, WidgetRef ref) {
+  SliverAppBar _sliverAppBar(BuildContext context) {
     return SliverAppBar(
       pinned: true,
       automaticallyImplyLeading: false,

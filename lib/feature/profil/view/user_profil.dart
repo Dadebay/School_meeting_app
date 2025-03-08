@@ -2,13 +2,15 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:okul_com_tm/feature/profil/components/page_buttons.dart';
 import 'package:okul_com_tm/feature/profil/components/sliver_app_bar.dart';
+import 'package:okul_com_tm/product/widgets/index.dart';
 
 @RoutePage()
-class UserProfilView extends StatelessWidget {
+class UserProfilView extends ConsumerWidget {
   const UserProfilView({super.key, required this.isTeacher});
   final bool isTeacher;
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return NestedScrollView(
       headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
         return <Widget>[

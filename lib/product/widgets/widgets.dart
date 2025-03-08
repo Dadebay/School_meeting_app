@@ -1,9 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:kartal/kartal.dart';
-import 'package:lottie/lottie.dart';
-import 'package:okul_com_tm/product/constants/api_constants.dart';
-import 'package:okul_com_tm/product/constants/index.dart';
+import 'package:okul_com_tm/product/widgets/index.dart';
 
 class CustomWidgets {
   static Center loader() {
@@ -24,7 +20,7 @@ class CustomWidgets {
       padding: context.padding.normal,
       child: Column(
         children: [
-          Lottie.asset(IconConstants.loader, width: 250, height: 250, animate: true),
+          Image.asset(IconConstants.noLessons, width: 250, height: 250),
           Padding(
             padding: context.padding.verticalNormal,
             child: Text(
@@ -56,6 +52,48 @@ class CustomWidgets {
       ),
       placeholder: (context, url) => loader(),
       errorWidget: (context, url, error) => Icon(Icons.error),
+    );
+  }
+}
+
+class CustomSnackbar {
+  static void showCustomSnackbar(BuildContext context, String title, String subtitle, Color color) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (title.isNotEmpty)
+              Text(
+                title,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                  color: Colors.white,
+                ),
+              ),
+            if (subtitle.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Text(
+                  subtitle,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 16,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+          ],
+        ),
+        backgroundColor: color,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: context.border.normalBorderRadius,
+        ),
+        duration: const Duration(seconds: 3),
+        margin: context.padding.low,
+      ),
     );
   }
 }

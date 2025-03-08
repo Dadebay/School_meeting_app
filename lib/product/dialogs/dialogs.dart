@@ -1,26 +1,12 @@
-// ignore_for_file: inference_failure_on_function_return_type
+// ignore_for_file: inference_failure_on_function_return_type, inference_failure_on_function_invocation, duplicate_ignore
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:iconly/iconly.dart';
-import 'package:kartal/kartal.dart';
-import 'package:okul_com_tm/feature/lesson_profil/service/lesson_provider.dart';
-import 'package:okul_com_tm/feature/login/service/auth_provider.dart';
-import 'package:okul_com_tm/product/constants/color_constants.dart';
-import 'package:okul_com_tm/product/constants/icon_constants.dart';
-import 'package:okul_com_tm/product/constants/string_constants.dart';
-import 'package:okul_com_tm/product/constants/widgets.dart';
-import 'package:okul_com_tm/product/sizes/image_sizes.dart';
-import 'package:okul_com_tm/product/widgets/custom_button.dart';
-import 'package:restart_app/restart_app.dart';
+import 'package:okul_com_tm/product/widgets/index.dart';
 
 class Dialogs {
-  static void showNoConnectionDialog({
-    required VoidCallback onRetry,
-    required BuildContext context,
-  }) {
+  static void showNoConnectionDialog({required VoidCallback onRetry, required BuildContext context}) {
     showDialog(
       context: context,
       barrierDismissible: false, // Kullanıcı dışarıya tıklayarak kapatamaz.
@@ -47,14 +33,14 @@ class Dialogs {
                     children: <Widget>[
                       Text(
                         StringConstants.noConnectionTitle,
-                        style: context.general.textTheme.bodyLarge,
+                        style: context.general.textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
                       ),
                       Padding(
                         padding: context.padding.normal,
                         child: Text(
                           StringConstants.noConnectionSubtitle,
                           textAlign: TextAlign.center,
-                          style: context.general.textTheme.bodyMedium,
+                          style: context.general.textTheme.bodyMedium!.copyWith(fontSize: 19),
                         ),
                       ),
                       CustomButton(
@@ -63,6 +49,9 @@ class Dialogs {
                             Navigator.of(context).pop(); // Diyalogu kapat.
                             onRetry(); // Yeniden deneme işlemini çağır.
                           }),
+                      SizedBox(
+                        height: 20,
+                      ),
                     ],
                   ),
                 ),
@@ -81,6 +70,87 @@ class Dialogs {
                 ),
               ),
             ],
+          ),
+        );
+      },
+    );
+  }
+
+  static sendReasonForCancelLesson({required BuildContext context}) {
+    TextEditingController controller = TextEditingController();
+    showDialog(
+      context: context,
+      barrierDismissible: true, // Kullanıcı dışarıya tıklayarak kapatamaz.
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: context.border.normalBorderRadius,
+          ),
+          elevation: 0.0,
+          backgroundColor: Colors.transparent,
+          child: Container(
+            padding: context.padding.normal,
+            decoration: BoxDecoration(
+              color: ColorConstants.whiteColor,
+              borderRadius: context.border.normalBorderRadius,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Text(
+                  'Write rease why you want to cancel the lesson',
+                  style: context.general.textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold, fontSize: 22),
+                ),
+                Padding(padding: context.padding.normal, child: CustomTextField(labelName: 'Reason', controller: controller, maxLine: 5, focusNode: FocusNode(), requestfocusNode: FocusNode())),
+                CustomButton(
+                    text: 'Send',
+                    mini: true,
+                    onPressed: () {
+                      CustomSnackbar.showCustomSnackbar(context, "Success", "Your request has been sent ", ColorConstants.greenColor);
+                    }),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  static showCancelLessonDialog({required BuildContext context, required String title, required String subtitle, required String cancelText, required VoidCallback ontap}) {
+    showDialog(
+      context: context,
+      barrierDismissible: true, // Kullanıcı dışarıya tıklayarak kapatamaz.
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: context.border.normalBorderRadius,
+          ),
+          elevation: 0.0,
+          backgroundColor: Colors.transparent,
+          child: Container(
+            padding: context.padding.normal,
+            decoration: BoxDecoration(
+              color: ColorConstants.whiteColor,
+              borderRadius: context.border.normalBorderRadius,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Text(
+                  title,
+                  style: context.general.textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold, fontSize: 22),
+                ),
+                Padding(
+                  padding: context.padding.normal,
+                  child: Text(
+                    subtitle,
+                    textAlign: TextAlign.center,
+                    style: context.general.textTheme.bodyMedium!.copyWith(fontSize: 20),
+                  ),
+                ),
+                CustomButton(text: cancelText, mini: true, onPressed: ontap),
+              ],
+            ),
           ),
         );
       },
@@ -270,7 +340,6 @@ class Dialogs {
                             SnackBar(content: Text("Please select a date and time!")),
                           );
                         } else {
-                          final String description = descriptionController.text;
                           rescheduleNotifier.setDate(tempSelectedDate!);
                           rescheduleNotifier.setTime(tempSelectedTime!);
                           Navigator.of(context).pop();

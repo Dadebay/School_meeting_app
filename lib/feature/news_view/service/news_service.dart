@@ -11,7 +11,6 @@ class NewsService {
 
     if (response.statusCode == 200) {
       final utf8Body = utf8.decode(response.bodyBytes);
-      print('Decoded Response: $utf8Body'); // Yanıtı kontrol etmek için logla
       final List<dynamic> data = json.decode(utf8Body) as List<dynamic>;
       return data.map((json) => NewsModel.fromJson(json as Map<String, dynamic>)).toList();
     } else {

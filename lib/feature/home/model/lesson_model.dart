@@ -1,3 +1,5 @@
+// ignore_for_file: strict_raw_type
+
 class LessonModel {
   final int id;
   final String lessonName;
@@ -39,7 +41,7 @@ class LessonModel {
       teacher: json['teacher']?.toString() ?? '',
       classroom: json['classroom']?.toString() ?? '',
       img: json['img']?.toString() ?? '',
-      teacherConfirmation: json['teacher_confirmation'] as bool? ?? false,
+      teacherConfirmation: json['teacherConfirmation'] as bool? ?? false,
       students: (json['students'] as List?)?.map((e) => e).toList() ?? [],
     );
   }
@@ -60,7 +62,7 @@ class StudentModel {
 
   factory StudentModel.fromJson(Map<String, dynamic> json) {
     return StudentModel(
-      id: json['id'] as int ?? 0,
+      id: json['id'] as int,
       username: json['username']?.toString() ?? '',
       email: json['email']?.toString() ?? '',
       img: json['img']?.toString() ?? '',

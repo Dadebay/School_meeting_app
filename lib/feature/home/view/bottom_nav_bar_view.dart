@@ -1,16 +1,11 @@
 // ignore_for_file: deprecated_member_use
 
-import 'dart:developer';
-
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:iconly/iconly.dart';
-import 'package:kartal/kartal.dart';
 import 'package:okul_com_tm/feature/home/view/home_view.dart';
-import 'package:okul_com_tm/feature/login/service/auth_provider.dart';
 import 'package:okul_com_tm/feature/profil/view/user_profil.dart';
-import 'package:okul_com_tm/product/constants/index.dart';
 import 'package:okul_com_tm/product/initialize/custom_bottom_nav_extension.dart';
+import 'package:okul_com_tm/product/widgets/index.dart';
 
 import '../../news_view/view/news_view.dart';
 
@@ -36,7 +31,6 @@ class _BottomNavBarState extends State<BottomNavBar> {
         isTeacher = false;
       }
       setState(() {});
-      log("isTeacher" + isTeacher.toString());
     });
   }
 
@@ -46,7 +40,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> pages = [HomeView(), NewsView(), UserProfilView(isTeacher: isTeacher)];
+    final List<Widget> pages = [HomeView(isTeacher: isTeacher), NewsView(), UserProfilView(isTeacher: isTeacher)];
 
     return Scaffold(
         extendBody: true,
@@ -67,7 +61,6 @@ class _BottomNavBarState extends State<BottomNavBar> {
           currentIndex: selectedIndex,
           onTap: (index) async {
             selectedIndex = index;
-
             setState(() {});
           },
         ));

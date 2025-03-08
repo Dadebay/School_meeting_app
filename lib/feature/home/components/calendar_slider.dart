@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kartal/kartal.dart';
 import 'package:okul_com_tm/feature/home/service/calendar_provider.dart';
-import 'package:okul_com_tm/product/constants/index.dart';
 import 'package:okul_com_tm/product/sizes/widget_sizes.dart';
 
+import '../../../product/widgets/index.dart';
 import '../../lesson_profil/service/lessons_service.dart';
 
 class CalendarSlider extends ConsumerWidget {
@@ -17,7 +15,7 @@ class CalendarSlider extends ConsumerWidget {
 
     return Container(
       height: WidgetSizes.calendarSliderWidth.value + 10,
-      margin: context.padding.onlyBottomNormal,
+      margin: context.padding.verticalLow,
       child: PageView.builder(
         controller: pageController,
         itemCount: 365, // Tüm yılın günleri

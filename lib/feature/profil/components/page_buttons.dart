@@ -1,28 +1,27 @@
-import 'package:auto_route/auto_route.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import 'package:kartal/kartal.dart';
+import 'package:okul_com_tm/feature/profil/view/free_time_post_page.dart';
 import 'package:okul_com_tm/product/constants/color_constants.dart';
 
 class PageButtons extends StatelessWidget {
   final bool isTeacher;
 
   final List<String> buttonNames = [
-    'Achievements',
     'Share app',
     "About Us",
     'Privacy Policy',
   ];
 
   final List<IconData> buttonIcons = [
-    IconlyLight.discovery,
-    IconlyLight.setting,
+    CupertinoIcons.share,
     IconlyLight.info_square,
     IconlyLight.document,
   ];
 
   final List<String> teacherButtonNames = [
-    'My Lessons',
+    'Set Free Time',
     "About Us",
   ];
 
@@ -30,9 +29,6 @@ class PageButtons extends StatelessWidget {
     IconlyLight.document,
     IconlyLight.info_square,
   ];
-  final List<String> teacherPages = ['/teacherLessons', '/create_lesson'];
-
-  final List<String> studentPages = [];
 
   PageButtons({super.key, required this.isTeacher});
 
@@ -45,7 +41,11 @@ class PageButtons extends StatelessWidget {
         return Padding(
           padding: context.padding.verticalLow,
           child: ListTile(
-            onTap: () => context.router.pushNamed(isTeacher ? teacherPages[index] : studentPages[index]),
+            onTap: () {
+              if (isTeacher) {
+                context.route.navigateToPage(FreeTimePage());
+              } else {}
+            },
             shape: RoundedRectangleBorder(
               borderRadius: context.border.normalBorderRadius,
             ),

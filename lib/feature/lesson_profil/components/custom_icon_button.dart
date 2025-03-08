@@ -1,11 +1,9 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
-import 'package:iconly/iconly.dart';
-import 'package:kartal/kartal.dart';
 import 'package:okul_com_tm/feature/home/model/lesson_model.dart';
-import 'package:okul_com_tm/product/constants/index.dart';
 import 'package:okul_com_tm/product/sizes/widget_sizes.dart';
+import 'package:okul_com_tm/product/widgets/index.dart';
 
 class CustomIconButton extends StatelessWidget {
   CustomIconButton({

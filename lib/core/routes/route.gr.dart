@@ -15,19 +15,21 @@ import 'package:okul_com_tm/feature/home/view/bottom_nav_bar_view.dart' as _i1;
 import 'package:okul_com_tm/feature/home/view/home_view.dart' as _i4;
 import 'package:okul_com_tm/feature/lesson_profil/view/lessons_profil.dart'
     as _i5;
+import 'package:okul_com_tm/feature/lesson_profil/view/student_attendence_view.dart'
+    as _i10;
 import 'package:okul_com_tm/feature/login/view/login_view.dart' as _i6;
 import 'package:okul_com_tm/feature/news_view/model/news_model.dart' as _i16;
 import 'package:okul_com_tm/feature/news_view/view/news_profile_view.dart'
     as _i7;
 import 'package:okul_com_tm/feature/news_view/view/news_view.dart' as _i8;
-import 'package:okul_com_tm/feature/profil/view/create_lesson.dart' as _i3;
-import 'package:okul_com_tm/feature/profil/view/rooms_availability.dart' as _i9;
-import 'package:okul_com_tm/feature/profil/view/teachers_lessons_view.dart'
-    as _i11;
-import 'package:okul_com_tm/feature/profil/view/user_profil.dart' as _i12;
+import 'package:okul_com_tm/feature/profil/view/free_time_post_page.dart'
+    as _i3;
+import 'package:okul_com_tm/feature/profil/view/user_profil.dart' as _i11;
+import 'package:okul_com_tm/feature/profil/view/user_update_profile.dart'
+    as _i12;
 import 'package:okul_com_tm/feature/splash/view/connection_check_view.dart'
     as _i2;
-import 'package:okul_com_tm/feature/splash/view/splash_view.dart' as _i10;
+import 'package:okul_com_tm/feature/splash/view/splash_view.dart' as _i9;
 
 /// generated route for
 /// [_i1.BottomNavBar]
@@ -68,30 +70,33 @@ class ConnectionCheckView extends _i13.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i3.CreateLessonView]
-class CreateLessonView extends _i13.PageRouteInfo<void> {
-  const CreateLessonView({List<_i13.PageRouteInfo>? children})
+/// [_i3.FreeTimePage]
+class FreeTimeRoute extends _i13.PageRouteInfo<void> {
+  const FreeTimeRoute({List<_i13.PageRouteInfo>? children})
       : super(
-          CreateLessonView.name,
+          FreeTimeRoute.name,
           initialChildren: children,
         );
 
-  static const String name = 'CreateLessonView';
+  static const String name = 'FreeTimeRoute';
 
   static _i13.PageInfo page = _i13.PageInfo(
     name,
     builder: (data) {
-      return _i3.CreateLessonView();
+      return const _i3.FreeTimePage();
     },
   );
 }
 
 /// generated route for
 /// [_i4.HomeView]
-class HomeView extends _i13.PageRouteInfo<void> {
-  const HomeView({List<_i13.PageRouteInfo>? children})
-      : super(
+class HomeView extends _i13.PageRouteInfo<HomeViewArgs> {
+  HomeView({
+    required bool isTeacher,
+    List<_i13.PageRouteInfo>? children,
+  }) : super(
           HomeView.name,
+          args: HomeViewArgs(isTeacher: isTeacher),
           initialChildren: children,
         );
 
@@ -100,9 +105,21 @@ class HomeView extends _i13.PageRouteInfo<void> {
   static _i13.PageInfo page = _i13.PageInfo(
     name,
     builder: (data) {
-      return const _i4.HomeView();
+      final args = data.argsAs<HomeViewArgs>();
+      return _i4.HomeView(isTeacher: args.isTeacher);
     },
   );
+}
+
+class HomeViewArgs {
+  const HomeViewArgs({required this.isTeacher});
+
+  final bool isTeacher;
+
+  @override
+  String toString() {
+    return 'HomeViewArgs{isTeacher: $isTeacher}';
+  }
 }
 
 /// generated route for
@@ -110,12 +127,14 @@ class HomeView extends _i13.PageRouteInfo<void> {
 class LessonsProfil extends _i13.PageRouteInfo<LessonsProfilArgs> {
   LessonsProfil({
     required _i14.LessonModel lessonModel,
+    required bool isTeacher,
     _i15.Key? key,
     List<_i13.PageRouteInfo>? children,
   }) : super(
           LessonsProfil.name,
           args: LessonsProfilArgs(
             lessonModel: lessonModel,
+            isTeacher: isTeacher,
             key: key,
           ),
           initialChildren: children,
@@ -129,6 +148,7 @@ class LessonsProfil extends _i13.PageRouteInfo<LessonsProfilArgs> {
       final args = data.argsAs<LessonsProfilArgs>();
       return _i5.LessonsProfil(
         args.lessonModel,
+        args.isTeacher,
         key: args.key,
       );
     },
@@ -138,16 +158,19 @@ class LessonsProfil extends _i13.PageRouteInfo<LessonsProfilArgs> {
 class LessonsProfilArgs {
   const LessonsProfilArgs({
     required this.lessonModel,
+    required this.isTeacher,
     this.key,
   });
 
   final _i14.LessonModel lessonModel;
 
+  final bool isTeacher;
+
   final _i15.Key? key;
 
   @override
   String toString() {
-    return 'LessonsProfilArgs{lessonModel: $lessonModel, key: $key}';
+    return 'LessonsProfilArgs{lessonModel: $lessonModel, isTeacher: $isTeacher, key: $key}';
   }
 }
 
@@ -236,26 +259,7 @@ class NewsView extends _i13.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i9.RoomsAvailabilityView]
-class RoomsAvailabilityView extends _i13.PageRouteInfo<void> {
-  const RoomsAvailabilityView({List<_i13.PageRouteInfo>? children})
-      : super(
-          RoomsAvailabilityView.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'RoomsAvailabilityView';
-
-  static _i13.PageInfo page = _i13.PageInfo(
-    name,
-    builder: (data) {
-      return _i9.RoomsAvailabilityView();
-    },
-  );
-}
-
-/// generated route for
-/// [_i10.SplashView]
+/// [_i9.SplashView]
 class SplashView extends _i13.PageRouteInfo<void> {
   const SplashView({List<_i13.PageRouteInfo>? children})
       : super(
@@ -268,32 +272,66 @@ class SplashView extends _i13.PageRouteInfo<void> {
   static _i13.PageInfo page = _i13.PageInfo(
     name,
     builder: (data) {
-      return const _i10.SplashView();
+      return const _i9.SplashView();
     },
   );
 }
 
 /// generated route for
-/// [_i11.TeacherLessonsView]
-class TeacherLessonsView extends _i13.PageRouteInfo<void> {
-  const TeacherLessonsView({List<_i13.PageRouteInfo>? children})
-      : super(
-          TeacherLessonsView.name,
+/// [_i10.StudentAttendancePage]
+class StudentAttendanceRoute
+    extends _i13.PageRouteInfo<StudentAttendanceRouteArgs> {
+  StudentAttendanceRoute({
+    _i15.Key? key,
+    required List<_i14.StudentModel> students,
+    required int lessonId,
+    List<_i13.PageRouteInfo>? children,
+  }) : super(
+          StudentAttendanceRoute.name,
+          args: StudentAttendanceRouteArgs(
+            key: key,
+            students: students,
+            lessonId: lessonId,
+          ),
           initialChildren: children,
         );
 
-  static const String name = 'TeacherLessonsView';
+  static const String name = 'StudentAttendanceRoute';
 
   static _i13.PageInfo page = _i13.PageInfo(
     name,
     builder: (data) {
-      return const _i11.TeacherLessonsView();
+      final args = data.argsAs<StudentAttendanceRouteArgs>();
+      return _i10.StudentAttendancePage(
+        key: args.key,
+        students: args.students,
+        lessonId: args.lessonId,
+      );
     },
   );
 }
 
+class StudentAttendanceRouteArgs {
+  const StudentAttendanceRouteArgs({
+    this.key,
+    required this.students,
+    required this.lessonId,
+  });
+
+  final _i15.Key? key;
+
+  final List<_i14.StudentModel> students;
+
+  final int lessonId;
+
+  @override
+  String toString() {
+    return 'StudentAttendanceRouteArgs{key: $key, students: $students, lessonId: $lessonId}';
+  }
+}
+
 /// generated route for
-/// [_i12.UserProfilView]
+/// [_i11.UserProfilView]
 class UserProfilView extends _i13.PageRouteInfo<UserProfilViewArgs> {
   UserProfilView({
     _i15.Key? key,
@@ -314,7 +352,7 @@ class UserProfilView extends _i13.PageRouteInfo<UserProfilViewArgs> {
     name,
     builder: (data) {
       final args = data.argsAs<UserProfilViewArgs>();
-      return _i12.UserProfilView(
+      return _i11.UserProfilView(
         key: args.key,
         isTeacher: args.isTeacher,
       );
@@ -336,4 +374,23 @@ class UserProfilViewArgs {
   String toString() {
     return 'UserProfilViewArgs{key: $key, isTeacher: $isTeacher}';
   }
+}
+
+/// generated route for
+/// [_i12.UserUpdateProfile]
+class UserUpdateProfile extends _i13.PageRouteInfo<void> {
+  const UserUpdateProfile({List<_i13.PageRouteInfo>? children})
+      : super(
+          UserUpdateProfile.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'UserUpdateProfile';
+
+  static _i13.PageInfo page = _i13.PageInfo(
+    name,
+    builder: (data) {
+      return _i12.UserUpdateProfile();
+    },
+  );
 }

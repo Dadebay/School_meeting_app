@@ -14,10 +14,8 @@ class FCMService {
     final body = {'fcmtoken': fcmToken};
     final bearerToken = await AuthServiceStorage.getToken();
     if (bearerToken != null) {
-      print(bearerToken);
       headers['Authorization'] = 'Bearer $bearerToken';
     } else {
-      print('Bearer token not found.');
       return null;
     }
 
@@ -32,11 +30,9 @@ class FCMService {
       if (response.statusCode == 200) {
         return json.decode(response.body) as Map<String, dynamic>;
       } else {
-        print('Request failed with status: ${response.statusCode}');
         return null;
       }
     } catch (e) {
-      print('Error occurred: $e');
       return null;
     }
   }
