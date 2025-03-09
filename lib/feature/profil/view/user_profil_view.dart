@@ -14,15 +14,10 @@ class UserProfilView extends ConsumerWidget {
     return NestedScrollView(
       headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
         return <Widget>[
-          ProfilSliverAppBar(
-            innerBoxIsScrolled: innerBoxIsScrolled,
-            isTeacher: isTeacher,
-          ),
+          ProfilSliverAppBar(innerBoxIsScrolled: innerBoxIsScrolled, isTeacher: isTeacher),
         ];
       },
-      body: PageButtons(
-        isTeacher: isTeacher,
-      ),
+      body: PageButtons(isTeacher: isTeacher),
     );
   }
 }

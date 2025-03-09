@@ -182,7 +182,7 @@ class LessonCard extends StatelessWidget {
   void _navigateToLesson(BuildContext context) {
     context.navigateTo(
       LessonsProfil(
-        lessonModel: lessonModel,
+        lessonModelBack: lessonModel,
         isTeacher: isTeacher,
       ),
     );

@@ -59,15 +59,22 @@ class CustomWidgets {
 
 class CustomSnackbar {
   static void showCustomSnackbar(BuildContext context, String title, String subtitle, Color color) {
-    ScaffoldMessenger.of(context).showSnackBar(
+    final messenger = ScaffoldMessenger.of(context);
+
+    // Önce var olan SnackBar'ı kaldır
+    messenger.hideCurrentSnackBar();
+
+    // Yeni SnackBar'ı göster
+    messenger.showSnackBar(
       SnackBar(
         content: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
             if (title.isNotEmpty)
               Text(
                 title.tr(),
-                style: TextStyle(
+                style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
                   color: Colors.white,
@@ -78,7 +85,7 @@ class CustomSnackbar {
                 padding: const EdgeInsets.only(top: 8.0),
                 child: Text(
                   subtitle.tr(),
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontWeight: FontWeight.w400,
                     fontSize: 16,
                     color: Colors.white,
@@ -90,10 +97,10 @@ class CustomSnackbar {
         backgroundColor: color,
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(
-          borderRadius: context.border.normalBorderRadius,
+          borderRadius: BorderRadius.circular(12), // Daha yuvarlak kenarlar için
         ),
         duration: const Duration(seconds: 3),
-        margin: context.padding.low,
+        margin: const EdgeInsets.all(10), // Varsayılan padding yerine sabit bir boşluk
       ),
     );
   }

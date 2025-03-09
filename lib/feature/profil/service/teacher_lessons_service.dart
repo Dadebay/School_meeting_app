@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -53,6 +54,20 @@ class TeacherLessonsService {
       CustomSnackbar.showCustomSnackbar(context, 'Error', 'Confirmation failed with status: ${response.statusCode}', ColorConstants.redColor);
 
       return {};
+    }
+  }
+
+  static Future<String> fetchData({required bool privacy}) async {
+    final response = await http.get(Uri.parse(privacy ? ApiConstants.privacyURL : ApiConstants.aboutusURL));
+    print(privacy ? ApiConstants.privacyURL : ApiConstants.aboutusURL);
+    if (response.statusCode == 200) {
+      final utf8Body = utf8.decode(response.bodyBytes);
+      print(utf8Body);
+      final String data = json.decode(utf8Body)[0]['text'] as String;
+
+      return data;
+    } else {
+      return '';
     }
   }
 }

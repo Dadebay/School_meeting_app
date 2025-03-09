@@ -20,6 +20,7 @@ dependencies:
   auto_route:
   flutter_secure_storage:
   restart_app: ^1.3.2
+  flutter_html:
 
   #Image
   cached_network_image: ^3.2.3

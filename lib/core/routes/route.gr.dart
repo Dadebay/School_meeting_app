@@ -11,19 +11,26 @@
 import 'package:auto_route/auto_route.dart' as _i13;
 import 'package:flutter/material.dart' as _i15;
 import 'package:okul_com_tm/feature/home/view/bottom_nav_bar_view.dart' as _i1;
-import 'package:okul_com_tm/feature/home/view/home_view.dart' as _i4;
-import 'package:okul_com_tm/feature/lesson_profil/model/lesson_model.dart' as _i14;
-import 'package:okul_com_tm/feature/lesson_profil/view/lessons_profil.dart' as _i5;
-import 'package:okul_com_tm/feature/lesson_profil/view/student_attendence_view.dart' as _i10;
-import 'package:okul_com_tm/feature/login/view/login_view.dart' as _i6;
+import 'package:okul_com_tm/feature/home/view/home_view.dart' as _i5;
+import 'package:okul_com_tm/feature/lesson_profil/model/lesson_model.dart'
+    as _i14;
+import 'package:okul_com_tm/feature/lesson_profil/view/lessons_profil.dart'
+    as _i6;
+import 'package:okul_com_tm/feature/lesson_profil/view/student_attendence_view.dart'
+    as _i11;
+import 'package:okul_com_tm/feature/login/view/login_view.dart' as _i7;
 import 'package:okul_com_tm/feature/news_view/model/news_model.dart' as _i16;
-import 'package:okul_com_tm/feature/news_view/view/news_profile_view.dart' as _i7;
-import 'package:okul_com_tm/feature/news_view/view/news_view.dart' as _i8;
-import 'package:okul_com_tm/feature/profil/view/free_time_post_page.dart' as _i3;
-import 'package:okul_com_tm/feature/profil/view/user_profil.dart' as _i11;
-import 'package:okul_com_tm/feature/profil/view/user_update_profile.dart' as _i12;
-import 'package:okul_com_tm/feature/splash/view/connection_check_view.dart' as _i2;
-import 'package:okul_com_tm/feature/splash/view/splash_view.dart' as _i9;
+import 'package:okul_com_tm/feature/news_view/view/news_profile_view.dart'
+    as _i8;
+import 'package:okul_com_tm/feature/news_view/view/news_view.dart' as _i9;
+import 'package:okul_com_tm/feature/profil/view/edit_user_profile_view.dart'
+    as _i3;
+import 'package:okul_com_tm/feature/profil/view/free_time_managament_view.dart'
+    as _i4;
+import 'package:okul_com_tm/feature/profil/view/user_profil_view.dart' as _i12;
+import 'package:okul_com_tm/feature/splash/view/connection_check_view.dart'
+    as _i2;
+import 'package:okul_com_tm/feature/splash/view/splash_view.dart' as _i10;
 
 /// generated route for
 /// [_i1.BottomNavBar]
@@ -64,26 +71,45 @@ class ConnectionCheckView extends _i13.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i3.FreeTimePage]
-class FreeTimeRoute extends _i13.PageRouteInfo<void> {
-  const FreeTimeRoute({List<_i13.PageRouteInfo>? children})
+/// [_i3.EditUserProfileView]
+class EditUserProfileView extends _i13.PageRouteInfo<void> {
+  const EditUserProfileView({List<_i13.PageRouteInfo>? children})
       : super(
-          FreeTimeRoute.name,
+          EditUserProfileView.name,
           initialChildren: children,
         );
 
-  static const String name = 'FreeTimeRoute';
+  static const String name = 'EditUserProfileView';
 
   static _i13.PageInfo page = _i13.PageInfo(
     name,
     builder: (data) {
-      return const _i3.FreeTimePage();
+      return _i3.EditUserProfileView();
     },
   );
 }
 
 /// generated route for
-/// [_i4.HomeView]
+/// [_i4.FreeTimeManagamentView]
+class FreeTimeManagamentView extends _i13.PageRouteInfo<void> {
+  const FreeTimeManagamentView({List<_i13.PageRouteInfo>? children})
+      : super(
+          FreeTimeManagamentView.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'FreeTimeManagamentView';
+
+  static _i13.PageInfo page = _i13.PageInfo(
+    name,
+    builder: (data) {
+      return const _i4.FreeTimeManagamentView();
+    },
+  );
+}
+
+/// generated route for
+/// [_i5.HomeView]
 class HomeView extends _i13.PageRouteInfo<HomeViewArgs> {
   HomeView({
     required bool isTeacher,
@@ -100,7 +126,7 @@ class HomeView extends _i13.PageRouteInfo<HomeViewArgs> {
     name,
     builder: (data) {
       final args = data.argsAs<HomeViewArgs>();
-      return _i4.HomeView(isTeacher: args.isTeacher);
+      return _i5.HomeView(isTeacher: args.isTeacher);
     },
   );
 }
@@ -117,17 +143,17 @@ class HomeViewArgs {
 }
 
 /// generated route for
-/// [_i5.LessonsProfil]
+/// [_i6.LessonsProfil]
 class LessonsProfil extends _i13.PageRouteInfo<LessonsProfilArgs> {
   LessonsProfil({
-    required _i14.LessonModel lessonModel,
+    required _i14.LessonModel lessonModelBack,
     required bool isTeacher,
     _i15.Key? key,
     List<_i13.PageRouteInfo>? children,
   }) : super(
           LessonsProfil.name,
           args: LessonsProfilArgs(
-            lessonModel: lessonModel,
+            lessonModelBack: lessonModelBack,
             isTeacher: isTeacher,
             key: key,
           ),
@@ -140,8 +166,8 @@ class LessonsProfil extends _i13.PageRouteInfo<LessonsProfilArgs> {
     name,
     builder: (data) {
       final args = data.argsAs<LessonsProfilArgs>();
-      return _i5.LessonsProfil(
-        args.lessonModel,
+      return _i6.LessonsProfil(
+        args.lessonModelBack,
         args.isTeacher,
         key: args.key,
       );
@@ -151,12 +177,12 @@ class LessonsProfil extends _i13.PageRouteInfo<LessonsProfilArgs> {
 
 class LessonsProfilArgs {
   const LessonsProfilArgs({
-    required this.lessonModel,
+    required this.lessonModelBack,
     required this.isTeacher,
     this.key,
   });
 
-  final _i14.LessonModel lessonModel;
+  final _i14.LessonModel lessonModelBack;
 
   final bool isTeacher;
 
@@ -164,12 +190,12 @@ class LessonsProfilArgs {
 
   @override
   String toString() {
-    return 'LessonsProfilArgs{lessonModel: $lessonModel, isTeacher: $isTeacher, key: $key}';
+    return 'LessonsProfilArgs{lessonModelBack: $lessonModelBack, isTeacher: $isTeacher, key: $key}';
   }
 }
 
 /// generated route for
-/// [_i6.LoginView]
+/// [_i7.LoginView]
 class LoginView extends _i13.PageRouteInfo<void> {
   const LoginView({List<_i13.PageRouteInfo>? children})
       : super(
@@ -182,13 +208,13 @@ class LoginView extends _i13.PageRouteInfo<void> {
   static _i13.PageInfo page = _i13.PageInfo(
     name,
     builder: (data) {
-      return _i6.LoginView();
+      return _i7.LoginView();
     },
   );
 }
 
 /// generated route for
-/// [_i7.NewsProfileView]
+/// [_i8.NewsProfileView]
 class NewsProfileView extends _i13.PageRouteInfo<NewsProfileViewArgs> {
   NewsProfileView({
     _i15.Key? key,
@@ -209,7 +235,7 @@ class NewsProfileView extends _i13.PageRouteInfo<NewsProfileViewArgs> {
     name,
     builder: (data) {
       final args = data.argsAs<NewsProfileViewArgs>();
-      return _i7.NewsProfileView(
+      return _i8.NewsProfileView(
         key: args.key,
         newsModel: args.newsModel,
       );
@@ -234,7 +260,7 @@ class NewsProfileViewArgs {
 }
 
 /// generated route for
-/// [_i8.NewsView]
+/// [_i9.NewsView]
 class NewsView extends _i13.PageRouteInfo<void> {
   const NewsView({List<_i13.PageRouteInfo>? children})
       : super(
@@ -247,13 +273,13 @@ class NewsView extends _i13.PageRouteInfo<void> {
   static _i13.PageInfo page = _i13.PageInfo(
     name,
     builder: (data) {
-      return _i8.NewsView();
+      return _i9.NewsView();
     },
   );
 }
 
 /// generated route for
-/// [_i9.SplashView]
+/// [_i10.SplashView]
 class SplashView extends _i13.PageRouteInfo<void> {
   const SplashView({List<_i13.PageRouteInfo>? children})
       : super(
@@ -266,14 +292,15 @@ class SplashView extends _i13.PageRouteInfo<void> {
   static _i13.PageInfo page = _i13.PageInfo(
     name,
     builder: (data) {
-      return const _i9.SplashView();
+      return const _i10.SplashView();
     },
   );
 }
 
 /// generated route for
-/// [_i10.StudentAttendancePage]
-class StudentAttendanceRoute extends _i13.PageRouteInfo<StudentAttendanceRouteArgs> {
+/// [_i11.StudentAttendancePage]
+class StudentAttendanceRoute
+    extends _i13.PageRouteInfo<StudentAttendanceRouteArgs> {
   StudentAttendanceRoute({
     _i15.Key? key,
     required List<_i14.StudentModel> students,
@@ -295,7 +322,7 @@ class StudentAttendanceRoute extends _i13.PageRouteInfo<StudentAttendanceRouteAr
     name,
     builder: (data) {
       final args = data.argsAs<StudentAttendanceRouteArgs>();
-      return _i10.StudentAttendancePage(
+      return _i11.StudentAttendancePage(
         key: args.key,
         students: args.students,
         lessonId: args.lessonId,
@@ -324,7 +351,7 @@ class StudentAttendanceRouteArgs {
 }
 
 /// generated route for
-/// [_i11.UserProfilView]
+/// [_i12.UserProfilView]
 class UserProfilView extends _i13.PageRouteInfo<UserProfilViewArgs> {
   UserProfilView({
     _i15.Key? key,
@@ -345,7 +372,7 @@ class UserProfilView extends _i13.PageRouteInfo<UserProfilViewArgs> {
     name,
     builder: (data) {
       final args = data.argsAs<UserProfilViewArgs>();
-      return _i11.UserProfilView(
+      return _i12.UserProfilView(
         key: args.key,
         isTeacher: args.isTeacher,
       );
@@ -367,23 +394,4 @@ class UserProfilViewArgs {
   String toString() {
     return 'UserProfilViewArgs{key: $key, isTeacher: $isTeacher}';
   }
-}
-
-/// generated route for
-/// [_i12.UserUpdateProfile]
-class UserUpdateProfile extends _i13.PageRouteInfo<void> {
-  const UserUpdateProfile({List<_i13.PageRouteInfo>? children})
-      : super(
-          UserUpdateProfile.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'UserUpdateProfile';
-
-  static _i13.PageInfo page = _i13.PageInfo(
-    name,
-    builder: (data) {
-      return _i12.UserUpdateProfile();
-    },
-  );
 }

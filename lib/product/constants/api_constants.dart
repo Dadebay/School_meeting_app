@@ -15,5 +15,7 @@ class ApiConstants {
   static const String setFreeTime = '${baseUrl}freeTime/';
   static const String cancelLessonTeacher = '${baseUrl}Cancel/';
   static const String getFreeTimes = '${baseUrl}getFreeTime';
-  static const String deleteFreeTime = '${baseUrl}Cancel/';
+  static const String deleteFreeTime = '${baseUrl}deleteFreeTime/';
+  static const String aboutusURL = '${baseUrl}About/';
+  static const String privacyURL = '${baseUrl}Privacy/';
 }

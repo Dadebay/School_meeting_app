@@ -12,7 +12,6 @@ final userUpdateProvider = StateNotifierProvider<UserUpdateNotifier, UserUpdateS
 
 class UserUpdateNotifier extends StateNotifier<UserUpdateState> {
   UserUpdateNotifier() : super(UserUpdateState());
-
   Future<UserModel?> getUserProfile() async {
     final token = await AuthServiceStorage.getToken();
 
@@ -20,9 +19,6 @@ class UserUpdateNotifier extends StateNotifier<UserUpdateState> {
     final response = await http.get(url, headers: {
       'Authorization': 'Bearer $token',
     });
-    print(token);
-    print(response.statusCode);
-    print(response.body);
     if (response.statusCode == 200) {
       final utf8Body = utf8.decode(response.bodyBytes);
       final UserModel data = UserModel.fromJson(json.decode(utf8Body)[0] as Map<String, dynamic>);
@@ -38,47 +34,32 @@ class UserUpdateNotifier extends StateNotifier<UserUpdateState> {
     }
   }
 
-  void setEmail(String email) {
+  void setDetails({required String email, required String userName, required File image}) {
     state = state.copyWith(email: email);
-  }
-
-  void setUsername(String username) {
-    state = state.copyWith(username: username);
-  }
-
-  void setImage(File image) {
+    state = state.copyWith(username: userName);
     state = state.copyWith(image: image);
   }
 
-  Future<void> updateProfile({required BuildContext context, required String userName, required String email}) async {
+  Future<void> updateProfile({required BuildContext context, required String userName, required File image, required String email}) async {
     final token = await AuthServiceStorage.getToken(); // Fetch the token
-
     final url = Uri.parse(ApiConstants.updateProfile);
     var request = http.MultipartRequest('POST', url);
-
     request.fields['email'] = email;
     request.fields['username'] = userName;
     request.headers['Authorization'] = 'Bearer $token';
-    print(request.fields['email'].toString());
-    print(request.fields['username'].toString());
     if (state.image != null) {
       var imageStream = http.ByteStream(state.image!.openRead());
       var length = await state.image!.length();
       var multipartFile = http.MultipartFile('img', imageStream, length, filename: state.image!.path.split('/').last);
       request.files.add(multipartFile);
     }
-
     var response = await request.send();
-
     if (response.statusCode == 200) {
-      CustomSnackbar.showCustomSnackbar(context, 'success', "Profile updated successfully", ColorConstants.greenColor);
+      CustomSnackbar.showCustomSnackbar(context, 'success', "profile_updated", ColorConstants.greenColor);
       getUserProfile();
-
-      Navigator.of(context).pop();
-      print('Profile updated successfully');
+      setDetails(email: email, userName: userName, image: image);
     } else {
-      CustomSnackbar.showCustomSnackbar(context, 'Error', "Failed to update profile", ColorConstants.redColor);
-      print('Failed to update profile');
+      CustomSnackbar.showCustomSnackbar(context, 'error', "failed_to_update", ColorConstants.redColor);
     }
   }
 }

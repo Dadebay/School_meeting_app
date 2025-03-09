@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, document_ignores, lines_longer_than_80_chars
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:kartal/kartal.dart';
 import 'package:okul_com_tm/product/constants/color_constants.dart';
@@ -31,7 +32,7 @@ class CustomButton extends StatelessWidget {
         width: double.infinity,
         alignment: Alignment.center,
         child: Text(
-          text,
+          text.tr(),
           style: context.general.textTheme.titleLarge?.copyWith(
             fontWeight: FontWeight.bold,
             color: showBorderStyle == true ? ColorConstants.blackColor : ColorConstants.whiteColor,

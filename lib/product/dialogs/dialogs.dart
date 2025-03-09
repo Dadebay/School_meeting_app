@@ -138,9 +138,7 @@ class Dialogs {
                         style: context.general.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
                       ),
                       GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).pop();
-                        },
+                        onTap: () => Navigator.of(context).pop(),
                         child: Padding(
                           padding: context.padding.onlyRightLow,
                           child: const Icon(CupertinoIcons.xmark_circle, color: ColorConstants.blackColor),
@@ -152,7 +150,7 @@ class Dialogs {
                 Padding(
                   padding: context.padding.normal,
                   child: Text(
-                    'log_out'.tr(),
+                    'log_out_title'.tr(),
                     textAlign: TextAlign.center,
                     style: context.general.textTheme.bodyLarge!.copyWith(color: ColorConstants.blackColor, fontSize: 19),
                   ),
@@ -166,19 +164,13 @@ class Dialogs {
                         await AuthServiceStorage.clearToken();
                         await AuthServiceStorage.clearStatus();
                         await Restart.restartApp();
-                        CustomSnackbar.showCustomSnackbar(context, "Success", "Successfully logged out", ColorConstants.greenColor);
+                        CustomSnackbar.showCustomSnackbar(context, "success", "log_out_subtitle", ColorConstants.greenColor);
                       },
                       showBorderStyle: true),
                 ),
                 Padding(
                   padding: context.padding.normal.copyWith(top: 0),
-                  child: CustomButton(
-                      text: 'no'.tr(),
-                      mini: true,
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      showBorderStyle: false),
+                  child: CustomButton(text: 'no'.tr(), mini: true, onPressed: () => Navigator.of(context).pop(), showBorderStyle: false),
                 ),
               ],
             ),

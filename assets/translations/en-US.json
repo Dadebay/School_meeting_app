@@ -26,6 +26,7 @@
     "news":"News",
     "log_out": "Logout",
     "log_out_title": "Are you sure you want to log out?",
+    "log_out_subtitle": "Successfully logged out",
     "yes": "Yes",
     "no": "No",
 
@@ -59,5 +60,27 @@
     "time_managament":"Time Managamanet",
     "times_submitted":"Free time submitted successfully",
     "failed_to_submit":"Failed to submit free time",
-    "lesson_canceled":"Lesson Canceled"
+    "lesson_canceled":"Lesson Canceled",
+    "set_free_time":"Set free time",
+    "free_time_added":"Successfully added free times",
+    "delete_free_time":"Free times successfully deleted",
+    "cannot_delete_free_time":"Something goes wrong pleas try again !",
+
+    "about_us":"About us",
+    "privacy_policy":"Privacy policy",
+    "edit_profile":"Edit profile",
+    "select_image":"Select image",
+    "select_date_range":"Please select your available date range",
+    "select_time_range_start":"Choose the start time for the job.",
+    "select_time_range_end":"Choose the time to leave work.",
+
+    "error_date_range":"Please select a valid date and time range",
+    "change_image":"Change image",
+    "update_profile":"Update Profile",
+
+    "image_selected":"Image selected successfully",
+
+    "profile_updated":"Profile updated successfully",
+    "failed_to_update":"Failed to update profile"
+
   }

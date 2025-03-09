@@ -27,7 +27,7 @@ class CustomTextField extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       padding: EdgeInsets.only(top: 15),
       child: TextFormField(
-        style: context.general.textTheme.bodyLarge!.copyWith(color: ColorConstants.blackColor, fontWeight: FontWeight.w600),
+        style: context.general.textTheme.bodyLarge!.copyWith(color: enabled == false ? ColorConstants.greyColor : ColorConstants.blackColor, fontWeight: FontWeight.w600),
         enabled: enabled ?? true,
         controller: controller,
         validator: (value) {

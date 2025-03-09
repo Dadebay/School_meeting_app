@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import 'package:kartal/kartal.dart';
@@ -26,7 +27,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             )
           : null,
       title: Text(
-        title,
+        title.tr(),
         style: context.general.textTheme.headlineMedium!.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
       ),
     );

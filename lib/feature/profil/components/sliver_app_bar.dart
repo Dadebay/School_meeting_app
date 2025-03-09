@@ -12,11 +12,11 @@ class ProfilSliverAppBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userModel = ref.read(userUpdateProvider);
+    final userModel = ref.watch(userUpdateProvider);
     return SliverAppBar(
       pinned: true,
       automaticallyImplyLeading: false,
-      expandedHeight: 320,
+      expandedHeight: ImageSizes.bigLlargeMini.value,
       elevation: 0,
       scrolledUnderElevation: 0,
       backgroundColor: ColorConstants.whiteColor,
@@ -27,25 +27,15 @@ class ProfilSliverAppBar extends ConsumerWidget {
             )
           : null,
       leading: IconButton(
-        onPressed: () {
-          context.navigateNamedTo('/updateProfile');
-        },
-        icon: Icon(
-          IconlyLight.edit_square,
-          color: ColorConstants.greyColor,
-        ),
+        onPressed: () => context.navigateNamedTo('/updateProfile'),
+        icon: Icon(IconlyLight.edit_square, color: ColorConstants.greyColor),
       ),
       actions: [
         Padding(
           padding: context.padding.low,
           child: IconButton(
-            onPressed: () {
-              Dialogs.logOut(context: context);
-            },
-            icon: Icon(
-              IconlyLight.logout,
-              color: ColorConstants.greyColor,
-            ),
+            onPressed: () => Dialogs.logOut(context: context),
+            icon: Icon(IconlyLight.logout, color: ColorConstants.greyColor),
           ),
         )
       ],

@@ -4,7 +4,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:okul_com_tm/feature/home/view/home_view.dart';
-import 'package:okul_com_tm/feature/profil/view/user_profil.dart';
+import 'package:okul_com_tm/feature/profil/view/user_profil_view.dart';
 import 'package:okul_com_tm/product/initialize/custom_bottom_nav_extension.dart';
 import 'package:okul_com_tm/product/widgets/index.dart';
 

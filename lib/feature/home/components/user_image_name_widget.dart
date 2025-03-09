@@ -7,6 +7,8 @@ class UserNameAndImage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(userUpdateProvider);
+
     return Padding(
       padding: const EdgeInsets.only(left: 25, right: 25, bottom: 50),
       child: Row(
@@ -28,7 +30,7 @@ class UserNameAndImage extends ConsumerWidget {
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: 'Hey,',
+                        text: 'Hey, ',
                         style: context.general.textTheme.headlineMedium?.copyWith(
                           fontWeight: FontWeight.w400,
                         ),
@@ -55,8 +57,15 @@ class UserNameAndImage extends ConsumerWidget {
               color: ColorConstants.primaryBlueColor.withOpacity(.1),
               border: Border.all(color: ColorConstants.primaryBlueColor),
             ),
-            child: Image.asset(
-              IconConstants.user1,
+            child: CachedNetworkImage(
+              imageUrl: ApiConstants.imageURL + state.imagePath,
+              imageBuilder: (context, imageProvider) => Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(image: imageProvider),
+                ),
+              ),
+              placeholder: (context, url) => CustomWidgets.loader(),
+              errorWidget: (context, url, error) => Icon(Icons.error),
             ),
           ),
         ],
