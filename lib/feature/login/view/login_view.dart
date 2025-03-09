@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:auto_route/auto_route.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:okul_com_tm/core/routes/route.gr.dart';
 import 'package:okul_com_tm/feature/splash/service/fcm_provider.dart';
@@ -41,15 +42,11 @@ class LoginView extends ConsumerWidget {
                       width: ImageSizes.high.value,
                     ),
                   ),
-                  // Padding(
-                  //   padding: context.padding.verticalMedium,
-                  //   child: Text(StringConstants.loginTitle, textAlign: TextAlign.center, style: context.general.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
-                  // ),
-                  Text(StringConstants.loginSubtitle, textAlign: TextAlign.center, style: context.general.textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w500)),
+                  Text('login_subtitle'.tr(), textAlign: TextAlign.center, style: context.general.textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w500)),
                   Padding(
                     padding: context.padding.verticalNormal,
                     child: CustomTextField(
-                      labelName: StringConstants.username,
+                      labelName: 'username'.tr(),
                       controller: userNameController,
                       prefixIcon: IconlyLight.profile,
                       focusNode: userNameFocusNode,
@@ -57,7 +54,7 @@ class LoginView extends ConsumerWidget {
                     ),
                   ),
                   CustomTextField(
-                    labelName: StringConstants.passwordTitle,
+                    labelName: 'parol'.tr(),
                     controller: passwordController,
                     prefixIcon: IconlyLight.lock,
                     focusNode: passwordFocusNode,
@@ -67,28 +64,29 @@ class LoginView extends ConsumerWidget {
                   Padding(
                     padding: context.padding.verticalNormal,
                     child: CustomButton(
-                      text: StringConstants.agree,
+                      text: 'agree'.tr(),
                       mini: true,
                       removeShadow: true,
                       onPressed: () async {
                         final username = userNameController.text;
                         final password = passwordController.text;
-                        await ref.read(authProvider.notifier).login(username, password);
+                        await ref.read(authProvider.notifier).login(username, password, context);
                         if (ref.read(authProvider).isLoggedIn) {
                           await FCMService.postFCMToken();
                           context.navigateTo(BottomNavBar());
                         } else {
-                          CustomSnackbar.showCustomSnackbar(context, "Error", "Please check your username and password", ColorConstants.redColor);
+                          userNameController.clear();
+                          passwordController.clear();
+                          CustomSnackbar.showCustomSnackbar(context, 'error_title'.tr(), 'login_title'.tr(), ColorConstants.redColor);
                         }
                       },
                     ),
                   ),
                   TextButton(
                       onPressed: () {
-                        context.navigateTo(SplashView());
-                        CustomSnackbar.showCustomSnackbar(context, "Contact", "Please contect School admin to reset your password", ColorConstants.redColor);
+                        CustomSnackbar.showCustomSnackbar(context, 'contact'.tr(), 'contact_subtitle'.tr(), ColorConstants.redColor);
                       },
-                      child: Text(StringConstants.forgotPassword, style: context.general.textTheme.bodyLarge?.copyWith(color: ColorConstants.greyColor)))
+                      child: Text('forgot_password'.tr(), style: context.general.textTheme.bodyLarge?.copyWith(color: ColorConstants.greyColor)))
                 ],
               ),
             ),

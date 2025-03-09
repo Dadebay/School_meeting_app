@@ -28,7 +28,7 @@ class ColorConstants {
               ColorConstants.whiteColor,
               ColorConstants.primaryBlueColor,
             ],
-            stops: [0, 0.5],
+            stops: [0, 0.3],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),

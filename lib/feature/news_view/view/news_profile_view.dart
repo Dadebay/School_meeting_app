@@ -1,8 +1,8 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:kartal/kartal.dart';
 import 'package:okul_com_tm/feature/news_view/model/news_model.dart';
-import 'package:okul_com_tm/product/constants/string_constants.dart';
 import 'package:okul_com_tm/product/sizes/image_sizes.dart';
 import 'package:okul_com_tm/product/widgets/custom_app_bar.dart';
 import 'package:okul_com_tm/product/widgets/widgets.dart';
@@ -15,7 +15,7 @@ class NewsProfileView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: StringConstants.news, showBackButton: true),
+      appBar: CustomAppBar(title: 'news'.tr(), showBackButton: true),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

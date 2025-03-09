@@ -1,50 +1,55 @@
 // ignore_for_file: unnecessary_null_comparison
 
 import 'package:auto_route/auto_route.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:okul_com_tm/feature/home/model/lesson_model.dart';
 import 'package:okul_com_tm/feature/lesson_profil/components/custom_icon_button.dart';
 import 'package:okul_com_tm/feature/lesson_profil/components/student_card.dart';
+import 'package:okul_com_tm/feature/lesson_profil/model/lesson_model.dart';
 import 'package:okul_com_tm/feature/lesson_profil/service/attendence_provider.dart';
 import 'package:okul_com_tm/feature/lesson_profil/service/lessons_service.dart';
 import 'package:okul_com_tm/feature/lesson_profil/view/student_attendence_view.dart';
+import 'package:okul_com_tm/feature/profil/service/teacher_lessons_service.dart';
 import 'package:okul_com_tm/product/dialogs/dialogs.dart';
 import 'package:okul_com_tm/product/sizes/widget_sizes.dart';
 import 'package:okul_com_tm/product/widgets/index.dart';
 
 @RoutePage()
 class LessonsProfil extends ConsumerStatefulWidget {
-  const LessonsProfil(this.lessonModel, this.isTeacher, {super.key});
-  final LessonModel lessonModel;
+  const LessonsProfil(this.lessonModelBack, this.isTeacher, {super.key});
+  final LessonModel lessonModelBack;
   final bool isTeacher;
   @override
   ConsumerState<LessonsProfil> createState() => _LessonsProfilState();
 }
 
 class _LessonsProfilState extends ConsumerState<LessonsProfil> {
-  List<StudentModel> studentList = [];
+  late LessonModel lessonModel;
 
   @override
   void initState() {
     super.initState();
-    fetcheData();
+    changeLessonState();
+    Future.microtask(() => ref.read(studentProvider.notifier).fetchStudents(widget.lessonModelBack.id));
   }
 
-  dynamic fetcheData() async {
-    print(studentList);
-
-    studentList = await LessonService().fetchStudents(widget.lessonModel.id);
-    print(studentList);
+  dynamic changeLessonState() {
+    // setState(() {
+    print("mana geldi");
+    lessonModel = widget.lessonModelBack;
+    // });
   }
 
   @override
   Widget build(BuildContext context) {
+    final studentList = ref.watch(studentProvider);
+
     return Scaffold(
       backgroundColor: ColorConstants.whiteColor,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: _buildFloatingActionButton(context),
+      floatingActionButton: _buildFloatingActionButton(context, studentList),
       appBar: _buildAppBar(context),
-      body: _buildBody(context),
+      body: _buildBody(context, studentList),
     );
   }
 
@@ -53,38 +58,94 @@ class _LessonsProfilState extends ConsumerState<LessonsProfil> {
       automaticallyImplyLeading: true,
       backgroundColor: ColorConstants.whiteColor,
       scrolledUnderElevation: 0.0,
-      actions: widget.isTeacher ? [_buildCancelLessonButton(context)] : null,
+      actions: lessonModel.whyCanceled.toString() == 'null'
+          ? widget.isTeacher
+              ? [_buildCancelLessonButton(context)]
+              : null
+          : null,
+    );
+  }
+
+  dynamic sendReasonForCancelLesson({required BuildContext context, required int lessonID}) {
+    TextEditingController controller = TextEditingController();
+    return showDialog(
+      context: context,
+      barrierDismissible: true, // Kullanıcı dışarıya tıklayarak kapatamaz.
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: context.border.normalBorderRadius,
+          ),
+          elevation: 0.0,
+          backgroundColor: Colors.transparent,
+          child: Container(
+            padding: context.padding.normal,
+            decoration: BoxDecoration(
+              color: ColorConstants.whiteColor,
+              borderRadius: context.border.normalBorderRadius,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Text(
+                  'fill_cancel_lesson_blank'.tr(),
+                  style: context.general.textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold, fontSize: 22),
+                ),
+                Padding(padding: context.padding.normal, child: CustomTextField(labelName: 'reason'.tr(), controller: controller, maxLine: 5, focusNode: FocusNode(), requestfocusNode: FocusNode())),
+                CustomButton(
+                    text: 'Send',
+                    mini: true,
+                    onPressed: () async {
+                      await TeacherLessonsService().cancelLesson(lessonID, controller.text, context);
+                      final lessonState = ref.watch(lessonProvider);
+                      await LessonService.fetchLessonsForDate(DateTime.parse(lessonModel.date)).then((e) {
+                        lessonState.lessons = e;
+
+                        e.forEach((element) {
+                          print(element.id);
+                          print(lessonModel.id.toString());
+                          if (element.id.toString() == lessonModel.id.toString()) {
+                            lessonModel = element;
+                            setState(() {});
+
+                            print("Asdasdasdasdasddqwdqbuhqbdoihqbowdihqbwoudhbqwoudhbqowhudbqowuhdboqwhbdoquhwbd");
+                            print(lessonModel.whyCanceled);
+                            print(element.whyCanceled);
+                            return;
+                          }
+                        });
+                      });
+                    }),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 
   Widget _buildCancelLessonButton(BuildContext context) {
-    return IconButton(
+    return TextButton(
       onPressed: () {
-        Dialogs.showCancelLessonDialog(
-          context: context,
-          title: "Cancel Lesson",
-          subtitle: "Do you want to cancel the lesson?",
-          cancelText: 'Agree',
-          ontap: () {
-            Navigator.of(context).pop();
-            Dialogs.sendReasonForCancelLesson(context: context);
-          },
-        );
+        sendReasonForCancelLesson(context: context, lessonID: lessonModel.id);
       },
-      icon: Icon(
-        IconlyBold.info_circle,
-        color: ColorConstants.redColor,
+      child: Text(
+        'cancel'.tr(),
+        style: context.general.textTheme.titleMedium?.copyWith(
+          color: ColorConstants.redColor,
+          fontWeight: FontWeight.w400,
+        ),
       ),
     );
   }
 
-  Widget _buildBody(BuildContext context) {
+  Widget _buildBody(BuildContext context, List<StudentModel> studentList) {
     return ListView(
       padding: context.padding.horizontalNormal,
       physics: const BouncingScrollPhysics(),
       children: [
         Text(
-          widget.lessonModel.lessonName,
+          lessonModel.lessonName,
           maxLines: 3,
           overflow: TextOverflow.ellipsis,
           style: context.general.textTheme.headlineLarge?.copyWith(
@@ -96,11 +157,17 @@ class _LessonsProfilState extends ConsumerState<LessonsProfil> {
           Padding(
             padding: context.padding.onlyTopNormal,
             child: Text(
-              "Lesson Status : ${widget.lessonModel.teacherConfirmation.toString() == "true" ? "Confirmed" : "Not Confirmed"}",
+              'lesson_status'.tr() +
+                  ": " +
+                  " ${lessonModel.whyCanceled.toString() == 'null' ? lessonModel.teacherConfirmation ? 'confirmed'.tr() : 'not_confirmed'.tr() : 'lesson_canceled'.tr()}",
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: context.general.textTheme.titleLarge?.copyWith(
-                color: ColorConstants.primaryBlueColor,
+                color: lessonModel.whyCanceled.toString() == 'null'
+                    ? lessonModel.teacherConfirmation
+                        ? ColorConstants.primaryBlueColor
+                        : ColorConstants.redColor
+                    : ColorConstants.redColor,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -108,7 +175,7 @@ class _LessonsProfilState extends ConsumerState<LessonsProfil> {
         Padding(
           padding: context.padding.verticalNormal,
           child: Text(
-            widget.lessonModel.content,
+            lessonModel.content,
             maxLines: 5,
             overflow: TextOverflow.ellipsis,
             style: context.general.textTheme.titleMedium?.copyWith(
@@ -117,11 +184,11 @@ class _LessonsProfilState extends ConsumerState<LessonsProfil> {
             ),
           ),
         ),
-        CustomIconButton(lessonModel: widget.lessonModel),
+        CustomIconButton(lessonModel: lessonModel),
         Padding(
           padding: context.padding.verticalMedium,
           child: Text(
-            StringConstants.classmates,
+            'classmates'.tr(),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: context.general.textTheme.headlineMedium?.copyWith(
@@ -131,7 +198,7 @@ class _LessonsProfilState extends ConsumerState<LessonsProfil> {
           ),
         ),
         StudentCard(
-          lessonId: widget.lessonModel.id,
+          lessonId: lessonModel.id,
           students: studentList,
         ),
         SizedBox(height: context.padding.verticalHigh.vertical),
@@ -151,47 +218,77 @@ class _LessonsProfilState extends ConsumerState<LessonsProfil> {
     }
   }
 
-  Widget? _buildFloatingActionButton(BuildContext context) {
-    if (widget.isTeacher && widget.lessonModel.teacherConfirmation.toString() == "true") {
-      if (compareTime(widget.lessonModel.date.toString() + " " + widget.lessonModel.endTime.toString())) {
+  Widget? _buildFloatingActionButton(BuildContext context, List<StudentModel> studentList) {
+    if (widget.isTeacher && lessonModel.teacherConfirmation) {
+      if (compareTime(lessonModel.date.toString() + " " + lessonModel.endTime.toString())) {
         return Container(
           margin: context.padding.normal,
           height: WidgetSizes.iconContainerSize.value,
           child: CustomButton(
-            text: "Attendence lesson",
-            onPressed: () => _onFloatingButtonPressed(context),
+            text: 'attendence_lesson'.tr(),
+            onPressed: () => _onFloatingButtonPressed(context, studentList),
           ),
         );
       } else {
-        return null;
+        return lessonModel.whyCanceled.toString() == 'null'
+            ? null
+            : Container(
+                margin: context.padding.normal,
+                height: WidgetSizes.iconContainerSize.value,
+                child: CustomButton(
+                  text: 'confirm'.tr(),
+                  onPressed: () => _onFloatingButtonPressed(context, studentList),
+                ),
+              );
       }
     }
     return Container(
       margin: context.padding.normal,
       height: WidgetSizes.iconContainerSize.value,
       child: CustomButton(
-        text: widget.isTeacher ? StringConstants.confirm : StringConstants.cancel,
-        onPressed: () => _onFloatingButtonPressed(context),
+        text: widget.isTeacher ? 'confirm'.tr() : 'cancel_lesson'.tr(),
+        onPressed: () => _onFloatingButtonPressed(context, studentList),
       ),
     );
   }
 
-  void _onFloatingButtonPressed(BuildContext context) {
+  void _onFloatingButtonPressed(BuildContext context, List<StudentModel> studentList) {
     if (widget.isTeacher) {
-      if (compareTime(widget.lessonModel.date.toString() + " " + widget.lessonModel.endTime.toString())) {
+      if (compareTime(lessonModel.date.toString() + " " + lessonModel.endTime.toString())) {
         final selectedStudents = ref.watch(attendanceProvider);
         selectedStudents.clear();
-        context.route.navigateToPage(StudentAttendancePage(lessonId: widget.lessonModel.id, students: studentList));
+        context.route.navigateToPage(StudentAttendancePage(lessonId: lessonModel.id, students: studentList));
       } else {
-        LessonService().confirmLesson(widget.lessonModel.id, context);
+        TeacherLessonsService().confirmLesson(lessonModel, context).then((value) async {
+          if (value) {
+            print("dasdadadasd__________________________________________________________________________________");
+            final lessonState = ref.watch(lessonProvider);
+            await LessonService.fetchLessonsForDate(DateTime.parse(lessonModel.date)).then((e) {
+              lessonState.lessons = e;
+
+              e.forEach((element) {
+                print(element.id);
+                if (element.id.toString() == lessonModel.id.toString()) {
+                  lessonModel = element;
+
+                  setState(() {});
+                  return;
+                }
+              });
+            });
+          } else {}
+        });
       }
     } else {
       Dialogs.showCancelLessonDialog(
         context: context,
-        title: "Cancel Lesson",
-        subtitle: "Are you sure you want to cancel the lesson?",
-        cancelText: StringConstants.yes,
-        ontap: () => LessonService().cancelLesson(widget.lessonModel.id, context),
+        title: 'cancel_lesson'.tr(),
+        subtitle: 'cancel_subtitle'.tr(),
+        cancelText: 'agree'.tr(),
+        ontap: () {
+          LessonService().cancelLessonStudent(lessonModel.id, context);
+          CustomSnackbar.showCustomSnackbar(context, 'success', 'cancelled'.tr(), ColorConstants.redColor);
+        },
       );
     }
   }

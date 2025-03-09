@@ -1,11 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:iconly/iconly.dart';
-import 'package:kartal/kartal.dart';
+import 'package:okul_com_tm/feature/profil/service/set_free_time_service.dart';
 import 'package:okul_com_tm/feature/profil/view/free_time_post_page.dart';
-import 'package:okul_com_tm/product/constants/color_constants.dart';
+import 'package:okul_com_tm/product/widgets/index.dart';
 
-class PageButtons extends StatelessWidget {
+class PageButtons extends ConsumerWidget {
   final bool isTeacher;
 
   final List<String> buttonNames = [
@@ -33,7 +32,7 @@ class PageButtons extends StatelessWidget {
   PageButtons({super.key, required this.isTeacher});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return ListView.builder(
       itemCount: isTeacher ? teacherButtonNames.length : buttonNames.length,
       padding: context.padding.normal,
@@ -43,6 +42,7 @@ class PageButtons extends StatelessWidget {
           child: ListTile(
             onTap: () {
               if (isTeacher) {
+                ref.read(freeTimesProvider.notifier).fetchFreeTimes(context);
                 context.route.navigateToPage(FreeTimePage());
               } else {}
             },

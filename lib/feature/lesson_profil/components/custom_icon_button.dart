@@ -1,7 +1,8 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:okul_com_tm/feature/home/model/lesson_model.dart';
+import 'package:okul_com_tm/feature/lesson_profil/model/lesson_model.dart';
 import 'package:okul_com_tm/product/sizes/widget_sizes.dart';
 import 'package:okul_com_tm/product/widgets/index.dart';
 
@@ -29,7 +30,7 @@ class CustomIconButton extends StatelessWidget {
   ];
   @override
   Widget build(BuildContext context) {
-    List<String> titles = [lessonModel.date.toString(), StringConstants.classroom, StringConstants.teacher];
+    List<String> titles = [lessonModel.date.toString(), 'classroom'.tr(), 'teacher'.tr()];
     List<String> subTitles = [lessonModel.startTime.toString().substring(0, 5) + " - " + lessonModel.endTime.toString().substring(0, 5), lessonModel.classroom.toString(), lessonModel.teacher.toString()];
     return Column(
         children: List.generate(icons.length, (index) {

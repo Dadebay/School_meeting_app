@@ -11,6 +11,7 @@ class LessonModel {
   final bool past;
   final String teacher;
   final String classroom;
+  final String whyCanceled;
   final String img;
   final List students;
 
@@ -21,7 +22,8 @@ class LessonModel {
     required this.date,
     required this.startTime,
     required this.endTime,
-    required this.teacherConfirmation,
+    required this.whyCanceled,
+    this.teacherConfirmation = false,
     required this.past,
     required this.teacher,
     required this.classroom,
@@ -29,10 +31,12 @@ class LessonModel {
     required this.students,
   });
 
+  // JSON'dan nesneye dönüştürme
   factory LessonModel.fromJson(Map<String, dynamic> json) {
     return LessonModel(
       id: json['id'] as int? ?? 0,
       lessonName: json['lesson_name']?.toString() ?? '',
+      whyCanceled: json['why_canceled'].toString(),
       date: json['date']?.toString() ?? '',
       content: json['description']?.toString() ?? '',
       startTime: json['start_time']?.toString() ?? '',
@@ -44,6 +48,57 @@ class LessonModel {
       teacherConfirmation: json['teacherConfirmation'] as bool? ?? false,
       students: (json['students'] as List?)?.map((e) => e).toList() ?? [],
     );
+  }
+
+  // `copyWith` metodu
+  LessonModel copyWith({
+    int? id,
+    String? lessonName,
+    String? content,
+    String? date,
+    String? startTime,
+    String? endTime,
+    bool? teacherConfirmation,
+    bool? past,
+    String? teacher,
+    String? classroom,
+    String? img,
+    List? students,
+  }) {
+    return LessonModel(
+      id: id ?? this.id,
+      lessonName: lessonName ?? this.lessonName,
+      content: content ?? this.content,
+      date: date ?? this.date,
+      whyCanceled: whyCanceled ?? this.whyCanceled,
+      startTime: startTime ?? this.startTime,
+      endTime: endTime ?? this.endTime,
+      teacherConfirmation: teacherConfirmation ?? this.teacherConfirmation,
+      past: past ?? this.past,
+      teacher: teacher ?? this.teacher,
+      classroom: classroom ?? this.classroom,
+      img: img ?? this.img,
+      students: students ?? this.students,
+    );
+  }
+
+  // JSON'a dönüştürme
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'lesson_name': lessonName,
+      'why_canceled': whyCanceled,
+      'description': content,
+      'date': date,
+      'start_time': startTime,
+      'end_time': endTime,
+      'past': past,
+      'teacher': teacher,
+      'classroom': classroom,
+      'img': img,
+      'teacherConfirmation': teacherConfirmation,
+      'students': students,
+    };
   }
 }
 

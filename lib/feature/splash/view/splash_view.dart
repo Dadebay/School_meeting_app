@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:okul_com_tm/product/widgets/index.dart';
 
@@ -11,7 +12,6 @@ class SplashView extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          ColorConstants.gradientColor(),
           Align(
             alignment: Alignment.topCenter,
             child: Image.asset(
@@ -22,20 +22,36 @@ class SplashView extends StatelessWidget {
             ),
           ),
           Align(
+            alignment: Alignment.topCenter,
+            child: Padding(
+              padding: context.padding.normal.copyWith(bottom: 0, top: 40),
+              child: Text(StringConstants.appName,
+                  maxLines: 2,
+                  textAlign: TextAlign.center,
+                  style: context.general.textTheme.headlineLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: ColorConstants.primaryBlueColor,
+                  )),
+            ),
+          ),
+          Align(
             alignment: Alignment.bottomCenter,
             child: Container(
               height: MediaQuery.of(context).size.height / 2.5,
               margin: context.padding.normal,
               padding: context.padding.medium,
-              decoration: BoxDecoration(
-                borderRadius: context.border.highBorderRadius,
-                color: ColorConstants.whiteColor,
-              ),
+              decoration: BoxDecoration(borderRadius: context.border.highBorderRadius, color: ColorConstants.whiteColor, boxShadow: [
+                BoxShadow(
+                  color: ColorConstants.primaryBlueColor.withOpacity(.5),
+                  blurRadius: 5,
+                  spreadRadius: 2,
+                ),
+              ]),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    StringConstants.splashTitle,
+                    "splash_title".tr(),
                     textAlign: TextAlign.center,
                     style: context.general.textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.bold,
@@ -43,7 +59,7 @@ class SplashView extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    StringConstants.splashSubtitle,
+                    'splash_subtitle'.tr(),
                     textAlign: TextAlign.center,
                     style: context.general.textTheme.bodyLarge?.copyWith(
                       fontWeight: FontWeight.w500,
@@ -51,7 +67,7 @@ class SplashView extends StatelessWidget {
                     ),
                   ),
                   CustomButton(
-                    text: StringConstants.splashButton,
+                    text: 'splash_button'.tr(),
                     onPressed: () {
                       context.navigateNamedTo('/login');
                     },

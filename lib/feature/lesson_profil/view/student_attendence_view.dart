@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:okul_com_tm/feature/lesson_profil/service/attendence_provider.dart';
 import 'package:okul_com_tm/product/widgets/index.dart';
 
-import '../../home/model/lesson_model.dart';
+import '../model/lesson_model.dart';
 
 @RoutePage()
 class StudentAttendancePage extends ConsumerWidget {

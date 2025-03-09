@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:auto_route/auto_route.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:okul_com_tm/feature/home/view/home_view.dart';
 import 'package:okul_com_tm/feature/profil/view/user_profil.dart';
@@ -49,7 +50,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                 automaticallyImplyLeading: false,
                 backgroundColor: ColorConstants.primaryBlueColor,
                 title: Text(
-                  StringConstants.news,
+                  'news'.tr(),
                   style: context.general.textTheme.headlineMedium!.copyWith(color: ColorConstants.whiteColor, fontWeight: FontWeight.bold),
                 ),
               )
@@ -61,6 +62,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
           currentIndex: selectedIndex,
           onTap: (index) async {
             selectedIndex = index;
+            // FCMService.postFCMToken();
             setState(() {});
           },
         ));

@@ -10,25 +10,19 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:auto_route/auto_route.dart' as _i13;
 import 'package:flutter/material.dart' as _i15;
-import 'package:okul_com_tm/feature/home/model/lesson_model.dart' as _i14;
 import 'package:okul_com_tm/feature/home/view/bottom_nav_bar_view.dart' as _i1;
 import 'package:okul_com_tm/feature/home/view/home_view.dart' as _i4;
-import 'package:okul_com_tm/feature/lesson_profil/view/lessons_profil.dart'
-    as _i5;
-import 'package:okul_com_tm/feature/lesson_profil/view/student_attendence_view.dart'
-    as _i10;
+import 'package:okul_com_tm/feature/lesson_profil/model/lesson_model.dart' as _i14;
+import 'package:okul_com_tm/feature/lesson_profil/view/lessons_profil.dart' as _i5;
+import 'package:okul_com_tm/feature/lesson_profil/view/student_attendence_view.dart' as _i10;
 import 'package:okul_com_tm/feature/login/view/login_view.dart' as _i6;
 import 'package:okul_com_tm/feature/news_view/model/news_model.dart' as _i16;
-import 'package:okul_com_tm/feature/news_view/view/news_profile_view.dart'
-    as _i7;
+import 'package:okul_com_tm/feature/news_view/view/news_profile_view.dart' as _i7;
 import 'package:okul_com_tm/feature/news_view/view/news_view.dart' as _i8;
-import 'package:okul_com_tm/feature/profil/view/free_time_post_page.dart'
-    as _i3;
+import 'package:okul_com_tm/feature/profil/view/free_time_post_page.dart' as _i3;
 import 'package:okul_com_tm/feature/profil/view/user_profil.dart' as _i11;
-import 'package:okul_com_tm/feature/profil/view/user_update_profile.dart'
-    as _i12;
-import 'package:okul_com_tm/feature/splash/view/connection_check_view.dart'
-    as _i2;
+import 'package:okul_com_tm/feature/profil/view/user_update_profile.dart' as _i12;
+import 'package:okul_com_tm/feature/splash/view/connection_check_view.dart' as _i2;
 import 'package:okul_com_tm/feature/splash/view/splash_view.dart' as _i9;
 
 /// generated route for
@@ -279,8 +273,7 @@ class SplashView extends _i13.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i10.StudentAttendancePage]
-class StudentAttendanceRoute
-    extends _i13.PageRouteInfo<StudentAttendanceRouteArgs> {
+class StudentAttendanceRoute extends _i13.PageRouteInfo<StudentAttendanceRouteArgs> {
   StudentAttendanceRoute({
     _i15.Key? key,
     required List<_i14.StudentModel> students,

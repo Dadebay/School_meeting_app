@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
-import 'package:okul_com_tm/product/constants/api_constants.dart';
+import 'package:okul_com_tm/product/widgets/index.dart';
 
 class AuthServiceStorage {
   static const _storage = FlutterSecureStorage();
@@ -64,7 +64,7 @@ class AuthState {
 class AuthNotifier extends StateNotifier<AuthState> {
   AuthNotifier() : super(AuthState(isLoggedIn: false));
 
-  Future<void> login(String username, String password) async {
+  Future<void> login(String username, String password, BuildContext context) async {
     try {
       final response = await AuthService.login(username, password);
       if (response != null) {

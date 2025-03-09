@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:okul_com_tm/feature/home/components/index.dart';
 import 'package:okul_com_tm/feature/lesson_profil/service/lessons_service.dart';
+import 'package:okul_com_tm/feature/profil/service/user_update_service.dart';
 import 'package:okul_com_tm/product/sizes/widget_sizes.dart';
 import 'package:okul_com_tm/product/widgets/index.dart';
 
@@ -18,6 +19,8 @@ class _HomeViewState extends ConsumerState<HomeView> {
   void initState() {
     super.initState();
     ref.read(lessonProvider.notifier).fetchLessonsForDate(DateTime.now());
+    final userProvider = ref.read(userUpdateProvider.notifier);
+    userProvider.getUserProfile();
   }
 
   @override

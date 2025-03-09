@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:okul_com_tm/product/widgets/index.dart';
 
@@ -26,11 +27,12 @@ class CustomTextField extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       padding: EdgeInsets.only(top: 15),
       child: TextFormField(
+        style: context.general.textTheme.bodyLarge!.copyWith(color: ColorConstants.blackColor, fontWeight: FontWeight.w600),
         enabled: enabled ?? true,
         controller: controller,
         validator: (value) {
           if (value == null || value.isEmpty) {
-            return StringConstants.textfieldError;
+            return 'textfield_error'.tr();
           }
           return null;
         },

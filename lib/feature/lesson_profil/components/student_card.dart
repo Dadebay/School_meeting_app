@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:kartal/kartal.dart';
-import 'package:okul_com_tm/product/constants/color_constants.dart';
-import 'package:okul_com_tm/product/widgets/widgets.dart';
+import 'package:okul_com_tm/product/widgets/index.dart';
 
-import '../../home/model/lesson_model.dart';
+import '../model/lesson_model.dart';
 
 class StudentCard extends StatelessWidget {
   final int lessonId;
@@ -38,7 +36,16 @@ class StudentCard extends StatelessWidget {
                     color: ColorConstants.whiteColor,
                     shape: BoxShape.circle,
                   ),
-                  child: CustomWidgets.imageWidget(studentModel.img),
+                  child: CachedNetworkImage(
+                    imageUrl: ApiConstants.imageURL + studentModel.img,
+                    imageBuilder: (context, imageProvider) => Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(image: imageProvider),
+                      ),
+                    ),
+                    placeholder: (context, url) => CustomWidgets.loader(),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
+                  ),
                 ),
               ),
               Text(

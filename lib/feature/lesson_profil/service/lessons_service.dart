@@ -1,17 +1,18 @@
 import 'dart:convert';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:okul_com_tm/feature/home/model/lesson_model.dart';
-import 'package:okul_com_tm/feature/profil/service/teacher_lessons_service.dart';
+import 'package:okul_com_tm/feature/lesson_profil/model/lesson_model.dart';
 import 'package:okul_com_tm/product/dialogs/dialogs.dart';
 import 'package:okul_com_tm/product/widgets/index.dart';
 
 class LessonService {
   static Future<List<LessonModel>> fetchLessonsForDate(DateTime date) async {
     final token = await AuthServiceStorage.getToken();
+    final String? status = await AuthServiceStorage.getStatus();
 
-    final url = Uri.parse(ApiConstants.getLessons);
+    final url = Uri.parse(status == 'teacher' ? ApiConstants.teacherLessons : ApiConstants.getLessons);
     final response = await http.post(
       url,
       headers: {
@@ -32,7 +33,7 @@ class LessonService {
     }
   }
 
-  Future<Map<String, String>> cancelLesson(int lessonId, BuildContext context) async {
+  Future<Map<String, String>> cancelLessonStudent(int lessonId, BuildContext context) async {
     final token = await AuthServiceStorage.getToken();
     Navigator.pop(context);
     final response = await http.post(
@@ -54,7 +55,7 @@ class LessonService {
           context: context,
           title: decodedData['title'].toString(),
           subtitle: decodedData['description'].toString(),
-          cancelText: StringConstants.agree,
+          cancelText: 'agree'.tr(),
           ontap: () {
             Navigator.pop(context);
           });
@@ -78,43 +79,11 @@ class LessonService {
       throw Exception("Failed to load students");
     }
   }
-
-  Future<bool> confirmLesson(int lessonId, BuildContext context) async {
-    final token = await AuthServiceStorage.getToken();
-    final response = await http.post(
-      Uri.parse(ApiConstants.confirmLesson),
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Authorization': 'Bearer $token',
-      },
-      body: {
-        'lessonId': lessonId.toString(),
-      },
-    );
-
-    if (response.statusCode == 200) {
-      CustomSnackbar.showCustomSnackbar(
-        context,
-        'Succes',
-        'Lessons successfully confirmed',
-        ColorConstants.redColor,
-      );
-      return true;
-    } else {
-      CustomSnackbar.showCustomSnackbar(
-        context,
-        'Error',
-        'Request failed with status: ${response.statusCode}',
-        ColorConstants.redColor,
-      );
-      return false;
-    }
-  }
 }
 
 class LessonState {
   final DateTime selectedDate;
-  final List<LessonModel> lessons;
+  List<LessonModel> lessons;
 
   LessonState({required this.selectedDate, required this.lessons});
 
@@ -131,13 +100,31 @@ class LessonNotifier extends StateNotifier<LessonState> {
 
   Future<void> fetchLessonsForDate(DateTime date) async {
     try {
-      final String? status = await AuthServiceStorage.getStatus();
-      final lessons = status == 'teacher' ? await TeacherLessonsService.fetchMyLessons() : await LessonService.fetchLessonsForDate(date);
+      final lessons = await LessonService.fetchLessonsForDate(date);
       state = state.copyWith(selectedDate: date, lessons: lessons);
-    } catch (e) {}
+    } catch (e) {
+      debugPrint("Error fetching lessons: $e");
+    }
   }
 }
 
 final lessonProvider = StateNotifierProvider<LessonNotifier, LessonState>((ref) {
   return LessonNotifier();
+});
+
+class StudentNotifier extends StateNotifier<List<StudentModel>> {
+  StudentNotifier() : super([]);
+
+  Future<void> fetchStudents(int lessonId) async {
+    try {
+      final students = await LessonService().fetchStudents(lessonId);
+      state = students;
+    } catch (e) {
+      state = [];
+    }
+  }
+}
+
+final studentProvider = StateNotifierProvider<StudentNotifier, List<StudentModel>>((ref) {
+  return StudentNotifier();
 });

@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:okul_com_tm/feature/profil/model/room_model.dart';
+import 'package:okul_com_tm/feature/login/model/user_model.dart';
 import 'package:okul_com_tm/product/widgets/index.dart';
 
 final userUpdateProvider = StateNotifierProvider<UserUpdateNotifier, UserUpdateState>((ref) {
@@ -71,7 +71,7 @@ class UserUpdateNotifier extends StateNotifier<UserUpdateState> {
     var response = await request.send();
 
     if (response.statusCode == 200) {
-      CustomSnackbar.showCustomSnackbar(context, 'Success', "Profile updated successfully", ColorConstants.greenColor);
+      CustomSnackbar.showCustomSnackbar(context, 'success', "Profile updated successfully", ColorConstants.greenColor);
       getUserProfile();
 
       Navigator.of(context).pop();

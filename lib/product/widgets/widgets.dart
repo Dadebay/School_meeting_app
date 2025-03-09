@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:okul_com_tm/product/widgets/index.dart';
 
@@ -65,7 +66,7 @@ class CustomSnackbar {
           children: [
             if (title.isNotEmpty)
               Text(
-                title,
+                title.tr(),
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
@@ -76,7 +77,7 @@ class CustomSnackbar {
               Padding(
                 padding: const EdgeInsets.only(top: 8.0),
                 child: Text(
-                  subtitle,
+                  subtitle.tr(),
                   style: TextStyle(
                     fontWeight: FontWeight.w400,
                     fontSize: 16,
