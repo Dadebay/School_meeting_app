@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
+import 'package:okul_com_tm/feature/lesson_profil/model/attendence_students_model.dart';
 
 import '../../../product/widgets/index.dart';
 
@@ -34,16 +35,29 @@ class AttendenceService {
       },
       body: jsonEncode({"students": selectedStudents}),
     );
-    print(token);
-    print(ApiConstants.attendenceStudents + lessonId.toString());
-    print(selectedStudents);
-    print(response.body);
-    print(response.statusCode);
     if (response.statusCode == 200) {
-      CustomSnackbar.showCustomSnackbar(context, 'Success', "Attendance submitted successfully", ColorConstants.greenColor);
+      CustomSnackbar.showCustomSnackbar(context, 'success', "attendence_submitted", ColorConstants.greenColor);
       context.route.pop();
     } else {
-      CustomSnackbar.showCustomSnackbar(context, 'Error', "Failed to submit attendance", ColorConstants.redColor);
+      CustomSnackbar.showCustomSnackbar(context, 'error', "failed_to_submit_attendance", ColorConstants.redColor);
+    }
+  }
+
+  static Future<List<AttendenceStudentsModel>> fetchAttendentStudents(int lessonId) async {
+    final token = await AuthServiceStorage.getToken();
+
+    final url = Uri.parse(ApiConstants.getAttendenceStudentsURL + lessonId.toString() + '/');
+    final response = await http.get(
+      url,
+      headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'},
+    );
+
+    if (response.statusCode == 200) {
+      final utf8Body = utf8.decode(response.bodyBytes);
+      final List<dynamic> data = json.decode(utf8Body) as List<dynamic>;
+      return data.map((json) => AttendenceStudentsModel.fromJson(json as Map<String, dynamic>)).toList();
+    } else {
+      throw Exception('Failed to load lessons');
     }
   }
 }

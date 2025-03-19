@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:okul_com_tm/feature/lesson_profil/service/lessons_service.dart';
 import 'package:okul_com_tm/product/widgets/index.dart';
 
-import '../model/lesson_model.dart';
-
-class StudentCard extends StatelessWidget {
-  final int lessonId;
-  const StudentCard({super.key, required this.students, required this.lessonId});
-  final List<StudentModel> students;
-
+class StudentCard extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final studentList = ref.watch(studentProvider);
+
     return Container(
       padding: context.padding.low,
+      margin: context.padding.onlyBottomHigh,
       decoration: BoxDecoration(
         borderRadius: context.border.highBorderRadius,
         color: ColorConstants.greyColorwithOpacity,
@@ -21,11 +19,11 @@ class StudentCard extends StatelessWidget {
           crossAxisCount: 3,
           childAspectRatio: 1 / 1.3,
         ),
-        itemCount: students.length,
+        itemCount: studentList.length,
         shrinkWrap: true,
         physics: const BouncingScrollPhysics(),
         itemBuilder: (context, index) {
-          final studentModel = students[index];
+          final studentModel = studentList[index];
           return Column(
             children: [
               Expanded(

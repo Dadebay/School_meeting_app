@@ -9,17 +9,17 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:auto_route/auto_route.dart' as _i13;
-import 'package:flutter/material.dart' as _i15;
+import 'package:flutter/material.dart' as _i14;
 import 'package:okul_com_tm/feature/home/view/bottom_nav_bar_view.dart' as _i1;
 import 'package:okul_com_tm/feature/home/view/home_view.dart' as _i5;
 import 'package:okul_com_tm/feature/lesson_profil/model/lesson_model.dart'
-    as _i14;
+    as _i16;
 import 'package:okul_com_tm/feature/lesson_profil/view/lessons_profil.dart'
     as _i6;
 import 'package:okul_com_tm/feature/lesson_profil/view/student_attendence_view.dart'
     as _i11;
 import 'package:okul_com_tm/feature/login/view/login_view.dart' as _i7;
-import 'package:okul_com_tm/feature/news_view/model/news_model.dart' as _i16;
+import 'package:okul_com_tm/feature/news_view/model/news_model.dart' as _i15;
 import 'package:okul_com_tm/feature/news_view/view/news_profile_view.dart'
     as _i8;
 import 'package:okul_com_tm/feature/news_view/view/news_view.dart' as _i9;
@@ -146,15 +146,15 @@ class HomeViewArgs {
 /// [_i6.LessonsProfil]
 class LessonsProfil extends _i13.PageRouteInfo<LessonsProfilArgs> {
   LessonsProfil({
-    required _i14.LessonModel lessonModelBack,
     required bool isTeacher,
-    _i15.Key? key,
+    required int lessonID,
+    _i14.Key? key,
     List<_i13.PageRouteInfo>? children,
   }) : super(
           LessonsProfil.name,
           args: LessonsProfilArgs(
-            lessonModelBack: lessonModelBack,
             isTeacher: isTeacher,
+            lessonID: lessonID,
             key: key,
           ),
           initialChildren: children,
@@ -167,8 +167,8 @@ class LessonsProfil extends _i13.PageRouteInfo<LessonsProfilArgs> {
     builder: (data) {
       final args = data.argsAs<LessonsProfilArgs>();
       return _i6.LessonsProfil(
-        args.lessonModelBack,
         args.isTeacher,
+        args.lessonID,
         key: args.key,
       );
     },
@@ -177,20 +177,20 @@ class LessonsProfil extends _i13.PageRouteInfo<LessonsProfilArgs> {
 
 class LessonsProfilArgs {
   const LessonsProfilArgs({
-    required this.lessonModelBack,
     required this.isTeacher,
+    required this.lessonID,
     this.key,
   });
 
-  final _i14.LessonModel lessonModelBack;
-
   final bool isTeacher;
 
-  final _i15.Key? key;
+  final int lessonID;
+
+  final _i14.Key? key;
 
   @override
   String toString() {
-    return 'LessonsProfilArgs{lessonModelBack: $lessonModelBack, isTeacher: $isTeacher, key: $key}';
+    return 'LessonsProfilArgs{isTeacher: $isTeacher, lessonID: $lessonID, key: $key}';
   }
 }
 
@@ -217,8 +217,8 @@ class LoginView extends _i13.PageRouteInfo<void> {
 /// [_i8.NewsProfileView]
 class NewsProfileView extends _i13.PageRouteInfo<NewsProfileViewArgs> {
   NewsProfileView({
-    _i15.Key? key,
-    required _i16.NewsModel newsModel,
+    _i14.Key? key,
+    required _i15.NewsModel newsModel,
     List<_i13.PageRouteInfo>? children,
   }) : super(
           NewsProfileView.name,
@@ -249,9 +249,9 @@ class NewsProfileViewArgs {
     required this.newsModel,
   });
 
-  final _i15.Key? key;
+  final _i14.Key? key;
 
-  final _i16.NewsModel newsModel;
+  final _i15.NewsModel newsModel;
 
   @override
   String toString() {
@@ -298,55 +298,55 @@ class SplashView extends _i13.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i11.StudentAttendancePage]
-class StudentAttendanceRoute
-    extends _i13.PageRouteInfo<StudentAttendanceRouteArgs> {
-  StudentAttendanceRoute({
-    _i15.Key? key,
-    required List<_i14.StudentModel> students,
-    required int lessonId,
+/// [_i11.StudentAttendancePageView]
+class StudentAttendanceRouteView
+    extends _i13.PageRouteInfo<StudentAttendanceRouteViewArgs> {
+  StudentAttendanceRouteView({
+    _i14.Key? key,
+    required _i16.LessonModel lessonModel,
+    required bool showAttendentStudents,
     List<_i13.PageRouteInfo>? children,
   }) : super(
-          StudentAttendanceRoute.name,
-          args: StudentAttendanceRouteArgs(
+          StudentAttendanceRouteView.name,
+          args: StudentAttendanceRouteViewArgs(
             key: key,
-            students: students,
-            lessonId: lessonId,
+            lessonModel: lessonModel,
+            showAttendentStudents: showAttendentStudents,
           ),
           initialChildren: children,
         );
 
-  static const String name = 'StudentAttendanceRoute';
+  static const String name = 'StudentAttendanceRouteView';
 
   static _i13.PageInfo page = _i13.PageInfo(
     name,
     builder: (data) {
-      final args = data.argsAs<StudentAttendanceRouteArgs>();
-      return _i11.StudentAttendancePage(
+      final args = data.argsAs<StudentAttendanceRouteViewArgs>();
+      return _i11.StudentAttendancePageView(
         key: args.key,
-        students: args.students,
-        lessonId: args.lessonId,
+        lessonModel: args.lessonModel,
+        showAttendentStudents: args.showAttendentStudents,
       );
     },
   );
 }
 
-class StudentAttendanceRouteArgs {
-  const StudentAttendanceRouteArgs({
+class StudentAttendanceRouteViewArgs {
+  const StudentAttendanceRouteViewArgs({
     this.key,
-    required this.students,
-    required this.lessonId,
+    required this.lessonModel,
+    required this.showAttendentStudents,
   });
 
-  final _i15.Key? key;
+  final _i14.Key? key;
 
-  final List<_i14.StudentModel> students;
+  final _i16.LessonModel lessonModel;
 
-  final int lessonId;
+  final bool showAttendentStudents;
 
   @override
   String toString() {
-    return 'StudentAttendanceRouteArgs{key: $key, students: $students, lessonId: $lessonId}';
+    return 'StudentAttendanceRouteViewArgs{key: $key, lessonModel: $lessonModel, showAttendentStudents: $showAttendentStudents}';
   }
 }
 
@@ -354,7 +354,7 @@ class StudentAttendanceRouteArgs {
 /// [_i12.UserProfilView]
 class UserProfilView extends _i13.PageRouteInfo<UserProfilViewArgs> {
   UserProfilView({
-    _i15.Key? key,
+    _i14.Key? key,
     required bool isTeacher,
     List<_i13.PageRouteInfo>? children,
   }) : super(
@@ -386,7 +386,7 @@ class UserProfilViewArgs {
     required this.isTeacher,
   });
 
-  final _i15.Key? key;
+  final _i14.Key? key;
 
   final bool isTeacher;
 

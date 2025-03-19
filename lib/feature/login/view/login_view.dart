@@ -57,6 +57,7 @@ class LoginView extends ConsumerWidget {
                     labelName: 'parol'.tr(),
                     controller: passwordController,
                     prefixIcon: IconlyLight.lock,
+                    isPassword: true,
                     focusNode: passwordFocusNode,
                     requestfocusNode: userNameFocusNode,
                   ),
@@ -77,7 +78,7 @@ class LoginView extends ConsumerWidget {
                         } else {
                           userNameController.clear();
                           passwordController.clear();
-                          CustomSnackbar.showCustomSnackbar(context, 'error_title'.tr(), 'login_title'.tr(), ColorConstants.redColor);
+                          CustomSnackbar.showCustomSnackbar(context, 'error_title'.tr(), 'login_error'.tr(), ColorConstants.redColor);
                         }
                       },
                     ),

@@ -22,7 +22,7 @@ class NewsProfileView extends StatelessWidget {
           children: [
             Hero(
               tag: newsModel.title,
-              child: Container(height: ImageSizes.high.value, child: CustomWidgets.imageWidget(newsModel.img)),
+              child: Container(height: ImageSizes.high.value, child: CustomWidgets.imageWidget(newsModel.img, false)),
             ),
             Padding(
               padding: context.padding.normal,

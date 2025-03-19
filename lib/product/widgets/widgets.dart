@@ -7,6 +7,18 @@ class CustomWidgets {
     return Center(child: Lottie.asset(IconConstants.loader, width: 150, height: 150, animate: true));
   }
 
+  static bool compareTime(String timeString) {
+    DateTime givenTime = DateTime.parse(timeString); // String'i DateTime'a çevir
+    DateTime now = DateTime.now(); // Şu anki zamanı al
+    if (givenTime.isBefore(now)) {
+      return true;
+    } else if (givenTime.isAfter(now)) {
+      return false;
+    } else {
+      return false;
+    }
+  }
+
   static Center errorFetchData() {
     return Center(child: Text("Error fetching data"));
   }
@@ -43,12 +55,12 @@ class CustomWidgets {
     ));
   }
 
-  static Widget imageWidget(String url) {
+  static Widget imageWidget(String url, bool fit) {
     return CachedNetworkImage(
       imageUrl: ApiConstants.imageURL + url,
       imageBuilder: (context, imageProvider) => Container(
         decoration: BoxDecoration(
-          image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+          image: fit ? DecorationImage(image: imageProvider) : DecorationImage(image: imageProvider, fit: BoxFit.cover),
         ),
       ),
       placeholder: (context, url) => loader(),

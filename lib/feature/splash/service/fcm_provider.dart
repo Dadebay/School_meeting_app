@@ -10,7 +10,6 @@ class FCMService {
   static Future<Map<String, dynamic>?> postFCMToken() async {
     final url = Uri.parse(ApiConstants.fcmPost);
     String fcmToken = await FirebaseMessaging.instance.getToken() ?? '';
-    print(fcmToken);
     final headers = {'Content-Type': 'application/x-www-form-urlencoded'};
     final body = {'fcmtoken': fcmToken};
     final bearerToken = await AuthServiceStorage.getToken();

@@ -15,46 +15,26 @@ class LessonCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final Color color = ColorConstants.getRandomColor();
     return GestureDetector(
-      onTap: () => _navigateToLesson(context),
+      onTap: () => context.navigateTo(LessonsProfil(lessonID: lessonModel.id, isTeacher: isTeacher)),
       child: Container(
         margin: context.padding.low,
-        decoration: _boxDecoration(color, context),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: context.border.highBorderRadius,
+          border: Border.all(color: color),
+          boxShadow: [BoxShadow(color: color.withOpacity(.5), blurRadius: 5, spreadRadius: 2)],
+        ),
         child: Stack(
           children: [
-            _backgroundImage(context, color),
+            Positioned.fill(
+              child: Container(
+                decoration: BoxDecoration(borderRadius: context.border.highBorderRadius, color: color.withOpacity(.5)),
+                child: ClipRRect(borderRadius: context.border.highBorderRadius, child: CustomWidgets.imageWidget(lessonModel.img, false)),
+              ),
+            ),
             _dateViewerCard(context),
             _lessonInfoCard(context),
           ],
-        ),
-      ),
-    );
-  }
-
-  BoxDecoration _boxDecoration(Color color, BuildContext context) {
-    return BoxDecoration(
-      color: Colors.white,
-      borderRadius: context.border.highBorderRadius,
-      border: Border.all(color: color),
-      boxShadow: [
-        BoxShadow(
-          color: color.withOpacity(.5),
-          blurRadius: 5,
-          spreadRadius: 2,
-        ),
-      ],
-    );
-  }
-
-  Widget _backgroundImage(BuildContext context, Color color) {
-    return Positioned.fill(
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: context.border.highBorderRadius,
-          color: color.withOpacity(.5),
-        ),
-        child: ClipRRect(
-          borderRadius: context.border.highBorderRadius,
-          child: CustomWidgets.imageWidget(lessonModel.img),
         ),
       ),
     );
@@ -138,22 +118,21 @@ class LessonCard extends StatelessWidget {
   }
 
   Widget _actionButton(BuildContext context) {
+    bool isLessonCanceled = lessonModel.whyCanceled != 'null' && lessonModel.whyCanceled.isNotEmpty ?? false;
+    bool isTeacherConfirmed = lessonModel.teacherConfirmation;
+    bool isNotConfirmed = !lessonModel.teacherConfirmation;
+    Color buttonColor = _getButtonColor(isLessonCanceled, isTeacherConfirmed, isNotConfirmed);
+    String buttonText = _getButtonText(isLessonCanceled, isNotConfirmed);
     return ElevatedButton(
-      onPressed: () => _navigateToLesson(context),
+      onPressed: () => context.navigateTo(LessonsProfil(lessonID: lessonModel.id, isTeacher: isTeacher)),
       style: ButtonStyle(
         padding: WidgetStateProperty.all<EdgeInsetsGeometry>(context.padding.normal),
         elevation: WidgetStateProperty.all<double>(0),
-        backgroundColor: WidgetStateProperty.all<Color>(
-          lessonModel.whyCanceled.toString() == 'null'
-              ? lessonModel.teacherConfirmation == false
-                  ? (isTeacher ? ColorConstants.primaryBlueColor : Colors.transparent)
-                  : Colors.transparent
-              : ColorConstants.redColor,
-        ),
+        backgroundColor: WidgetStateProperty.all<Color>(buttonColor),
         shape: WidgetStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
-            side: BorderSide(color: ColorConstants.primaryBlueColor.withOpacity(1)),
+            side: BorderSide(color: ColorConstants.primaryBlueColor.withOpacity(.6)),
           ),
         ),
       ),
@@ -161,30 +140,47 @@ class LessonCard extends StatelessWidget {
         width: double.infinity,
         alignment: Alignment.center,
         child: Text(
-          lessonModel.whyCanceled.toString() == 'null'
-              ? isTeacher
-                  ? (lessonModel.teacherConfirmation ? 'view_lesson'.tr() : 'confirm'.tr())
-                  : 'join_lesson'
-              : 'lesson_canceled',
+          buttonText.tr(),
           style: context.general.textTheme.bodyLarge?.copyWith(
             fontWeight: FontWeight.w700,
-            color: lessonModel.whyCanceled.toString() == 'null'
-                ? lessonModel.teacherConfirmation == false
-                    ? (isTeacher ? ColorConstants.whiteColor : ColorConstants.primaryBlueColor)
-                    : ColorConstants.primaryBlueColor
-                : ColorConstants.whiteColor,
+            color: _getTextColor(isLessonCanceled, isTeacherConfirmed, isNotConfirmed),
           ),
         ),
       ),
     );
   }
 
-  void _navigateToLesson(BuildContext context) {
-    context.navigateTo(
-      LessonsProfil(
-        lessonModelBack: lessonModel,
-        isTeacher: isTeacher,
-      ),
-    );
+  Color _getButtonColor(bool isLessonCanceled, bool isTeacherConfirmed, bool isNotConfirmed) {
+    if (isLessonCanceled) {
+      return ColorConstants.redColor;
+    } else if (isNotConfirmed) {
+      return isTeacher ? ColorConstants.primaryBlueColor : Colors.transparent;
+    } else {
+      return Colors.transparent;
+    }
+  }
+
+  String _getButtonText(bool isLessonCanceled, bool isNotConfirmed) {
+    if (isLessonCanceled) {
+      return 'lesson_canceled';
+    } else if (isNotConfirmed) {
+      return isTeacher
+          ? 'confirm'.tr()
+          : CustomWidgets.compareTime(lessonModel.date.toString() + " " + lessonModel.endTime.toString())
+              ? 'past'.tr()
+              : 'view_lesson'.tr();
+    } else {
+      return CustomWidgets.compareTime(lessonModel.date.toString() + " " + lessonModel.endTime.toString()) ? 'past'.tr() : 'view_lesson'.tr();
+    }
+  }
+
+  Color _getTextColor(bool isLessonCanceled, bool isTeacherConfirmed, bool isNotConfirmed) {
+    if (isLessonCanceled) {
+      return ColorConstants.whiteColor;
+    } else if (isNotConfirmed) {
+      return isTeacher ? ColorConstants.whiteColor : ColorConstants.primaryBlueColor;
+    } else {
+      return CustomWidgets.compareTime(lessonModel.date.toString() + " " + lessonModel.endTime.toString()) ? ColorConstants.greyColor : ColorConstants.primaryBlueColor;
+    }
   }
 }

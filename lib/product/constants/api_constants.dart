@@ -18,4 +18,7 @@ class ApiConstants {
   static const String deleteFreeTime = '${baseUrl}deleteFreeTime/';
   static const String aboutusURL = '${baseUrl}About/';
   static const String privacyURL = '${baseUrl}Privacy/';
+  static const String getAttendenceStudentsURL = '${baseUrl}getAttendence/';
+  static const String getStudentsForChatURL = '${baseUrl}getStudents';
+  static const String getAllForChatURL = '${baseUrl}getTeachers';
 }

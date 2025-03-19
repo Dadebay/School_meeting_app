@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:okul_com_tm/product/widgets/index.dart';
 
-class CustomTextField extends StatelessWidget {
+class CustomTextField extends StatefulWidget {
   final String labelName;
   final TextEditingController controller;
   final FocusNode focusNode;
@@ -10,6 +10,8 @@ class CustomTextField extends StatelessWidget {
   final IconData? prefixIcon;
   final int? maxLine;
   final bool? enabled;
+  final bool isPassword; // Şifre alanı için yeni özellik
+
   const CustomTextField({
     required this.labelName,
     required this.controller,
@@ -18,18 +20,30 @@ class CustomTextField extends StatelessWidget {
     this.maxLine,
     this.prefixIcon,
     this.enabled,
+    this.isPassword = false, // Varsayılan olarak false
     Key? key,
   }) : super(key: key);
+
+  @override
+  _CustomTextFieldState createState() => _CustomTextFieldState();
+}
+
+class _CustomTextFieldState extends State<CustomTextField> {
+  bool _obscureText = true; // Şifre gizleme/gösterme durumu
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      padding: EdgeInsets.only(top: 15),
+      padding: const EdgeInsets.only(top: 15),
       child: TextFormField(
-        style: context.general.textTheme.bodyLarge!.copyWith(color: enabled == false ? ColorConstants.greyColor : ColorConstants.blackColor, fontWeight: FontWeight.w600),
-        enabled: enabled ?? true,
-        controller: controller,
+        style: context.general.textTheme.bodyLarge!.copyWith(
+          color: widget.enabled == false ? ColorConstants.greyColor : ColorConstants.blackColor,
+          fontWeight: FontWeight.w600,
+        ),
+        enabled: widget.enabled ?? true,
+        controller: widget.controller,
+        obscureText: widget.isPassword ? _obscureText : false, // Şifre alanı için gizleme özelliği
         validator: (value) {
           if (value == null || value.isEmpty) {
             return 'textfield_error'.tr();
@@ -37,30 +51,47 @@ class CustomTextField extends StatelessWidget {
           return null;
         },
         onEditingComplete: () {
-          requestfocusNode.requestFocus();
+          widget.requestfocusNode.requestFocus();
         },
         keyboardType: TextInputType.text,
-        maxLines: maxLine ?? 1,
-        focusNode: focusNode,
+        maxLines: widget.maxLine ?? 1,
+        focusNode: widget.focusNode,
         textInputAction: TextInputAction.done,
         enableSuggestions: false,
+        // obscuringCharacter: '*',
         autocorrect: false,
         decoration: InputDecoration(
-          prefixIconConstraints: BoxConstraints(minWidth: prefixIcon == null ? 20 : 10, minHeight: 0),
-          prefixIcon: prefixIcon == null
-              ? SizedBox.shrink()
+          prefixIconConstraints: BoxConstraints(minWidth: widget.prefixIcon == null ? 20 : 10, minHeight: 0),
+          prefixIcon: widget.prefixIcon == null
+              ? const SizedBox.shrink()
               : Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: Icon(
-                    prefixIcon,
+                    widget.prefixIcon,
                     color: ColorConstants.greyColor,
                     size: ImageSizes.mini.value,
                   ),
                 ),
-          labelText: labelName,
-          labelStyle: context.general.textTheme.bodyLarge!.copyWith(color: ColorConstants.greyColor, fontWeight: FontWeight.w500),
+          suffixIcon: widget.isPassword // Şifre alanı için hide/show iconu
+              ? IconButton(
+                  icon: Icon(
+                    _obscureText ? Icons.visibility_off : Icons.visibility,
+                    color: ColorConstants.greyColor,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _obscureText = !_obscureText; // Şifre görünürlüğünü değiştir
+                    });
+                  },
+                )
+              : null,
+          labelText: widget.labelName,
+          labelStyle: context.general.textTheme.bodyLarge!.copyWith(
+            color: ColorConstants.greyColor,
+            fontWeight: FontWeight.w500,
+          ),
           floatingLabelAlignment: FloatingLabelAlignment.start,
-          contentPadding: EdgeInsets.only(left: 10, top: 18, bottom: 15, right: 10),
+          contentPadding: const EdgeInsets.only(left: 10, top: 18, bottom: 15, right: 10),
           isDense: true,
           alignLabelWithHint: true,
           border: _buildOutlineInputBorder(borderColor: ColorConstants.blackColor),

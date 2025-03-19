@@ -29,7 +29,7 @@ class NewsCard extends StatelessWidget {
               tag: newsModel.title,
               child: ClipRRect(
                 borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
-                child: Container(height: ImageSizes.high2x.value, alignment: Alignment.center, child: CustomWidgets.imageWidget(newsModel.img)),
+                child: Container(height: ImageSizes.high2x.value, alignment: Alignment.center, child: CustomWidgets.imageWidget(newsModel.img, false)),
               ),
             ),
             Padding(

@@ -63,6 +63,7 @@ class SplashView extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: context.general.textTheme.bodyLarge?.copyWith(
                       fontWeight: FontWeight.w500,
+                      fontSize: 18,
                       color: ColorConstants.greyColor,
                     ),
                   ),

@@ -23,8 +23,6 @@ class TeacherLessonsService {
         'noticeForStudents': 'Lesson confirmed: ${lesson.lessonName} - ${lesson.date} - ${lesson.content}',
       },
     );
-    print(response.body);
-    print(response.statusCode);
     if (response.statusCode == 200) {
       CustomSnackbar.showCustomSnackbar(context, 'Succes', 'Lessons successfully confirmed', ColorConstants.greenColor);
       return true;
@@ -46,8 +44,6 @@ class TeacherLessonsService {
       body: {'why_canceled': reason},
     );
     log(ApiConstants.cancelLessonTeacher + lessonId.toString() + "/");
-    print(response.statusCode);
-    print(response.body);
     if (response.statusCode == 200 || response.statusCode == 423) {
       return {};
     } else {
@@ -59,10 +55,8 @@ class TeacherLessonsService {
 
   static Future<String> fetchData({required bool privacy}) async {
     final response = await http.get(Uri.parse(privacy ? ApiConstants.privacyURL : ApiConstants.aboutusURL));
-    print(privacy ? ApiConstants.privacyURL : ApiConstants.aboutusURL);
     if (response.statusCode == 200) {
       final utf8Body = utf8.decode(response.bodyBytes);
-      print(utf8Body);
       final String data = json.decode(utf8Body)[0]['text'] as String;
 
       return data;

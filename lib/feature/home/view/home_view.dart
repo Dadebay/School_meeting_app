@@ -10,6 +10,7 @@ import 'package:okul_com_tm/product/widgets/index.dart';
 class HomeView extends ConsumerStatefulWidget {
   const HomeView({required this.isTeacher});
   final bool isTeacher;
+
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _HomeViewState();
 }
@@ -19,13 +20,13 @@ class _HomeViewState extends ConsumerState<HomeView> {
   void initState() {
     super.initState();
     ref.read(lessonProvider.notifier).fetchLessonsForDate(DateTime.now());
-    final userProvider = ref.read(userUpdateProvider.notifier);
-    userProvider.getUserProfile();
+    ref.read(userUpdateProvider.notifier).getUserProfile();
   }
 
   @override
   Widget build(BuildContext context) {
-    final lessonState = ref.watch(lessonProvider);
+    final lessonState = ref.watch(lessonProvider); // Watch the lesson state
+
     return NestedScrollView(
       headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
         return <Widget>[
@@ -60,12 +61,12 @@ class _HomeViewState extends ConsumerState<HomeView> {
       elevation: 5,
       scrolledUnderElevation: 5,
       shape: RoundedRectangleBorder(
-        borderRadius: context.border.highBorderRadius,
+        borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
       ),
       backgroundColor: ColorConstants.whiteColor,
       flexibleSpace: Container(
         decoration: BoxDecoration(
-          borderRadius: context.border.highBorderRadius,
+          borderRadius: BorderRadius.only(bottomLeft: Radius.circular(40), bottomRight: Radius.circular(40)),
           gradient: const LinearGradient(
             colors: [
               ColorConstants.blueColorwithOpacity,

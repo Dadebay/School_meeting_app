@@ -48,26 +48,16 @@ class UserNameAndImage extends ConsumerWidget {
             ),
           ),
           Container(
-            margin: const EdgeInsets.only(left: 30),
-            padding: const EdgeInsets.all(10),
-            width: ImageSizes.normal.value,
-            height: ImageSizes.normal.value,
-            decoration: BoxDecoration(
-              borderRadius: context.border.normalBorderRadius,
-              color: ColorConstants.primaryBlueColor.withOpacity(.1),
-              border: Border.all(color: ColorConstants.primaryBlueColor),
-            ),
-            child: CachedNetworkImage(
-              imageUrl: ApiConstants.imageURL + state.imagePath,
-              imageBuilder: (context, imageProvider) => Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(image: imageProvider),
-                ),
+              margin: const EdgeInsets.only(left: 30),
+              padding: const EdgeInsets.all(10),
+              width: ImageSizes.normal.value,
+              height: ImageSizes.normal.value,
+              decoration: BoxDecoration(
+                borderRadius: context.border.normalBorderRadius,
+                color: ColorConstants.primaryBlueColor.withOpacity(.1),
+                border: Border.all(color: ColorConstants.primaryBlueColor),
               ),
-              placeholder: (context, url) => CustomWidgets.loader(),
-              errorWidget: (context, url, error) => Icon(Icons.error),
-            ),
-          ),
+              child: CustomWidgets.imageWidget(state.imagePath, false)),
         ],
       ),
     );
