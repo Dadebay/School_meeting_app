@@ -42,7 +42,6 @@ class NewsProfileView extends StatelessWidget {
                       color: Colors.grey,
                     ),
                   ),
-                  SizedBox(height: 20),
                   Text(
                     newsModel.content,
                     style: context.general.textTheme.bodyLarge,

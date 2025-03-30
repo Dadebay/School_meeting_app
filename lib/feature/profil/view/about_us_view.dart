@@ -16,9 +16,9 @@ class AboutUsView extends StatelessWidget {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return CustomWidgets.loader();
               } else if (snapshot.hasError) {
-                return CustomWidgets.errorFetchData();
+                return CustomWidgets.errorFetchData(context);
               } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return CustomWidgets.emptyData();
+                return CustomWidgets.emptyData(context);
               } else {
                 return ListView(
                   padding: context.padding.low,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:okul_com_tm/feature/home/service/calendar_provider.dart';
 import 'package:okul_com_tm/product/sizes/widget_sizes.dart';
 
+import '../../../product/dialogs/dialogs.dart';
 import '../../../product/widgets/index.dart';
 import '../../lesson_profil/service/lessons_service.dart';
 
@@ -18,12 +19,7 @@ class CalendarSlider extends ConsumerWidget {
       margin: context.padding.verticalLow,
       child: PageView.builder(
         controller: pageController,
-        itemCount: 365, // Tüm yılın günleri
-        onPageChanged: (index) {
-          final date = getDateFromIndex(index, selectedDate.year);
-          ref.read(calendarProvider.notifier).updateSelectedDate(date);
-          ref.read(lessonProvider.notifier).fetchLessonsForDate(date);
-        },
+        itemCount: 365,
         itemBuilder: (context, index) {
           final date = getDateFromIndex(index, selectedDate.year);
           final isSelected = selectedDate.day == date.day && selectedDate.month == date.month;
@@ -33,6 +29,28 @@ class CalendarSlider extends ConsumerWidget {
               ref.read(calendarProvider.notifier).updateSelectedDate(date);
               pageController.animateToPage(index, duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
               ref.read(lessonProvider.notifier).fetchLessonsForDate(date);
+            },
+            onLongPress: () {
+              Dialogs.showCancelLessonDialog(
+                  context: context,
+                  title: 'Cancel all lessons',
+                  subtitle: 'Are you ready to cancel all lessons to this Date ?',
+                  cancelText: 'Agree',
+                  ontap: () async {
+                    LessonNotifier lessonNotifier = ref.read(lessonProvider.notifier);
+                    await LessonService.cancelAllLessons(date).then((value) {
+                      if (value == 200) {
+                        Navigator.of(context).pop();
+                        CustomSnackbar.showCustomSnackbar(context, 'Success', 'All lessons canceled', ColorConstants.greenColor);
+                        lessonNotifier.clearLessons([]);
+                        lessonNotifier.fetchLessonsForDate(date);
+                      } else {
+                        Navigator.of(context).pop();
+
+                        CustomSnackbar.showCustomSnackbar(context, 'Error', 'Failed to cancel lessons', ColorConstants.redColor);
+                      }
+                    });
+                  });
             },
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 300),

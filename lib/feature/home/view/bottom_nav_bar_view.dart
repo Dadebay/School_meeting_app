@@ -64,7 +64,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
           currentIndex: selectedIndex,
           onTap: (index) async {
             selectedIndex = index;
-            ChatService.fetchStudents();
+            ChatNotifier.fetchStudents();
             setState(() {});
           },
         ));

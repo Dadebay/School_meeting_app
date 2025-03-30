@@ -34,6 +34,23 @@ class UserUpdateNotifier extends StateNotifier<UserUpdateState> {
     }
   }
 
+  static Future<void> changePassword({required BuildContext context, required String currentPassword, required String newPassword}) async {
+    final url = Uri.parse(ApiConstants.changePassword);
+    final response = await http.post(
+      url,
+      body: {
+        'current_password': currentPassword,
+        'new_password': newPassword,
+      },
+    );
+    if (response.statusCode == 200) {
+      CustomSnackbar.showCustomSnackbar(context, 'success', 'Password changed successfully', Colors.green);
+      Navigator.pop(context);
+    } else {
+      CustomSnackbar.showCustomSnackbar(context, 'error', 'Incorrect current password', Colors.red);
+    }
+  }
+
   void setDetails({required String email, required String userName, required File image}) {
     state = state.copyWith(email: email);
     state = state.copyWith(username: userName);

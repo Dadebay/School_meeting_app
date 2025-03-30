@@ -1,3 +1,5 @@
+// ignore_for_file: inference_failure_on_function_invocation
+
 import 'dart:developer';
 
 import 'package:auto_route/auto_route.dart';
@@ -31,7 +33,7 @@ class _LessonsProfilState extends ConsumerState<LessonsProfil> {
   Widget build(BuildContext context) {
     lessonModel = ref.watch(lessonProvider).lessons.where((lesson) => lesson.id == widget.lessonID).first;
     ref.read(studentProvider.notifier).fetchStudents(lessonModel.id);
-    bool isLessonCanceled = lessonModel.whyCanceled != 'null' && lessonModel.whyCanceled.isNotEmpty ?? false;
+    bool isLessonCanceled = lessonModel.whyCanceled != 'null' && lessonModel.whyCanceled.isNotEmpty;
     bool isLessonPassed = lessonModel.past || CustomWidgets.compareTime(lessonModel.date.toString() + " " + lessonModel.endTime.toString());
     log("isLessonPassed : $isLessonPassed");
     log("isLessonPassed : ${lessonModel.past}}");
@@ -129,9 +131,6 @@ class _LessonsProfilState extends ConsumerState<LessonsProfil> {
   Future<void> refreshLessonData() async {
     await LessonService.fetchLessonsForDate(DateTime.parse(lessonModel.date)).then((e) {
       ref.watch(lessonProvider.notifier).clearLessons(e);
-      // setState(() {
-      //   lessonModel = e.firstWhere((element) => element.id == lessonModel.id);
-      // });
     });
   }
 
@@ -157,7 +156,7 @@ class _LessonsProfilState extends ConsumerState<LessonsProfil> {
   }
 
   Widget? _buildFloatingActionButton(BuildContext context, bool isLessonPassed) {
-    if (widget.isTeacher && lessonModel.teacherConfirmation) {
+    if (widget.isTeacher) {
       if (isLessonPassed) {
         return Container(
           margin: context.padding.normal,

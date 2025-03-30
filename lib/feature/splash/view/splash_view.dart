@@ -24,14 +24,8 @@ class SplashView extends StatelessWidget {
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
-              padding: context.padding.normal.copyWith(bottom: 0, top: 40),
-              child: Text(StringConstants.appName,
-                  maxLines: 2,
-                  textAlign: TextAlign.center,
-                  style: context.general.textTheme.headlineLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: ColorConstants.primaryBlueColor,
-                  )),
+              padding: context.padding.normal.copyWith(bottom: 10, top: 40),
+              child: Image.asset(IconConstants.appName),
             ),
           ),
           Align(

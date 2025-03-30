@@ -12,6 +12,14 @@ class AuthServiceStorage {
     await _storage.write(key: 'auth_token', value: token);
   }
 
+  static Future<void> saveUserID(int userID) async {
+    await _storage.write(key: 'user_id', value: userID.toString());
+  }
+
+  static Future<String?> getUserID() async {
+    return await _storage.read(key: 'user_id');
+  }
+
   static Future<void> saveStatus(String token) async {
     await _storage.write(key: 'status', value: token);
   }
@@ -99,8 +107,9 @@ class AuthService {
         'password': password,
       }),
     );
-
     if (response.statusCode == 200) {
+      final responseJson = json.decode(response.body);
+      await AuthServiceStorage.saveUserID(int.parse(responseJson['user_id'].toString()));
       return json.decode(response.body) as Map<String, dynamic>;
     } else {
       return null;

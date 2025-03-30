@@ -20,6 +20,7 @@ class AppRouter extends RootStackRouter {
         AutoRoute(path: '/newsProfile', page: NewsProfileView.page),
         AutoRoute(path: '/updateProfile', page: EditUserProfileView.page),
         AutoRoute(path: '/setFreeTime', page: FreeTimeManagamentView.page),
+        AutoRoute(path: '/pastLessons', page: PassedLessons.page),
       ];
 
   @override

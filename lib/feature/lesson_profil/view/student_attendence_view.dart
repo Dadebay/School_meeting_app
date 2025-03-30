@@ -31,9 +31,9 @@ class StudentAttendancePageView extends ConsumerWidget {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return CustomWidgets.loader();
                 } else if (snapshot.hasError) {
-                  return CustomWidgets.errorFetchData();
+                  return CustomWidgets.errorFetchData(context);
                 } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return CustomWidgets.emptyData();
+                  return CustomWidgets.emptyData(context);
                 } else {
                   final studentsList = snapshot.data!;
                   return ListView.builder(

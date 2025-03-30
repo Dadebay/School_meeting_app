@@ -8,18 +8,18 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:auto_route/auto_route.dart' as _i13;
-import 'package:flutter/material.dart' as _i14;
+import 'package:auto_route/auto_route.dart' as _i14;
+import 'package:flutter/material.dart' as _i15;
 import 'package:okul_com_tm/feature/home/view/bottom_nav_bar_view.dart' as _i1;
 import 'package:okul_com_tm/feature/home/view/home_view.dart' as _i5;
 import 'package:okul_com_tm/feature/lesson_profil/model/lesson_model.dart'
-    as _i16;
+    as _i17;
 import 'package:okul_com_tm/feature/lesson_profil/view/lessons_profil.dart'
     as _i6;
 import 'package:okul_com_tm/feature/lesson_profil/view/student_attendence_view.dart'
-    as _i11;
+    as _i12;
 import 'package:okul_com_tm/feature/login/view/login_view.dart' as _i7;
-import 'package:okul_com_tm/feature/news_view/model/news_model.dart' as _i15;
+import 'package:okul_com_tm/feature/news_view/model/news_model.dart' as _i16;
 import 'package:okul_com_tm/feature/news_view/view/news_profile_view.dart'
     as _i8;
 import 'package:okul_com_tm/feature/news_view/view/news_view.dart' as _i9;
@@ -27,15 +27,17 @@ import 'package:okul_com_tm/feature/profil/view/edit_user_profile_view.dart'
     as _i3;
 import 'package:okul_com_tm/feature/profil/view/free_time_managament_view.dart'
     as _i4;
-import 'package:okul_com_tm/feature/profil/view/user_profil_view.dart' as _i12;
+import 'package:okul_com_tm/feature/profil/view/get_passed_lessons.dart'
+    as _i10;
+import 'package:okul_com_tm/feature/profil/view/user_profil_view.dart' as _i13;
 import 'package:okul_com_tm/feature/splash/view/connection_check_view.dart'
     as _i2;
-import 'package:okul_com_tm/feature/splash/view/splash_view.dart' as _i10;
+import 'package:okul_com_tm/feature/splash/view/splash_view.dart' as _i11;
 
 /// generated route for
 /// [_i1.BottomNavBar]
-class BottomNavBar extends _i13.PageRouteInfo<void> {
-  const BottomNavBar({List<_i13.PageRouteInfo>? children})
+class BottomNavBar extends _i14.PageRouteInfo<void> {
+  const BottomNavBar({List<_i14.PageRouteInfo>? children})
       : super(
           BottomNavBar.name,
           initialChildren: children,
@@ -43,7 +45,7 @@ class BottomNavBar extends _i13.PageRouteInfo<void> {
 
   static const String name = 'BottomNavBar';
 
-  static _i13.PageInfo page = _i13.PageInfo(
+  static _i14.PageInfo page = _i14.PageInfo(
     name,
     builder: (data) {
       return _i1.BottomNavBar();
@@ -53,8 +55,8 @@ class BottomNavBar extends _i13.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i2.ConnectionCheckView]
-class ConnectionCheckView extends _i13.PageRouteInfo<void> {
-  const ConnectionCheckView({List<_i13.PageRouteInfo>? children})
+class ConnectionCheckView extends _i14.PageRouteInfo<void> {
+  const ConnectionCheckView({List<_i14.PageRouteInfo>? children})
       : super(
           ConnectionCheckView.name,
           initialChildren: children,
@@ -62,7 +64,7 @@ class ConnectionCheckView extends _i13.PageRouteInfo<void> {
 
   static const String name = 'ConnectionCheckView';
 
-  static _i13.PageInfo page = _i13.PageInfo(
+  static _i14.PageInfo page = _i14.PageInfo(
     name,
     builder: (data) {
       return const _i2.ConnectionCheckView();
@@ -72,8 +74,8 @@ class ConnectionCheckView extends _i13.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i3.EditUserProfileView]
-class EditUserProfileView extends _i13.PageRouteInfo<void> {
-  const EditUserProfileView({List<_i13.PageRouteInfo>? children})
+class EditUserProfileView extends _i14.PageRouteInfo<void> {
+  const EditUserProfileView({List<_i14.PageRouteInfo>? children})
       : super(
           EditUserProfileView.name,
           initialChildren: children,
@@ -81,7 +83,7 @@ class EditUserProfileView extends _i13.PageRouteInfo<void> {
 
   static const String name = 'EditUserProfileView';
 
-  static _i13.PageInfo page = _i13.PageInfo(
+  static _i14.PageInfo page = _i14.PageInfo(
     name,
     builder: (data) {
       return _i3.EditUserProfileView();
@@ -91,8 +93,8 @@ class EditUserProfileView extends _i13.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i4.FreeTimeManagamentView]
-class FreeTimeManagamentView extends _i13.PageRouteInfo<void> {
-  const FreeTimeManagamentView({List<_i13.PageRouteInfo>? children})
+class FreeTimeManagamentView extends _i14.PageRouteInfo<void> {
+  const FreeTimeManagamentView({List<_i14.PageRouteInfo>? children})
       : super(
           FreeTimeManagamentView.name,
           initialChildren: children,
@@ -100,7 +102,7 @@ class FreeTimeManagamentView extends _i13.PageRouteInfo<void> {
 
   static const String name = 'FreeTimeManagamentView';
 
-  static _i13.PageInfo page = _i13.PageInfo(
+  static _i14.PageInfo page = _i14.PageInfo(
     name,
     builder: (data) {
       return const _i4.FreeTimeManagamentView();
@@ -110,10 +112,10 @@ class FreeTimeManagamentView extends _i13.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i5.HomeView]
-class HomeView extends _i13.PageRouteInfo<HomeViewArgs> {
+class HomeView extends _i14.PageRouteInfo<HomeViewArgs> {
   HomeView({
     required bool isTeacher,
-    List<_i13.PageRouteInfo>? children,
+    List<_i14.PageRouteInfo>? children,
   }) : super(
           HomeView.name,
           args: HomeViewArgs(isTeacher: isTeacher),
@@ -122,7 +124,7 @@ class HomeView extends _i13.PageRouteInfo<HomeViewArgs> {
 
   static const String name = 'HomeView';
 
-  static _i13.PageInfo page = _i13.PageInfo(
+  static _i14.PageInfo page = _i14.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<HomeViewArgs>();
@@ -144,12 +146,12 @@ class HomeViewArgs {
 
 /// generated route for
 /// [_i6.LessonsProfil]
-class LessonsProfil extends _i13.PageRouteInfo<LessonsProfilArgs> {
+class LessonsProfil extends _i14.PageRouteInfo<LessonsProfilArgs> {
   LessonsProfil({
     required bool isTeacher,
     required int lessonID,
-    _i14.Key? key,
-    List<_i13.PageRouteInfo>? children,
+    _i15.Key? key,
+    List<_i14.PageRouteInfo>? children,
   }) : super(
           LessonsProfil.name,
           args: LessonsProfilArgs(
@@ -162,7 +164,7 @@ class LessonsProfil extends _i13.PageRouteInfo<LessonsProfilArgs> {
 
   static const String name = 'LessonsProfil';
 
-  static _i13.PageInfo page = _i13.PageInfo(
+  static _i14.PageInfo page = _i14.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<LessonsProfilArgs>();
@@ -186,7 +188,7 @@ class LessonsProfilArgs {
 
   final int lessonID;
 
-  final _i14.Key? key;
+  final _i15.Key? key;
 
   @override
   String toString() {
@@ -196,8 +198,8 @@ class LessonsProfilArgs {
 
 /// generated route for
 /// [_i7.LoginView]
-class LoginView extends _i13.PageRouteInfo<void> {
-  const LoginView({List<_i13.PageRouteInfo>? children})
+class LoginView extends _i14.PageRouteInfo<void> {
+  const LoginView({List<_i14.PageRouteInfo>? children})
       : super(
           LoginView.name,
           initialChildren: children,
@@ -205,7 +207,7 @@ class LoginView extends _i13.PageRouteInfo<void> {
 
   static const String name = 'LoginView';
 
-  static _i13.PageInfo page = _i13.PageInfo(
+  static _i14.PageInfo page = _i14.PageInfo(
     name,
     builder: (data) {
       return _i7.LoginView();
@@ -215,11 +217,11 @@ class LoginView extends _i13.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i8.NewsProfileView]
-class NewsProfileView extends _i13.PageRouteInfo<NewsProfileViewArgs> {
+class NewsProfileView extends _i14.PageRouteInfo<NewsProfileViewArgs> {
   NewsProfileView({
-    _i14.Key? key,
-    required _i15.NewsModel newsModel,
-    List<_i13.PageRouteInfo>? children,
+    _i15.Key? key,
+    required _i16.NewsModel newsModel,
+    List<_i14.PageRouteInfo>? children,
   }) : super(
           NewsProfileView.name,
           args: NewsProfileViewArgs(
@@ -231,7 +233,7 @@ class NewsProfileView extends _i13.PageRouteInfo<NewsProfileViewArgs> {
 
   static const String name = 'NewsProfileView';
 
-  static _i13.PageInfo page = _i13.PageInfo(
+  static _i14.PageInfo page = _i14.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<NewsProfileViewArgs>();
@@ -249,9 +251,9 @@ class NewsProfileViewArgs {
     required this.newsModel,
   });
 
-  final _i14.Key? key;
+  final _i15.Key? key;
 
-  final _i15.NewsModel newsModel;
+  final _i16.NewsModel newsModel;
 
   @override
   String toString() {
@@ -261,8 +263,8 @@ class NewsProfileViewArgs {
 
 /// generated route for
 /// [_i9.NewsView]
-class NewsView extends _i13.PageRouteInfo<void> {
-  const NewsView({List<_i13.PageRouteInfo>? children})
+class NewsView extends _i14.PageRouteInfo<void> {
+  const NewsView({List<_i14.PageRouteInfo>? children})
       : super(
           NewsView.name,
           initialChildren: children,
@@ -270,7 +272,7 @@ class NewsView extends _i13.PageRouteInfo<void> {
 
   static const String name = 'NewsView';
 
-  static _i13.PageInfo page = _i13.PageInfo(
+  static _i14.PageInfo page = _i14.PageInfo(
     name,
     builder: (data) {
       return _i9.NewsView();
@@ -279,9 +281,28 @@ class NewsView extends _i13.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i10.SplashView]
-class SplashView extends _i13.PageRouteInfo<void> {
-  const SplashView({List<_i13.PageRouteInfo>? children})
+/// [_i10.PassedLessons]
+class PassedLessons extends _i14.PageRouteInfo<void> {
+  const PassedLessons({List<_i14.PageRouteInfo>? children})
+      : super(
+          PassedLessons.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'PassedLessons';
+
+  static _i14.PageInfo page = _i14.PageInfo(
+    name,
+    builder: (data) {
+      return const _i10.PassedLessons();
+    },
+  );
+}
+
+/// generated route for
+/// [_i11.SplashView]
+class SplashView extends _i14.PageRouteInfo<void> {
+  const SplashView({List<_i14.PageRouteInfo>? children})
       : super(
           SplashView.name,
           initialChildren: children,
@@ -289,23 +310,23 @@ class SplashView extends _i13.PageRouteInfo<void> {
 
   static const String name = 'SplashView';
 
-  static _i13.PageInfo page = _i13.PageInfo(
+  static _i14.PageInfo page = _i14.PageInfo(
     name,
     builder: (data) {
-      return const _i10.SplashView();
+      return const _i11.SplashView();
     },
   );
 }
 
 /// generated route for
-/// [_i11.StudentAttendancePageView]
+/// [_i12.StudentAttendancePageView]
 class StudentAttendanceRouteView
-    extends _i13.PageRouteInfo<StudentAttendanceRouteViewArgs> {
+    extends _i14.PageRouteInfo<StudentAttendanceRouteViewArgs> {
   StudentAttendanceRouteView({
-    _i14.Key? key,
-    required _i16.LessonModel lessonModel,
+    _i15.Key? key,
+    required _i17.LessonModel lessonModel,
     required bool showAttendentStudents,
-    List<_i13.PageRouteInfo>? children,
+    List<_i14.PageRouteInfo>? children,
   }) : super(
           StudentAttendanceRouteView.name,
           args: StudentAttendanceRouteViewArgs(
@@ -318,11 +339,11 @@ class StudentAttendanceRouteView
 
   static const String name = 'StudentAttendanceRouteView';
 
-  static _i13.PageInfo page = _i13.PageInfo(
+  static _i14.PageInfo page = _i14.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<StudentAttendanceRouteViewArgs>();
-      return _i11.StudentAttendancePageView(
+      return _i12.StudentAttendancePageView(
         key: args.key,
         lessonModel: args.lessonModel,
         showAttendentStudents: args.showAttendentStudents,
@@ -338,9 +359,9 @@ class StudentAttendanceRouteViewArgs {
     required this.showAttendentStudents,
   });
 
-  final _i14.Key? key;
+  final _i15.Key? key;
 
-  final _i16.LessonModel lessonModel;
+  final _i17.LessonModel lessonModel;
 
   final bool showAttendentStudents;
 
@@ -351,12 +372,12 @@ class StudentAttendanceRouteViewArgs {
 }
 
 /// generated route for
-/// [_i12.UserProfilView]
-class UserProfilView extends _i13.PageRouteInfo<UserProfilViewArgs> {
+/// [_i13.UserProfilView]
+class UserProfilView extends _i14.PageRouteInfo<UserProfilViewArgs> {
   UserProfilView({
-    _i14.Key? key,
+    _i15.Key? key,
     required bool isTeacher,
-    List<_i13.PageRouteInfo>? children,
+    List<_i14.PageRouteInfo>? children,
   }) : super(
           UserProfilView.name,
           args: UserProfilViewArgs(
@@ -368,11 +389,11 @@ class UserProfilView extends _i13.PageRouteInfo<UserProfilViewArgs> {
 
   static const String name = 'UserProfilView';
 
-  static _i13.PageInfo page = _i13.PageInfo(
+  static _i14.PageInfo page = _i14.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<UserProfilViewArgs>();
-      return _i12.UserProfilView(
+      return _i13.UserProfilView(
         key: args.key,
         isTeacher: args.isTeacher,
       );
@@ -386,7 +407,7 @@ class UserProfilViewArgs {
     required this.isTeacher,
   });
 
-  final _i14.Key? key;
+  final _i15.Key? key;
 
   final bool isTeacher;
 

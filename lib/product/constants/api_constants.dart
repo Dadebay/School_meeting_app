@@ -20,5 +20,10 @@ class ApiConstants {
   static const String privacyURL = '${baseUrl}Privacy/';
   static const String getAttendenceStudentsURL = '${baseUrl}getAttendence/';
   static const String getStudentsForChatURL = '${baseUrl}getStudents';
+  static const String getMessages = '${baseUrl}get_messages';
   static const String getAllForChatURL = '${baseUrl}getTeachers';
+  static const String getPassedLessons = '${baseUrl}getPastLesson';
+  static const String changePassword = '${baseUrl}change_password';
+  static const String cancelAllLessons = '${baseUrl}CancelAll/';
+  static const String getConversation = '${baseUrl}get_conversations/';
 }

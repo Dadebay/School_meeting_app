@@ -118,7 +118,7 @@ class LessonCard extends StatelessWidget {
   }
 
   Widget _actionButton(BuildContext context) {
-    bool isLessonCanceled = lessonModel.whyCanceled != 'null' && lessonModel.whyCanceled.isNotEmpty ?? false;
+    bool isLessonCanceled = lessonModel.whyCanceled != 'null' && lessonModel.whyCanceled.isNotEmpty;
     bool isTeacherConfirmed = lessonModel.teacherConfirmation;
     bool isNotConfirmed = !lessonModel.teacherConfirmation;
     Color buttonColor = _getButtonColor(isLessonCanceled, isTeacherConfirmed, isNotConfirmed);

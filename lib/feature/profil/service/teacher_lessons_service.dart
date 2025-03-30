@@ -23,11 +23,13 @@ class TeacherLessonsService {
         'noticeForStudents': 'Lesson confirmed: ${lesson.lessonName} - ${lesson.date} - ${lesson.content}',
       },
     );
+    print(response.statusCode);
+    print(response.body);
     if (response.statusCode == 200) {
       CustomSnackbar.showCustomSnackbar(context, 'Succes', 'Lessons successfully confirmed', ColorConstants.greenColor);
       return true;
     } else {
-      CustomSnackbar.showCustomSnackbar(context, 'Error', 'Request failed with status: ${response.statusCode}', ColorConstants.redColor);
+      CustomSnackbar.showCustomSnackbar(context, 'Error', 'Request failed with status: ${response.body}', ColorConstants.redColor);
       return false;
     }
   }

@@ -57,7 +57,7 @@ class UserNameAndImage extends ConsumerWidget {
                 color: ColorConstants.primaryBlueColor.withOpacity(.1),
                 border: Border.all(color: ColorConstants.primaryBlueColor),
               ),
-              child: CustomWidgets.imageWidget(state.imagePath, false)),
+              child: CustomWidgets.imageWidget(state.imagePath, true)),
         ],
       ),
     );

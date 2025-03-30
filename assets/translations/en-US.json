@@ -40,7 +40,7 @@
   "log_out_subtitle": "Successfully logged out",
   "log_out_title": "Are you sure you want to log out?",
   "login_error": "Your creadentials is incorrect. Please try again",
-  "login_subtitle": "Please sign in to schedule and manage your meetings effortlessly.",
+  "login_subtitle": "Sign in to access your lessons and manage your schedule",
   "login_title": "Welcome to Your School Meeting Hub",
   "news": "News",
   "no": "No",
@@ -80,5 +80,7 @@
   "username": "Username",
   "view_attendence": "View students",
   "view_lesson": "View Lesson",
-  "yes": "Yes"
+  "yes": "Yes",
+  "past_lessons":"Passed Lessons",
+  "start_time_should_be_before_end_time":" Start time should be before end time"
 }

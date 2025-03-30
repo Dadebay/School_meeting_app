@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,12 +14,14 @@ class PageButtons extends ConsumerWidget {
     'set_free_time',
     "about_us",
     'privacy_policy',
+    'past_lessons',
   ];
 
   final List<IconData> buttonIcons = [
     CupertinoIcons.time,
     IconlyLight.info_square,
     IconlyLight.document,
+    IconlyLight.time_circle,
   ];
 
   PageButtons({super.key, required this.isTeacher});
@@ -45,13 +48,15 @@ class PageButtons extends ConsumerWidget {
         onTap: () {
           if (buttonNames[index] == 'set_free_time') {
             ref.read(freeTimesProvider.notifier).fetchFreeTimes(context);
-            ref.read(dateRangeProvider.notifier).setDateRange(null);
-            ref.read(timeRangeProvider.notifier).setTimeRange(null);
             context.route.navigateToPage(FreeTimeManagamentView());
           } else {
-            context.route.navigateToPage(AboutUsView(
-              privacyPolicy: buttonNames[index] == 'privacy_policy' ? true : false,
-            ));
+            if (buttonNames[index] == 'past_lessons') {
+              context.navigateNamedTo('/pastLessons');
+            } else {
+              context.route.navigateToPage(AboutUsView(
+                privacyPolicy: buttonNames[index] == 'privacy_policy' ? true : false,
+              ));
+            }
           }
         },
         shape: RoundedRectangleBorder(borderRadius: context.border.normalBorderRadius),

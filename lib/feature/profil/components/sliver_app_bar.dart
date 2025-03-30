@@ -58,6 +58,7 @@ class ProfilSliverAppBar extends ConsumerWidget {
                 imageUrl: ApiConstants.imageURL + userModel.imagePath,
                 imageBuilder: (context, imageProvider) => Container(
                   decoration: BoxDecoration(
+                    shape: BoxShape.circle,
                     image: DecorationImage(image: imageProvider),
                   ),
                 ),

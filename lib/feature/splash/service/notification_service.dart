@@ -36,7 +36,14 @@ class FCMConfig {
 
   Future<void> requestPermission() async {
     final FirebaseMessaging messaging = FirebaseMessaging.instance;
+    NotificationSettings settings = await messaging.requestPermission(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
 
+    if (settings.authorizationStatus == AuthorizationStatus.denied) {
+    } else if (settings.authorizationStatus == AuthorizationStatus.authorized) {}
     await messaging.requestPermission(
       alert: true,
       announcement: false,

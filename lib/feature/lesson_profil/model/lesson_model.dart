@@ -31,7 +31,6 @@ class LessonModel {
     required this.students,
   });
 
-  // JSON'dan nesneye dönüştürme
   factory LessonModel.fromJson(Map<String, dynamic> json) {
     return LessonModel(
       id: json['id'] as int? ?? 0,
@@ -50,7 +49,6 @@ class LessonModel {
     );
   }
 
-  // `copyWith` metodu
   LessonModel copyWith({
     int? id,
     String? lessonName,
@@ -70,7 +68,7 @@ class LessonModel {
       lessonName: lessonName ?? this.lessonName,
       content: content ?? this.content,
       date: date ?? this.date,
-      whyCanceled: whyCanceled ?? this.whyCanceled,
+      whyCanceled: whyCanceled,
       startTime: startTime ?? this.startTime,
       endTime: endTime ?? this.endTime,
       teacherConfirmation: teacherConfirmation ?? this.teacherConfirmation,
@@ -82,7 +80,6 @@ class LessonModel {
     );
   }
 
-  // JSON'a dönüştürme
   Map<String, dynamic> toJson() {
     return {
       'id': id,

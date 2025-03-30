@@ -19,12 +19,60 @@ class CustomWidgets {
     }
   }
 
-  static Center errorFetchData() {
-    return Center(child: Text("Error fetching data"));
+  static Center errorFetchData(BuildContext context) {
+    return Center(
+        child: Padding(
+      padding: context.padding.normal,
+      child: Column(
+        children: [
+          Image.asset(IconConstants.noLessons, width: 250, height: 250),
+          Padding(
+            padding: context.padding.verticalNormal,
+            child: Text(
+              "Lessons not found",
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: context.general.textTheme.titleLarge!.copyWith(fontWeight: FontWeight.bold),
+            ),
+          ),
+          Text(
+            "Please try again later.",
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+            style: context.general.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500, fontSize: 20, color: ColorConstants.greyColor),
+          ),
+        ],
+      ),
+    ));
   }
 
-  static Center emptyData() {
-    return Center(child: Text("No data available"));
+  static Center emptyData(BuildContext context) {
+    return Center(
+        child: Padding(
+      padding: context.padding.normal,
+      child: Column(
+        children: [
+          Image.asset(IconConstants.noLessons, width: 250, height: 250),
+          Padding(
+            padding: context.padding.verticalNormal,
+            child: Text(
+              "Empty Data",
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: context.general.textTheme.titleLarge!.copyWith(fontWeight: FontWeight.bold),
+            ),
+          ),
+          Text(
+            "Please try again later.",
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+            style: context.general.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500, fontSize: 20, color: ColorConstants.greyColor),
+          ),
+        ],
+      ),
+    ));
   }
 
   static Center emptyLessons(BuildContext context) {
