@@ -140,7 +140,6 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:okul_com_tm/feature/profil/model/free_time_model.dart';
@@ -152,20 +151,12 @@ final freeTimesProvider = StateNotifierProvider<FreeTimeNotifier, List<FreeTimeM
 class FreeTimeNotifier extends StateNotifier<List<FreeTimeModel>> {
   FreeTimeNotifier() : super([]);
 
-  Future<void> submitFreeTime(BuildContext context, String date1, String date2, DateTime timeStart, DateTime timeEnd) async {
-    final response = await _postData(ApiConstants.setFreeTime, {
-      "date1": date1,
-      "date2": date2,
-      "timestart": DateFormat("HH:mm").format(timeStart),
-      "timeend": DateFormat("HH:mm").format(timeEnd),
-    });
-
-    if (response.statusCode == 200) {
-      CustomSnackbar.showCustomSnackbar(context, 'success', "times_submitted", ColorConstants.greenColor);
-      fetchFreeTimes(context);
-    } else {
-      CustomSnackbar.showCustomSnackbar(context, 'error', "failed_to_submit", ColorConstants.redColor);
-    }
+  Future<dynamic> submitFreeTime(BuildContext context, Map<String, String> body) async {
+    final response = await _postData(ApiConstants.setFreeTime, body);
+    print(response.body);
+    print(body);
+    print("________________________________________________________________________________");
+    return response.statusCode;
   }
 
   Future<List<FreeTimeModel>> fetchFreeTimes(BuildContext context) async {

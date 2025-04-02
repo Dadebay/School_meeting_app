@@ -2,9 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:okul_com_tm/feature/chat_view/model/chat_student_model.dart';
 import 'package:okul_com_tm/product/widgets/index.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 // WebSocket bağlantı durumlarını temsil eden enum
@@ -20,12 +22,16 @@ class ChatState {
   final WebSocketStatus connectionStatus;
   final String messageText;
   final int? currentStudentID;
+  final int currentPage;
+  final bool hasMore;
 
   ChatState({
     required this.messages,
     this.messageText = '',
     required this.connectionStatus,
     this.currentStudentID,
+    this.currentPage = 1,
+    this.hasMore = true,
   });
 
   ChatState copyWith({
@@ -33,12 +39,16 @@ class ChatState {
     WebSocketStatus? connectionStatus,
     String? messageText,
     int? currentStudentID,
+    int? currentPage,
+    bool? hasMore,
   }) {
     return ChatState(
       messages: messages ?? this.messages,
       connectionStatus: connectionStatus ?? this.connectionStatus,
       messageText: messageText ?? this.messageText,
       currentStudentID: currentStudentID ?? this.currentStudentID,
+      currentPage: currentPage ?? this.currentPage,
+      hasMore: hasMore ?? this.hasMore,
     );
   }
 }
@@ -48,31 +58,10 @@ class ChatNotifier extends StateNotifier<ChatState> {
 
   WebSocketChannel? _channel;
   StreamSubscription? _subscription;
+  final RefreshController refreshController = RefreshController(initialRefresh: false);
 
   void updateMessageText(String text) {
     state = state.copyWith(messageText: text);
-  }
-
-  Future<void> fetchMessages({required int conversationID}) async {
-    final token = await AuthServiceStorage.getToken();
-    final url = '${ApiConstants.getConversation}$conversationID?page=1&size=10';
-
-    try {
-      final response = await http.get(Uri.parse(url), headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
-      });
-
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        final messages = (data['results'] as List).map((msg) => Message.fromJson(msg as Map<String, dynamic>)).toList();
-        state = state.copyWith(messages: messages);
-      } else {
-        log('Error fetching messages: ${response.statusCode}');
-      }
-    } catch (e) {
-      log('Exception while fetching messages: $e');
-    }
   }
 
   static Future<List<ChatStudentModel>> fetchStudents() async {
@@ -96,7 +85,49 @@ class ChatNotifier extends StateNotifier<ChatState> {
     }
   }
 
-  void connectWebSocket({required int studentID, required int myID}) {
+  Future<void> fetchMessages({required int conversationID, int page = 1}) async {
+    if (!state.hasMore && page > 1) return;
+
+    final token = await AuthServiceStorage.getToken();
+    final url = '${ApiConstants.getConversation}$conversationID?page=$page&size=15';
+
+    try {
+      final response = await http.get(Uri.parse(url), headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      });
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        final newMessages = (data['results'] as List).map((msg) => Message.fromJson(msg as Map<String, dynamic>)).toList();
+
+        state = state.copyWith(
+          messages: page == 1 ? newMessages : [...state.messages, ...newMessages],
+          currentPage: page,
+          hasMore: newMessages.length >= 15, // 15 mesajdan az gelirse daha fazla yok demektir
+        );
+      } else {
+        log('Error fetching messages: ${response.statusCode}');
+      }
+    } catch (e) {
+      log('Exception while fetching messages: $e');
+    }
+  }
+
+  void loadMoreMessages(int conversationID) async {
+    await fetchMessages(conversationID: conversationID, page: state.currentPage + 1);
+    refreshController.loadComplete();
+  }
+
+  void _scrollToBottom(ScrollController _scrollController) {
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent,
+      duration: Duration(milliseconds: 100),
+      curve: Curves.easeOut,
+    );
+  }
+
+  void connectWebSocket({required int studentID, required int myID, required ScrollController scrollController}) {
     if (state.connectionStatus == WebSocketStatus.connected && state.currentStudentID == studentID) {
       return;
     }
@@ -112,50 +143,22 @@ class ChatNotifier extends StateNotifier<ChatState> {
         connectionStatus: WebSocketStatus.connected,
         currentStudentID: studentID,
       );
-
       _subscription = _channel?.stream.listen(
         (message) {
-          print("Gelen Mesaj: $message");
-          final decoded = message.toString();
-          bool value = false;
-          final now = DateTime.now();
-          final nowFormatted = "${now.hour}:${now.minute}"; // Sadece saat ve dakika bazlı karşılaştırma
+          final newMessage = Message.fromJson({
+            'content': message.toString(),
+            'created_at': DateTime.now().toIso8601String(),
+            'sender_id': studentID,
+          });
 
-          for (var element in state.messages) {
-            final messageTime = DateTime.tryParse(element.createdAt);
-            final messageFormatted = messageTime != null ? "${messageTime.hour}:${messageTime.minute}" : "";
+          _scrollToBottom(scrollController);
 
-            print("Karşılaştırma - Gelen: $decoded, Kayıtlı: ${element.content}");
-            print("Zaman Karşılaştırması - Gelen: $nowFormatted, Kayıtlı: $messageFormatted");
-
-            if (element.content == decoded && messageFormatted == nowFormatted) {
-              value = true;
-              break; // Eğer eşleşme bulunduysa döngüden çık
-            }
-          }
-
-          print("Tekrar Ediyor mu?: $value");
-
-          if (!value) {
-            final newMessage = Message.fromJson({
-              'content': decoded,
-              'created_at': now.toIso8601String(),
-              'sender_id': studentID,
-            });
-
-            state = state.copyWith(
-              messages: [...state.messages, newMessage],
-            );
-          }
+          state = state.copyWith(
+            messages: [...state.messages, newMessage],
+          );
         },
-        onDone: () {
-          state = state.copyWith(connectionStatus: WebSocketStatus.disconnected);
-          print('WebSocket bağlantısı kapandı ❌');
-        },
-        onError: (error) {
-          state = state.copyWith(connectionStatus: WebSocketStatus.error);
-          print('WebSocket bağlantı hatası: $error 🚨');
-        },
+        onDone: () => state = state.copyWith(connectionStatus: WebSocketStatus.disconnected),
+        onError: (error) => state = state.copyWith(connectionStatus: WebSocketStatus.error),
       );
     } catch (e) {
       state = state.copyWith(connectionStatus: WebSocketStatus.error);
@@ -164,21 +167,10 @@ class ChatNotifier extends StateNotifier<ChatState> {
   }
 
   void _disconnectWebSocket() {
-    if (_subscription != null) {
-      _subscription!.cancel();
-      _subscription = null;
-    }
-
-    if (_channel != null) {
-      try {
-        _channel!.sink.close();
-      } catch (e) {
-        print('WebSocket kapatılırken hata: $e');
-      } finally {
-        _channel = null;
-      }
-    }
-
+    _subscription?.cancel();
+    _subscription = null;
+    _channel?.sink.close();
+    _channel = null;
     state = state.copyWith(connectionStatus: WebSocketStatus.disconnected);
   }
 
@@ -187,11 +179,9 @@ class ChatNotifier extends StateNotifier<ChatState> {
       try {
         _channel!.sink.add(text);
 
-        final now = DateTime.now().toIso8601String(); // Kesin tarih formatı
-
         final newMessage = Message.fromJson({
           'content': text,
-          'created_at': now,
+          'created_at': DateTime.now().toIso8601String(),
           'sender_id': myID,
         });
 

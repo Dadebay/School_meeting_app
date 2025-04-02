@@ -49,13 +49,14 @@ class LessonCard extends StatelessWidget {
           borderRadius: context.border.normalBorderRadius,
           color: ColorConstants.whiteColor,
         ),
-        padding: context.padding.normal,
+        padding: context.padding.normal.copyWith(left: 5, right: 5),
         width: ImageSizes.normal.value,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
               DateTime.parse(lessonModel.date).day.toString(),
+              maxLines: 1,
               style: context.general.textTheme.headlineSmall?.copyWith(
                 fontWeight: FontWeight.bold,
                 fontSize: context.general.textTheme.headlineLarge?.fontSize,

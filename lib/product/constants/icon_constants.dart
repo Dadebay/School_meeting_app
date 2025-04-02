@@ -5,6 +5,7 @@ class IconConstants {
   const IconConstants._();
 
   static const String logo = 'assets/icons/logo1.png';
+  static const String noImage = 'assets/icons/logo.jpg';
   static const String appName = 'assets/icons/app_name.jpg';
   static const String noLessons = 'assets/lottie/no_lessons.gif';
   static const String splashLoad = 'assets/lottie/splash_load.gif';

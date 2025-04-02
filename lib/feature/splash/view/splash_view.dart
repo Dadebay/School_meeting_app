@@ -3,6 +3,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:okul_com_tm/product/widgets/index.dart';
 
+import '../../../product/init/language/locale_keys.g.dart';
+
 @RoutePage()
 class SplashView extends StatelessWidget {
   const SplashView({super.key});
@@ -24,7 +26,7 @@ class SplashView extends StatelessWidget {
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
-              padding: context.padding.normal.copyWith(bottom: 10, top: 40),
+              padding: context.padding.normal.copyWith(bottom: 10, top: 50),
               child: Image.asset(IconConstants.appName),
             ),
           ),
@@ -45,24 +47,24 @@ class SplashView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "splash_title".tr(),
+                    LocaleKeys.splash_title.toString(),
                     textAlign: TextAlign.center,
                     style: context.general.textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: ColorConstants.blackColor,
                     ),
-                  ),
+                  ).tr(),
                   Text(
-                    'splash_subtitle'.tr(),
+                    LocaleKeys.splash_subtitle.toString(),
                     textAlign: TextAlign.center,
                     style: context.general.textTheme.bodyLarge?.copyWith(
                       fontWeight: FontWeight.w500,
                       fontSize: 18,
                       color: ColorConstants.greyColor,
                     ),
-                  ),
+                  ).tr(),
                   CustomButton(
-                    text: 'splash_button'.tr(),
+                    text: LocaleKeys.splash_button.toString(),
                     onPressed: () {
                       context.navigateNamedTo('/login');
                     },

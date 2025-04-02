@@ -5,6 +5,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:okul_com_tm/core/routes/route.gr.dart';
 import 'package:okul_com_tm/feature/splash/service/fcm_provider.dart';
+import 'package:okul_com_tm/product/init/language/locale_keys.g.dart';
 import 'package:okul_com_tm/product/widgets/index.dart';
 
 @RoutePage()
@@ -42,11 +43,11 @@ class LoginView extends ConsumerWidget {
                       width: ImageSizes.high.value,
                     ),
                   ),
-                  Text('login_subtitle'.tr(), textAlign: TextAlign.center, style: context.general.textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w500)),
+                  Text(LocaleKeys.login_subtitle, textAlign: TextAlign.center, style: context.general.textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w500)).tr(),
                   Padding(
                     padding: context.padding.verticalNormal,
                     child: CustomTextField(
-                      labelName: 'username'.tr(),
+                      labelName: LocaleKeys.login_username,
                       controller: userNameController,
                       prefixIcon: IconlyLight.profile,
                       focusNode: userNameFocusNode,
@@ -54,7 +55,7 @@ class LoginView extends ConsumerWidget {
                     ),
                   ),
                   CustomTextField(
-                    labelName: 'parol'.tr(),
+                    labelName: LocaleKeys.login_parol,
                     controller: passwordController,
                     prefixIcon: IconlyLight.lock,
                     isPassword: true,
@@ -65,7 +66,7 @@ class LoginView extends ConsumerWidget {
                   Padding(
                     padding: context.padding.verticalNormal,
                     child: CustomButton(
-                      text: 'agree'.tr(),
+                      text: LocaleKeys.general_agree,
                       mini: true,
                       removeShadow: true,
                       onPressed: () async {
@@ -78,16 +79,16 @@ class LoginView extends ConsumerWidget {
                         } else {
                           userNameController.clear();
                           passwordController.clear();
-                          CustomSnackbar.showCustomSnackbar(context, 'error_title'.tr(), 'login_error'.tr(), ColorConstants.redColor);
+                          CustomSnackbar.showCustomSnackbar(context, LocaleKeys.errors_title, LocaleKeys.errors_login, ColorConstants.redColor);
                         }
                       },
                     ),
                   ),
                   TextButton(
                       onPressed: () {
-                        CustomSnackbar.showCustomSnackbar(context, 'contact'.tr(), 'contact_subtitle'.tr(), ColorConstants.redColor);
+                        CustomSnackbar.showCustomSnackbar(context, LocaleKeys.general_contact, LocaleKeys.login_forgot_password_subtitle, ColorConstants.redColor);
                       },
-                      child: Text('forgot_password'.tr(), style: context.general.textTheme.bodyLarge?.copyWith(color: ColorConstants.greyColor)))
+                      child: Text(LocaleKeys.login_forgot_password, style: context.general.textTheme.bodyLarge?.copyWith(color: ColorConstants.greyColor)).tr())
                 ],
               ),
             ),

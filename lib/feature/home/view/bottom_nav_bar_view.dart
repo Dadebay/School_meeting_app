@@ -7,7 +7,7 @@ import 'package:okul_com_tm/feature/chat_view/service/chat_service.dart';
 import 'package:okul_com_tm/feature/chat_view/view/chat_view.dart';
 import 'package:okul_com_tm/feature/home/view/home_view.dart';
 import 'package:okul_com_tm/feature/profil/view/user_profil_view.dart';
-import 'package:okul_com_tm/product/initialize/custom_bottom_nav_extension.dart';
+import 'package:okul_com_tm/product/init/custom_bottom_nav_extension.dart';
 import 'package:okul_com_tm/product/widgets/index.dart';
 
 import '../../news_view/view/news_view.dart';
@@ -38,8 +38,8 @@ class _BottomNavBarState extends State<BottomNavBar> {
   }
 
   int selectedIndex = 0;
-  List<IconData> studentIcons = [IconlyLight.home, IconlyLight.discovery, IconlyLight.message, IconlyLight.profile];
-  List<IconData> studentSelectedIcons = [IconlyBold.home, IconlyBold.discovery, IconlyBold.message, IconlyBold.profile];
+  List<IconData> studentIcons = [IconlyLight.home, IconlyLight.discovery, IconlyLight.chat, IconlyLight.profile];
+  List<IconData> studentSelectedIcons = [IconlyBold.home, IconlyBold.discovery, IconlyBold.chat, IconlyBold.profile];
 
   @override
   Widget build(BuildContext context) {

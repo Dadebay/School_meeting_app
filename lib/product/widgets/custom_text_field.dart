@@ -85,7 +85,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                   },
                 )
               : null,
-          labelText: widget.labelName,
+          labelText: widget.labelName.tr(),
           labelStyle: context.general.textTheme.bodyLarge!.copyWith(
             color: ColorConstants.greyColor,
             fontWeight: FontWeight.w500,

@@ -16,7 +16,13 @@ class FreeTimeManagamentView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final freeTimes = ref.watch(freeTimesProvider);
-
+    print(freeTimes.length);
+    print(freeTimes.length);
+    print(freeTimes.length);
+    print(freeTimes.length);
+    print(freeTimes.length);
+    print(freeTimes.length);
+    print(freeTimes.length);
     return Scaffold(
       appBar: CustomAppBar(title: "time_managament", showBackButton: true),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -55,38 +61,44 @@ class FreeTimeManagamentView extends ConsumerWidget {
           },
         ),
       ),
-      body: ListView.builder(
-        itemCount: freeTimes.length,
-        itemBuilder: (context, index) {
-          final freeTime = freeTimes[index];
-          return Container(
-            padding: context.padding.normal,
-            margin: context.padding.low,
-            decoration: BoxDecoration(
-              color: ColorConstants.whiteColor,
-              border: Border.all(color: ColorConstants.blackColor.withOpacity(.2)),
-              borderRadius: context.border.lowBorderRadius,
-              boxShadow: [BoxShadow(color: ColorConstants.greyColorwithOpacity, blurRadius: 5, spreadRadius: 2)],
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    "Free date: ${freeTime.date} \nFree time: ${freeTime.timeStart} to ${freeTime.timeEnd}",
-                    style: context.general.textTheme.bodyLarge!.copyWith(fontSize: 16, fontWeight: FontWeight.w500, height: 1.5),
+      body: freeTimes.isEmpty
+          ? CustomWidgets.emptyData(context)
+          : ListView.builder(
+              itemCount: freeTimes.length,
+              itemBuilder: (context, index) {
+                print("I am here");
+                final freeTime = freeTimes[index];
+
+                return Container(
+                  padding: context.padding.normal,
+                  margin: context.padding.low,
+                  decoration: BoxDecoration(
+                    color: ColorConstants.whiteColor,
+                    border: Border.all(color: ColorConstants.blackColor.withOpacity(.2)),
+                    borderRadius: context.border.lowBorderRadius,
+                    boxShadow: [BoxShadow(color: ColorConstants.greyColorwithOpacity, blurRadius: 5, spreadRadius: 2)],
                   ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.delete),
-                  onPressed: () => ref.read(freeTimesProvider.notifier).deleteFreeTime(freeTime.id, context),
-                ),
-              ],
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          "Free date: ${freeTime.date} \nFree time: ${freeTime.timeStart} to ${freeTime.timeEnd}",
+                          style: context.general.textTheme.bodyLarge!.copyWith(fontSize: 16, fontWeight: FontWeight.w500, height: 1.5),
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.delete),
+                        onPressed: () => ref.read(freeTimesProvider.notifier).deleteFreeTime(freeTime.id, context),
+                      ),
+                    ],
+                  ),
+                );
+              },
             ),
-          );
-        },
-      ),
     );
   }
+
+// Update the FreeTimeManagamentView's _showRecurrenceDialog method:
 
   void _showRecurrenceDialog(BuildContext context, WidgetRef ref, DateTime start, DateTime end) {
     RecurrenceType recurrenceType = RecurrenceType.none;
@@ -119,7 +131,7 @@ class FreeTimeManagamentView extends ConsumerWidget {
                   showCheckmark: false,
                   disabledColor: ColorConstants.greenColorwithOpacity,
                   selectedColor: ColorConstants.primaryBlueColor,
-                  onSelected: (selected) => onSelected(selectedType), // 🔥 Güncelleme burada yapılıyor
+                  onSelected: (selected) => onSelected(selectedType),
                 ),
               );
             }
@@ -160,21 +172,21 @@ class FreeTimeManagamentView extends ConsumerWidget {
                         text: 'Workweek only',
                         type: recurrenceType,
                         selectedType: RecurrenceType.workweek,
-                        onSelected: (type) => setState(() => recurrenceType = type), // 🎯 Güncellendi
+                        onSelected: (type) => setState(() => recurrenceType = type),
                       ),
                       chipButton(
                         context: context,
                         text: 'Repeat Weekly',
                         type: recurrenceType,
                         selectedType: RecurrenceType.weekly,
-                        onSelected: (type) => setState(() => recurrenceType = type), // 🎯 Güncellendi
+                        onSelected: (type) => setState(() => recurrenceType = type),
                       ),
                       chipButton(
                         context: context,
                         text: 'Repeat Monthly',
                         type: recurrenceType,
                         selectedType: RecurrenceType.monthly,
-                        onSelected: (type) => setState(() => recurrenceType = type), // 🎯 Güncellendi
+                        onSelected: (type) => setState(() => recurrenceType = type),
                       ),
                     ],
                   ),
@@ -245,20 +257,54 @@ class FreeTimeManagamentView extends ConsumerWidget {
               ),
               actions: [
                 CustomButton(
-                    text: "Submit",
-                    mini: true,
-                    onPressed: () {
-                      ref.read(freeTimesProvider.notifier).submitFreeTime(
-                            context,
-                            DateFormat('yyyy-MM-dd').format(start),
-                            DateFormat('yyyy-MM-dd').format(end),
-                            DateFormat('HH:mm').format(start) as DateTime,
-                            DateFormat('HH:mm').format(end) as DateTime,
-                          );
-                      Navigator.pop(context);
-                    }),
+                  text: "Submit",
+                  mini: true,
+                  onPressed: () async {
+                    final formattedStartTime = DateFormat('HH:mm').format(start);
+                    final formattedEndTime = DateFormat('HH:mm').format(end);
+                    final formattedStartDate = DateFormat('yyyy-MM-dd').format(start);
+                    final formattedEndDate = DateFormat('yyyy-MM-dd').format(end);
+
+                    Map<String, String> body = {
+                      "date1": formattedStartDate,
+                      "date2": formattedEndDate,
+                      "timestart": formattedStartTime,
+                      "timeend": formattedEndTime,
+                    };
+
+                    if (recurrenceType == RecurrenceType.workweek) {
+                      body["workweekonly"] = "true";
+                    } else if (recurrenceType == RecurrenceType.weekly) {
+                      body["repeatweekly"] = selectedWeekDays.join(",");
+                    } else if (recurrenceType == RecurrenceType.monthly) {
+                      body["repeatmonthly"] = selectedMonths.join(",");
+                    }
+
+                    ref
+                        .read(freeTimesProvider.notifier)
+                        .submitFreeTime(
+                          context,
+                          body,
+                        )
+                        .then((value) async {
+                      if (value == 200) {
+                        CustomSnackbar.showCustomSnackbar(context, 'success', "times_submitted", ColorConstants.greenColor);
+                      } else {
+                        CustomSnackbar.showCustomSnackbar(context, 'error', "failed_to_submit", ColorConstants.redColor);
+                      }
+                    });
+                    await FreeTimeNotifier().fetchFreeTimes(context);
+
+                    Navigator.pop(context);
+                  },
+                ),
                 SizedBox(height: 20),
-                CustomButton(text: "Cancel", showBorderStyle: true, mini: true, onPressed: () => Navigator.pop(context)),
+                CustomButton(
+                  text: "Cancel",
+                  showBorderStyle: true,
+                  mini: true,
+                  onPressed: () => Navigator.pop(context),
+                ),
               ],
             );
           },

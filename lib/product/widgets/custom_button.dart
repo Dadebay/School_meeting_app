@@ -32,12 +32,12 @@ class CustomButton extends StatelessWidget {
         width: double.infinity,
         alignment: Alignment.center,
         child: Text(
-          text.tr(),
+          text,
           style: context.general.textTheme.titleLarge?.copyWith(
             fontWeight: FontWeight.bold,
             color: showBorderStyle == true ? ColorConstants.blackColor : ColorConstants.whiteColor,
           ),
-        ),
+        ).tr(),
       ),
     );
   }

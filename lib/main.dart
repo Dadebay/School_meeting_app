@@ -4,36 +4,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:okul_com_tm/core/routes/route.dart';
 import 'package:okul_com_tm/product/constants/string_constants.dart';
 import 'package:okul_com_tm/product/constants/theme_contants.dart';
-import 'package:okul_com_tm/product/initialize/app_start_init.dart';
+import 'package:okul_com_tm/product/init/app_start_init.dart';
+import 'package:okul_com_tm/product/init/product_localization.dart';
 
 Future<void> main() async {
   await AppStartInit.init();
-  runApp(
-    ProviderScope(
-      child: EasyLocalization(
-        supportedLocales: const [Locale('en', 'US'), Locale('tm', 'TM')],
-        path: 'assets/translations',
-        fallbackLocale: const Locale('en', 'US'),
-        child: MyApp(),
-      ),
-    ),
-  );
+  runApp(ProviderScope(child: ProductLocalization(child: _MyApp())));
 }
 
-class MyApp extends StatefulWidget {
-  MyApp({super.key});
-
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  final _appRouter = AppRouter();
-  @override
-  void initState() {
-    super.initState();
-    AppStartInit.getNotification();
-  }
+class _MyApp extends StatelessWidget {
+  const _MyApp();
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +30,7 @@ class _MyAppState extends State<MyApp> {
       locale: context.locale,
       theme: AppThemes.lightTheme,
       debugShowCheckedModeBanner: false,
-      routerConfig: _appRouter.config(),
+      routerConfig: AppRouter().config(),
     );
   }
 }

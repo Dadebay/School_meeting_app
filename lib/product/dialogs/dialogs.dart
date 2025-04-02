@@ -3,13 +3,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:okul_com_tm/product/init/language/locale_keys.g.dart';
 import 'package:okul_com_tm/product/widgets/index.dart';
 
 class Dialogs {
   static void showNoConnectionDialog({required VoidCallback onRetry, required BuildContext context}) {
     showDialog(
       context: context,
-      barrierDismissible: false, // Kullanıcı dışarıya tıklayarak kapatamaz.
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return Dialog(
           shape: RoundedRectangleBorder(
@@ -32,19 +33,19 @@ class Dialogs {
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Text(
-                        'noConnectionTitle'.tr(),
+                        LocaleKeys.general_noConnectionTitle,
                         style: context.general.textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
-                      ),
+                      ).tr(),
                       Padding(
                         padding: context.padding.normal,
                         child: Text(
-                          'noConnectionSubtitle'.tr(),
+                          LocaleKeys.general_noConnectionSubtitle,
                           textAlign: TextAlign.center,
                           style: context.general.textTheme.bodyMedium!.copyWith(fontSize: 19),
-                        ),
+                        ).tr(),
                       ),
                       CustomButton(
-                          text: 'retry'.tr(),
+                          text: LocaleKeys.general_retry,
                           onPressed: () {
                             Navigator.of(context).pop(); // Diyalogu kapat.
                             onRetry(); // Yeniden deneme işlemini çağır.
@@ -79,7 +80,7 @@ class Dialogs {
   static showCancelLessonDialog({required BuildContext context, required String title, required String subtitle, required String cancelText, required VoidCallback ontap}) {
     showDialog(
       context: context,
-      barrierDismissible: true, // Kullanıcı dışarıya tıklayarak kapatamaz.
+      barrierDismissible: true,
       builder: (BuildContext context) {
         return Dialog(
           shape: RoundedRectangleBorder(
@@ -118,7 +119,6 @@ class Dialogs {
   }
 
   static logOut({required BuildContext context}) {
-    // ignore: inference_failure_on_function_invocation
     return showModalBottomSheet(
         context: context,
         builder: (BuildContext bc) {
@@ -134,9 +134,9 @@ class Dialogs {
                     children: [
                       const SizedBox.shrink(),
                       Text(
-                        'log_out'.tr(),
+                        LocaleKeys.login_log_out,
                         style: context.general.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
-                      ),
+                      ).tr(),
                       GestureDetector(
                         onTap: () => Navigator.of(context).pop(),
                         child: Padding(
@@ -150,27 +150,27 @@ class Dialogs {
                 Padding(
                   padding: context.padding.normal,
                   child: Text(
-                    'log_out_title'.tr(),
+                    LocaleKeys.userProfile_log_out_title,
                     textAlign: TextAlign.center,
                     style: context.general.textTheme.bodyLarge!.copyWith(color: ColorConstants.blackColor, fontSize: 19),
-                  ),
+                  ).tr(),
                 ),
                 Padding(
                   padding: context.padding.normal,
                   child: CustomButton(
-                      text: 'yes'.tr(),
+                      text: LocaleKeys.general_yes,
                       mini: true,
                       onPressed: () async {
                         await AuthServiceStorage.clearToken();
                         await AuthServiceStorage.clearStatus();
                         await Restart.restartApp();
-                        CustomSnackbar.showCustomSnackbar(context, "success", "log_out_subtitle", ColorConstants.greenColor);
+                        CustomSnackbar.showCustomSnackbar(context, LocaleKeys.lessons_success, LocaleKeys.userProfile_log_out_subtitle, ColorConstants.greenColor);
                       },
                       showBorderStyle: true),
                 ),
                 Padding(
                   padding: context.padding.normal.copyWith(top: 0),
-                  child: CustomButton(text: 'no'.tr(), mini: true, onPressed: () => Navigator.of(context).pop(), showBorderStyle: false),
+                  child: CustomButton(text: LocaleKeys.general_no, mini: true, onPressed: () => Navigator.of(context).pop(), showBorderStyle: false),
                 ),
               ],
             ),

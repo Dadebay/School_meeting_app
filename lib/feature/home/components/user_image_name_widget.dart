@@ -36,7 +36,7 @@ class UserNameAndImage extends ConsumerWidget {
                         ),
                       ),
                       TextSpan(
-                        text: '${ref.watch(userUpdateProvider).username} !',
+                        text: '${ref.watch(userUpdateProvider).username}!',
                         style: context.general.textTheme.headlineMedium?.copyWith(
                           fontWeight: FontWeight.w600,
                         ),

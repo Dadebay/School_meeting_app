@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:okul_com_tm/product/init/language/locale_keys.g.dart';
 import 'package:okul_com_tm/product/widgets/index.dart';
 
 class CustomWidgets {
@@ -29,19 +30,19 @@ class CustomWidgets {
           Padding(
             padding: context.padding.verticalNormal,
             child: Text(
-              "Lessons not found",
+              LocaleKeys.lessons_not_found,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: context.general.textTheme.titleLarge!.copyWith(fontWeight: FontWeight.bold),
-            ),
+            ).tr(),
           ),
           Text(
-            "Please try again later.",
+            LocaleKeys.lessons_not_found_subtitle,
             maxLines: 3,
             overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.center,
             style: context.general.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500, fontSize: 20, color: ColorConstants.greyColor),
-          ),
+          ).tr(),
         ],
       ),
     ));
@@ -57,19 +58,19 @@ class CustomWidgets {
           Padding(
             padding: context.padding.verticalNormal,
             child: Text(
-              "Empty Data",
+              LocaleKeys.general_emptyData,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: context.general.textTheme.titleLarge!.copyWith(fontWeight: FontWeight.bold),
-            ),
+            ).tr(),
           ),
           Text(
-            "Please try again later.",
+            LocaleKeys.general_emptyDataSubtitle,
             maxLines: 3,
             overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.center,
             style: context.general.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500, fontSize: 20, color: ColorConstants.greyColor),
-          ),
+          ).tr(),
         ],
       ),
     ));
@@ -85,19 +86,19 @@ class CustomWidgets {
           Padding(
             padding: context.padding.verticalNormal,
             child: Text(
-              "Lessons not found",
+              LocaleKeys.lessons_not_found,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: context.general.textTheme.titleLarge!.copyWith(fontWeight: FontWeight.bold),
-            ),
+            ).tr(),
           ),
           Text(
-            "Please try again later, In this date we dont have any lessons",
+            LocaleKeys.lessons_not_found_subtitle,
             maxLines: 3,
             overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.center,
             style: context.general.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500, fontSize: 20, color: ColorConstants.greyColor),
-          ),
+          ).tr(),
         ],
       ),
     ));
@@ -112,7 +113,7 @@ class CustomWidgets {
         ),
       ),
       placeholder: (context, url) => loader(),
-      errorWidget: (context, url, error) => Icon(Icons.error),
+      errorWidget: (context, url, error) => Image.asset(IconConstants.noImage, fit: BoxFit.cover),
     );
   }
 }
@@ -121,37 +122,33 @@ class CustomSnackbar {
   static void showCustomSnackbar(BuildContext context, String title, String subtitle, Color color) {
     final messenger = ScaffoldMessenger.of(context);
 
-    // Önce var olan SnackBar'ı kaldır
     messenger.hideCurrentSnackBar();
 
-    // Yeni SnackBar'ı göster
     messenger.showSnackBar(
       SnackBar(
         content: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (title.isNotEmpty)
-              Text(
-                title.tr(),
+            Text(
+              title.tr(),
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+                color: Colors.white,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: Text(
+                subtitle.tr(),
                 style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 16,
                   color: Colors.white,
                 ),
               ),
-            if (subtitle.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: Text(
-                  subtitle.tr(),
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 16,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
+            ),
           ],
         ),
         backgroundColor: color,
