@@ -1,7 +1,5 @@
 // ignore_for_file: inference_failure_on_function_invocation
 
-import 'dart:developer';
-
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +11,7 @@ import 'package:okul_com_tm/feature/lesson_profil/service/lessons_service.dart';
 import 'package:okul_com_tm/feature/lesson_profil/view/student_attendence_view.dart';
 import 'package:okul_com_tm/feature/profil/service/teacher_lessons_service.dart';
 import 'package:okul_com_tm/product/dialogs/dialogs.dart';
+import 'package:okul_com_tm/product/init/language/locale_keys.g.dart';
 import 'package:okul_com_tm/product/sizes/widget_sizes.dart';
 import 'package:okul_com_tm/product/widgets/index.dart';
 
@@ -35,8 +34,6 @@ class _LessonsProfilState extends ConsumerState<LessonsProfil> {
     ref.read(studentProvider.notifier).fetchStudents(lessonModel.id);
     bool isLessonCanceled = lessonModel.whyCanceled != 'null' && lessonModel.whyCanceled.isNotEmpty;
     bool isLessonPassed = lessonModel.past || CustomWidgets.compareTime(lessonModel.date.toString() + " " + lessonModel.endTime.toString());
-    log("isLessonPassed : $isLessonPassed");
-    log("isLessonPassed : ${lessonModel.past}}");
     return Scaffold(
       backgroundColor: ColorConstants.whiteColor,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -55,7 +52,7 @@ class _LessonsProfilState extends ConsumerState<LessonsProfil> {
           CustomIconButton(lessonModel: lessonModel),
           Padding(
             padding: context.padding.verticalMedium,
-            child: Text('classmates'.tr(), maxLines: 1, overflow: TextOverflow.ellipsis, style: context.general.textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold)),
+            child: Text(LocaleKeys.lessons_classmates, maxLines: 1, overflow: TextOverflow.ellipsis, style: context.general.textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold)).tr(),
           ),
           StudentCard(),
         ],
@@ -77,12 +74,12 @@ class _LessonsProfilState extends ConsumerState<LessonsProfil> {
                       TextButton(
                         onPressed: () => sendReasonForCancelLesson(context: context, lessonID: lessonModel.id),
                         child: Text(
-                          'cancel'.tr(),
+                          LocaleKeys.general_cancel,
                           style: context.general.textTheme.titleMedium?.copyWith(
                             color: ColorConstants.redColor,
                             fontWeight: FontWeight.w400,
                           ),
-                        ),
+                        ).tr(),
                       )
                     ]
               : null,
@@ -109,12 +106,12 @@ class _LessonsProfilState extends ConsumerState<LessonsProfil> {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Text(
-                  'fill_cancel_lesson_blank'.tr(),
+                  LocaleKeys.lessons_fill_cancel_lesson_blank,
                   style: context.general.textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold, fontSize: 22),
-                ),
-                Padding(padding: context.padding.normal, child: CustomTextField(labelName: 'reason'.tr(), controller: controller, maxLine: 5, focusNode: FocusNode(), requestfocusNode: FocusNode())),
+                ).tr(),
+                Padding(padding: context.padding.normal, child: CustomTextField(labelName: LocaleKeys.lessons_reason, controller: controller, maxLine: 5, focusNode: FocusNode(), requestfocusNode: FocusNode())),
                 CustomButton(
-                    text: 'Send',
+                    text: LocaleKeys.general_send,
                     mini: true,
                     onPressed: () async {
                       await TeacherLessonsService().cancelLesson(lessonID, controller.text, context);
@@ -138,20 +135,20 @@ class _LessonsProfilState extends ConsumerState<LessonsProfil> {
     return Padding(
       padding: context.padding.onlyTopNormal,
       child: Text(
-        'lesson_status'.tr() +
+        LocaleKeys.lessons_lesson_status.tr() +
             ": " +
             (isLessonPassed
-                ? 'past'.tr()
+                ? LocaleKeys.lessons_past.tr()
                 : (isLessonCanceled
-                    ? 'lesson_canceled'.tr()
+                    ? LocaleKeys.lessons_lesson_canceled.tr()
                     : lessonModel.teacherConfirmation
-                        ? 'confirmed'.tr()
-                        : 'not_confirmed'.tr())),
+                        ? LocaleKeys.general_confirmed.tr()
+                        : LocaleKeys.lessons_not_confirmed.tr())),
         style: context.general.textTheme.titleLarge?.copyWith(
           color: isLessonCanceled ? ColorConstants.redColor : (lessonModel.teacherConfirmation ? ColorConstants.primaryBlueColor : ColorConstants.redColor),
           fontWeight: FontWeight.bold,
         ),
-      ),
+      ).tr(),
     );
   }
 
@@ -162,7 +159,7 @@ class _LessonsProfilState extends ConsumerState<LessonsProfil> {
           margin: context.padding.normal,
           height: WidgetSizes.iconContainerSize.value,
           child: CustomButton(
-            text: 'attendence_lesson'.tr(),
+            text: LocaleKeys.lessons_attendence_lesson,
             onPressed: () => _onFloatingButtonPressed(context, isLessonPassed),
           ),
         );
@@ -173,7 +170,7 @@ class _LessonsProfilState extends ConsumerState<LessonsProfil> {
                 margin: context.padding.normal,
                 height: WidgetSizes.iconContainerSize.value,
                 child: CustomButton(
-                  text: 'confirm'.tr(),
+                  text: LocaleKeys.lessons_confirm,
                   onPressed: () => _onFloatingButtonPressed(context, isLessonPassed),
                 ),
               );
@@ -183,7 +180,7 @@ class _LessonsProfilState extends ConsumerState<LessonsProfil> {
       margin: context.padding.normal,
       height: WidgetSizes.iconContainerSize.value,
       child: CustomButton(
-        text: widget.isTeacher ? 'confirm'.tr() : 'cancel_lesson'.tr(),
+        text: widget.isTeacher ? LocaleKeys.lessons_confirm : LocaleKeys.lessons_cancel_lesson,
         onPressed: () => _onFloatingButtonPressed(context, isLessonPassed),
       ),
     );
@@ -205,12 +202,12 @@ class _LessonsProfilState extends ConsumerState<LessonsProfil> {
     } else {
       Dialogs.showCancelLessonDialog(
         context: context,
-        title: 'cancel_lesson'.tr(),
-        subtitle: 'cancel_subtitle'.tr(),
-        cancelText: 'agree'.tr(),
+        title: LocaleKeys.lessons_cancel_lesson,
+        subtitle: LocaleKeys.lessons_cancel_subtitle,
+        cancelText: LocaleKeys.general_agree,
         ontap: () {
           LessonService().cancelLessonStudent(lessonModel.id, context);
-          CustomSnackbar.showCustomSnackbar(context, 'success', 'cancelled'.tr(), ColorConstants.redColor);
+          CustomSnackbar.showCustomSnackbar(context, LocaleKeys.lessons_success, LocaleKeys.lessons_cancelled, ColorConstants.redColor);
         },
       );
     }

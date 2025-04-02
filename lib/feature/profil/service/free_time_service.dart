@@ -143,6 +143,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:okul_com_tm/feature/profil/model/free_time_model.dart';
+import 'package:okul_com_tm/product/init/language/locale_keys.g.dart';
 
 import '../../../product/widgets/index.dart';
 
@@ -155,6 +156,7 @@ class FreeTimeNotifier extends StateNotifier<List<FreeTimeModel>> {
     final response = await _postData(ApiConstants.setFreeTime, body);
     print(response.body);
     print(body);
+    print(response.statusCode);
     print("________________________________________________________________________________");
     return response.statusCode;
   }
@@ -166,7 +168,7 @@ class FreeTimeNotifier extends StateNotifier<List<FreeTimeModel>> {
       state = data.map((json) => FreeTimeModel.fromJson(json as Map<String, dynamic>)).toList();
       return state;
     } else {
-      CustomSnackbar.showCustomSnackbar(context, 'error', "failed_to_submit", ColorConstants.redColor);
+      CustomSnackbar.showCustomSnackbar(context, LocaleKeys.errors_title, LocaleKeys.userProfile_failed_to_submit, ColorConstants.redColor);
       return [];
     }
   }
@@ -175,15 +177,16 @@ class FreeTimeNotifier extends StateNotifier<List<FreeTimeModel>> {
     final response = await _getData(ApiConstants.deleteFreeTime + id.toString());
     if (response.statusCode == 200) {
       state = state.where((item) => item.id != id).toList();
-      CustomSnackbar.showCustomSnackbar(context, 'success', 'delete_free_time', ColorConstants.greenColor);
+      CustomSnackbar.showCustomSnackbar(context, LocaleKeys.lessons_success, LocaleKeys.userProfile_delete_free_time, ColorConstants.greenColor);
     } else {
-      CustomSnackbar.showCustomSnackbar(context, 'error', 'cannot_delete_free_time', ColorConstants.redColor);
+      CustomSnackbar.showCustomSnackbar(context, LocaleKeys.errors_title, LocaleKeys.userProfile_cannot_delete_free_time, ColorConstants.redColor);
     }
   }
 
   Future _postData(String url, Map<String, String> body) async {
     final token = await AuthServiceStorage.getToken();
     log(body.toString());
+    print(token);
     return http.post(Uri.parse(url), headers: {'Authorization': 'Bearer $token'}, body: body);
   }
 

@@ -5,16 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:okul_com_tm/feature/profil/service/free_time_service.dart';
 import 'package:okul_com_tm/feature/profil/view/about_us_view.dart';
 import 'package:okul_com_tm/feature/profil/view/free_time_managament_view.dart';
+import 'package:okul_com_tm/product/init/language/locale_keys.g.dart';
 import 'package:okul_com_tm/product/widgets/index.dart';
 
 class PageButtons extends ConsumerWidget {
   final bool isTeacher;
 
   final List<String> buttonNames = [
-    'set_free_time',
-    "about_us",
-    'privacy_policy',
-    'past_lessons',
+    LocaleKeys.userProfile_set_free_time,
+    LocaleKeys.userProfile_about_us,
+    LocaleKeys.userProfile_privacy_policy,
+    LocaleKeys.userProfile_past_lessons,
   ];
 
   final List<IconData> buttonIcons = [
@@ -34,7 +35,7 @@ class PageButtons extends ConsumerWidget {
       itemBuilder: (context, index) {
         return isTeacher == true
             ? _buttons(context, index, ref)
-            : buttonNames[index] == 'set_free_time'
+            : buttonNames[index] == LocaleKeys.userProfile_set_free_time
                 ? SizedBox.shrink()
                 : _buttons(context, index, ref);
       },
@@ -46,15 +47,15 @@ class PageButtons extends ConsumerWidget {
       padding: context.padding.verticalLow,
       child: ListTile(
         onTap: () {
-          if (buttonNames[index] == 'set_free_time') {
+          if (buttonNames[index] == LocaleKeys.userProfile_set_free_time) {
             ref.read(freeTimesProvider.notifier).fetchFreeTimes(context);
             context.route.navigateToPage(FreeTimeManagamentView());
           } else {
-            if (buttonNames[index] == 'past_lessons') {
+            if (buttonNames[index] == LocaleKeys.userProfile_past_lessons) {
               context.navigateNamedTo('/pastLessons');
             } else {
               context.route.navigateToPage(AboutUsView(
-                privacyPolicy: buttonNames[index] == 'privacy_policy' ? true : false,
+                privacyPolicy: buttonNames[index] == LocaleKeys.userProfile_privacy_policy ? true : false,
               ));
             }
           }
@@ -72,9 +73,9 @@ class PageButtons extends ConsumerWidget {
           child: Icon(buttonIcons[index], color: ColorConstants.primaryBlueColor),
         ),
         title: Text(
-          buttonNames[index].toString().tr(),
+          buttonNames[index],
           style: context.general.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w500),
-        ),
+        ).tr(),
         trailing: Icon(IconlyLight.arrow_right_circle, color: ColorConstants.greyColor),
       ),
     );

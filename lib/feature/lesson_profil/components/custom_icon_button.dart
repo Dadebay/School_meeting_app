@@ -3,6 +3,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:okul_com_tm/feature/lesson_profil/model/lesson_model.dart';
+import 'package:okul_com_tm/product/init/language/locale_keys.g.dart';
 import 'package:okul_com_tm/product/sizes/widget_sizes.dart';
 import 'package:okul_com_tm/product/widgets/index.dart';
 
@@ -30,7 +31,7 @@ class CustomIconButton extends StatelessWidget {
   ];
   @override
   Widget build(BuildContext context) {
-    List<String> titles = [lessonModel.date.toString(), 'classroom'.tr(), 'teacher'.tr()];
+    List<String> titles = [lessonModel.date.toString(), LocaleKeys.lessons_classroom, LocaleKeys.lessons_teacher];
     List<String> subTitles = [lessonModel.startTime.toString().substring(0, 5) + " - " + lessonModel.endTime.toString().substring(0, 5), lessonModel.classroom.toString(), lessonModel.teacher.toString()];
     return Column(
         children: List.generate(icons.length, (index) {
@@ -58,7 +59,7 @@ class CustomIconButton extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: context.general.textTheme.titleMedium?.copyWith(color: ColorConstants.greyColor, fontWeight: FontWeight.bold),
-                ),
+                ).tr(),
                 Text(
                   subTitles[index],
                   maxLines: 1,

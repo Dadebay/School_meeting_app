@@ -66,7 +66,7 @@ class LoginView extends ConsumerWidget {
                   Padding(
                     padding: context.padding.verticalNormal,
                     child: CustomButton(
-                      text: LocaleKeys.general_agree,
+                      text: LocaleKeys.login_log_in,
                       mini: true,
                       removeShadow: true,
                       onPressed: () async {

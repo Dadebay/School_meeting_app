@@ -127,6 +127,8 @@ class ChatNotifier extends StateNotifier<ChatState> {
     );
   }
 
+  String? _lastSentMessage; // Son gönderilen mesajı takip etmek için değişken ekledik.
+
   void connectWebSocket({required int studentID, required int myID, required ScrollController scrollController}) {
     if (state.connectionStatus == WebSocketStatus.connected && state.currentStudentID == studentID) {
       return;
@@ -150,9 +152,16 @@ class ChatNotifier extends StateNotifier<ChatState> {
             'created_at': DateTime.now().toIso8601String(),
             'sender_id': studentID,
           });
-
-          _scrollToBottom(scrollController);
-
+          print(newMessage);
+          print(newMessage);
+          if (state.messages.length > 20) {
+            _scrollToBottom(scrollController);
+            ;
+          }
+          if (newMessage.content == _lastSentMessage) {
+            log('Kendi mesajımız tekrar geldi, listeye eklenmedi.');
+            return;
+          }
           state = state.copyWith(
             messages: [...state.messages, newMessage],
           );
@@ -184,7 +193,7 @@ class ChatNotifier extends StateNotifier<ChatState> {
           'created_at': DateTime.now().toIso8601String(),
           'sender_id': myID,
         });
-
+        _lastSentMessage = text;
         state = state.copyWith(
           messages: [...state.messages, newMessage],
           messageText: '',

@@ -27,9 +27,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             )
           : null,
       title: Text(
-        title.tr(),
+        title,
         style: context.general.textTheme.headlineMedium!.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
-      ),
+      ).tr(),
     );
   }
 

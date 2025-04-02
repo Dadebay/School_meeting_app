@@ -4,6 +4,7 @@ import 'package:okul_com_tm/feature/lesson_profil/model/attendence_students_mode
 import 'package:okul_com_tm/feature/lesson_profil/model/lesson_model.dart';
 import 'package:okul_com_tm/feature/lesson_profil/service/attendence_provider.dart';
 import 'package:okul_com_tm/feature/lesson_profil/service/lessons_service.dart';
+import 'package:okul_com_tm/product/init/language/locale_keys.g.dart';
 import 'package:okul_com_tm/product/widgets/index.dart';
 
 @RoutePage()
@@ -21,7 +22,7 @@ class StudentAttendancePageView extends ConsumerWidget {
     final studentList = ref.watch(studentProvider);
 
     final selectedStudents = ref.watch(attendanceProvider);
-    final appBarTitle = showAttendentStudents ? "attendent_students" : 'students';
+    final appBarTitle = showAttendentStudents ? LocaleKeys.lessons_attendence_lesson : LocaleKeys.lessons_students;
     return Scaffold(
       appBar: CustomAppBar(title: appBarTitle, showBackButton: true),
       body: showAttendentStudents
@@ -69,7 +70,7 @@ class StudentAttendancePageView extends ConsumerWidget {
                   text: 'Send',
                   onPressed: () async {
                     if (selectedStudents.isEmpty) {
-                      CustomSnackbar.showCustomSnackbar(context, 'error', 'select_student', ColorConstants.redColor);
+                      CustomSnackbar.showCustomSnackbar(context, LocaleKeys.errors_title, LocaleKeys.lessons_select_student, ColorConstants.redColor);
                     } else {
                       AttendenceService().sendAttendance(selectedStudents.toList(), lessonModel.id, context);
                       ref.watch(lessonProvider.notifier).changePastStatus(lessonModel.id);

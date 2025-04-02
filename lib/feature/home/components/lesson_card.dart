@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:okul_com_tm/core/routes/route.gr.dart';
 import 'package:okul_com_tm/feature/lesson_profil/model/lesson_model.dart';
+import 'package:okul_com_tm/product/init/language/locale_keys.g.dart';
 import 'package:okul_com_tm/product/widgets/index.dart';
 
 class LessonCard extends StatelessWidget {
@@ -163,15 +164,15 @@ class LessonCard extends StatelessWidget {
 
   String _getButtonText(bool isLessonCanceled, bool isNotConfirmed) {
     if (isLessonCanceled) {
-      return 'lesson_canceled';
+      return LocaleKeys.lessons_lesson_canceled;
     } else if (isNotConfirmed) {
       return isTeacher
-          ? 'confirm'.tr()
+          ? LocaleKeys.lessons_confirm
           : CustomWidgets.compareTime(lessonModel.date.toString() + " " + lessonModel.endTime.toString())
-              ? 'past'.tr()
-              : 'view_lesson'.tr();
+              ? LocaleKeys.lessons_past
+              : LocaleKeys.lessons_view_lesson;
     } else {
-      return CustomWidgets.compareTime(lessonModel.date.toString() + " " + lessonModel.endTime.toString()) ? 'past'.tr() : 'view_lesson'.tr();
+      return CustomWidgets.compareTime(lessonModel.date.toString() + " " + lessonModel.endTime.toString()) ? LocaleKeys.lessons_past : LocaleKeys.lessons_view_lesson;
     }
   }
 

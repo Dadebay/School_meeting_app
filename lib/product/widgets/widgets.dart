@@ -113,9 +113,11 @@ class CustomWidgets {
         ),
       ),
       placeholder: (context, url) => loader(),
-      errorWidget: (context, url, error) => Image.asset(IconConstants.noImage, fit: BoxFit.cover),
+      errorWidget: (context, url, error) => imagePlaceHolder(),
     );
   }
+
+  static ClipRRect imagePlaceHolder() => ClipRRect(borderRadius: BorderRadius.circular(10), child: Image.asset(IconConstants.noImage, fit: BoxFit.cover));
 }
 
 class CustomSnackbar {

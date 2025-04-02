@@ -7,6 +7,7 @@ import 'package:okul_com_tm/feature/lesson_profil/model/lesson_model.dart';
 import 'package:okul_com_tm/feature/login/service/auth_provider.dart';
 import 'package:okul_com_tm/product/constants/api_constants.dart';
 import 'package:okul_com_tm/product/constants/color_constants.dart';
+import 'package:okul_com_tm/product/init/language/locale_keys.g.dart';
 import 'package:okul_com_tm/product/widgets/widgets.dart';
 
 class TeacherLessonsService {
@@ -23,13 +24,15 @@ class TeacherLessonsService {
         'noticeForStudents': 'Lesson confirmed: ${lesson.lessonName} - ${lesson.date} - ${lesson.content}',
       },
     );
+    print(token);
+    print(lesson.id.toString());
     print(response.statusCode);
     print(response.body);
     if (response.statusCode == 200) {
-      CustomSnackbar.showCustomSnackbar(context, 'Succes', 'Lessons successfully confirmed', ColorConstants.greenColor);
+      CustomSnackbar.showCustomSnackbar(context, LocaleKeys.lessons_success, LocaleKeys.lessons_confirmed_lessons, ColorConstants.greenColor);
       return true;
     } else {
-      CustomSnackbar.showCustomSnackbar(context, 'Error', 'Request failed with status: ${response.body}', ColorConstants.redColor);
+      CustomSnackbar.showCustomSnackbar(context, LocaleKeys.errors_title, LocaleKeys.general_emptyDataSubtitle, ColorConstants.redColor);
       return false;
     }
   }

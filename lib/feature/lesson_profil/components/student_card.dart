@@ -42,7 +42,7 @@ class StudentCard extends ConsumerWidget {
                       ),
                     ),
                     placeholder: (context, url) => CustomWidgets.loader(),
-                    errorWidget: (context, url, error) => Icon(Icons.error),
+                    errorWidget: (context, url, error) => CustomWidgets.imagePlaceHolder(),
                   ),
                 ),
               ),

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:okul_com_tm/feature/lesson_profil/model/attendence_students_model.dart';
+import 'package:okul_com_tm/product/init/language/locale_keys.g.dart';
 
 import '../../../product/widgets/index.dart';
 
@@ -35,11 +36,14 @@ class AttendenceService {
       },
       body: jsonEncode({"students": selectedStudents}),
     );
+    print(response.body);
+    print(response.statusCode);
     if (response.statusCode == 200) {
-      CustomSnackbar.showCustomSnackbar(context, 'success', "attendence_submitted", ColorConstants.greenColor);
+      CustomSnackbar.showCustomSnackbar(context, LocaleKeys.lessons_success, LocaleKeys.lessons_attendent_students, ColorConstants.greenColor);
+      context.route.pop();
       context.route.pop();
     } else {
-      CustomSnackbar.showCustomSnackbar(context, 'error', "failed_to_submit_attendance", ColorConstants.redColor);
+      CustomSnackbar.showCustomSnackbar(context, LocaleKeys.errors_title, LocaleKeys.userProfile_failed_to_submit_attendance, ColorConstants.redColor);
     }
   }
 
@@ -51,7 +55,9 @@ class AttendenceService {
       url,
       headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'},
     );
-
+    print(lessonId);
+    print(response.body);
+    print(response.statusCode);
     if (response.statusCode == 200) {
       final utf8Body = utf8.decode(response.bodyBytes);
       final List<dynamic> data = json.decode(utf8Body) as List<dynamic>;

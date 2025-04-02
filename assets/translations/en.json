@@ -10,6 +10,11 @@
     "forgot_password": "Forgot password",
     "forgot_password_subtitle": "Please contect School admin to reset your password",
     "parol": "Password",
+    "change_password": "Change Password",
+    "current_password":"Current Password",
+    "changed_success":"Password changed successfully",
+    "incorrect_password":"'Incorrect current password'",
+    "new_password":"New Password",
     "log_in": "Log in",
     "log_out": "Logout"
   },
@@ -19,6 +24,7 @@
     "yes": "Yes",
     "contact": "Contact",
     "confirmed": "Confirmed",
+    "confirm": "Confirm",
     "description": "Description",
     "noConnectionSubtitle": "Please check your internet connection",
     "noConnectionTitle": " No Connection",
@@ -64,12 +70,22 @@
     "select_student": "Please select at least one student",
     "view_attendence": "View students",
     "view_lesson": "View Lesson",
+    "confirmed_lessons":"Lessons successfully confirmed",
     "not_found":"Happy practicing!",
+    
     "not_found_subtitle":"Lessons not found please try again later."
 
   },
   "userProfile":{
     "about_us": "About us",
+    "start_time":"Start time",
+    "select_recurrence":"Select Recurrence",
+    "workweek_only":"Workweek only",
+    "repeat_weekly":"Repeat Weekly",
+    "repeat_monthly":"Repeat Monthly",
+    "end_time":"End time",
+    "free_date":"Free Date",
+    "enter_time":"Enter time (HH:mm)",
     "cannot_delete_free_time": "Something goes wrong pleas try again !",
     "change_image": "Change image",
     "delete_free_time": "Free times successfully deleted",
@@ -96,5 +112,6 @@
     "select_time": "Select time",
     "select_time_range_end": "Choose the time to leave work.",
     "select_time_range_start": "Choose the start time for the job."
+
   }
 }

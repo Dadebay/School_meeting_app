@@ -17,6 +17,7 @@ class _MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appRouter = AppRouter();
     return MaterialApp.router(
       title: StringConstants.appName,
       builder: (context, child) => MediaQuery(
@@ -30,7 +31,9 @@ class _MyApp extends StatelessWidget {
       locale: context.locale,
       theme: AppThemes.lightTheme,
       debugShowCheckedModeBanner: false,
-      routerConfig: AppRouter().config(),
+      routerConfig: appRouter.config(),
+      // routerDelegate: appRouter.delegate(),
+      // routeInformationParser: appRouter.defaultRouteParser(),
     );
   }
 }

@@ -48,6 +48,7 @@ final authServiceProvider = FutureProvider<bool>((ref) async {
 
 final isFirstLaunchProvider = FutureProvider<bool>((ref) async {
   const storage = FlutterSecureStorage();
+
   final isFirstLaunch = await storage.read(key: 'is_first_launch') == null;
   if (isFirstLaunch) {
     await storage.write(key: 'is_first_launch', value: 'false');
@@ -73,10 +74,23 @@ class AuthNotifier extends StateNotifier<AuthState> {
   AuthNotifier() : super(AuthState(isLoggedIn: false));
 
   Future<void> login(String username, String password, BuildContext context) async {
+    const storage = FlutterSecureStorage();
+
     try {
       final response = await AuthService.login(username, password);
       if (response != null) {
         await AuthServiceStorage.saveToken(response['access'].toString());
+
+        await storage.write(key: 'is_first_launch', value: 'true');
+        await storage.read(key: 'is_first_launch').then((e) {
+          print(e);
+        });
+
+        await AuthServiceStorage.getToken().then((e) {
+          print(e);
+          print("{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}");
+        });
+
         await AuthServiceStorage.saveStatus(response['user_type'].toString());
         state = state.copyWith(isLoggedIn: true, token: response['access'].toString());
       } else {}
@@ -107,6 +121,8 @@ class AuthService {
         'password': password,
       }),
     );
+    print(response.body);
+    print(response.statusCode);
     if (response.statusCode == 200) {
       final responseJson = json.decode(response.body);
       await AuthServiceStorage.saveUserID(int.parse(responseJson['user_id'].toString()));

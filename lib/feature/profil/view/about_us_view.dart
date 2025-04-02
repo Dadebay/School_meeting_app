@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:okul_com_tm/feature/profil/service/teacher_lessons_service.dart';
+import 'package:okul_com_tm/product/init/language/locale_keys.g.dart';
 import 'package:okul_com_tm/product/widgets/index.dart';
 
 class AboutUsView extends StatelessWidget {
@@ -9,7 +10,7 @@ class AboutUsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: CustomAppBar(title: privacyPolicy ? 'privacy_policy' : 'about_us', showBackButton: true),
+        appBar: CustomAppBar(title: privacyPolicy ? LocaleKeys.userProfile_privacy_policy : LocaleKeys.userProfile_about_us, showBackButton: true),
         body: FutureBuilder<String>(
             future: TeacherLessonsService.fetchData(privacy: privacyPolicy),
             builder: (context, snapshot) {

@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:okul_com_tm/feature/login/model/user_model.dart';
+import 'package:okul_com_tm/product/init/language/locale_keys.g.dart';
 import 'package:okul_com_tm/product/widgets/index.dart';
 
 final userUpdateProvider = StateNotifierProvider<UserUpdateNotifier, UserUpdateState>((ref) {
@@ -44,10 +45,10 @@ class UserUpdateNotifier extends StateNotifier<UserUpdateState> {
       },
     );
     if (response.statusCode == 200) {
-      CustomSnackbar.showCustomSnackbar(context, 'success', 'Password changed successfully', Colors.green);
+      CustomSnackbar.showCustomSnackbar(context, LocaleKeys.lessons_success, LocaleKeys.login_changed_success, Colors.green);
       Navigator.pop(context);
     } else {
-      CustomSnackbar.showCustomSnackbar(context, 'error', 'Incorrect current password', Colors.red);
+      CustomSnackbar.showCustomSnackbar(context, LocaleKeys.errors_title, LocaleKeys.login_incorrect_password, Colors.red);
     }
   }
 
@@ -71,12 +72,14 @@ class UserUpdateNotifier extends StateNotifier<UserUpdateState> {
       request.files.add(multipartFile);
     }
     var response = await request.send();
+    print(response.stream.bytesToString());
+    print(response.statusCode);
     if (response.statusCode == 200) {
-      CustomSnackbar.showCustomSnackbar(context, 'success', "profile_updated", ColorConstants.greenColor);
+      CustomSnackbar.showCustomSnackbar(context, LocaleKeys.lessons_success, LocaleKeys.userProfile_profile_updated, ColorConstants.greenColor);
       getUserProfile();
       setDetails(email: email, userName: userName, image: image);
     } else {
-      CustomSnackbar.showCustomSnackbar(context, 'error', "failed_to_update", ColorConstants.redColor);
+      CustomSnackbar.showCustomSnackbar(context, LocaleKeys.errors_title, LocaleKeys.userProfile_failed_to_update, ColorConstants.redColor);
     }
   }
 }

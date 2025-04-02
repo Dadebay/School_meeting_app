@@ -3,9 +3,11 @@
 import 'dart:io';
 
 import 'package:auto_route/auto_route.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:okul_com_tm/feature/profil/service/user_update_service.dart';
+import 'package:okul_com_tm/product/init/language/locale_keys.g.dart';
 import 'package:okul_com_tm/product/sizes/widget_sizes.dart';
 import 'package:okul_com_tm/product/widgets/index.dart';
 
@@ -24,7 +26,7 @@ class EditUserProfileView extends ConsumerWidget {
     usernameController.text = state.username;
 
     return Scaffold(
-      appBar: CustomAppBar(title: 'edit_profile', showBackButton: true),
+      appBar: CustomAppBar(title: LocaleKeys.userProfile_edit_profile, showBackButton: true),
       body: ListView(
         padding: context.padding.normal,
         children: [
@@ -45,7 +47,7 @@ class EditUserProfileView extends ConsumerWidget {
               child: Stack(
                 children: [
                   Container(
-                    padding: context.padding.normal,
+                    // padding: context.padding.medium,
                     width: ImageSizes.large.value,
                     height: WidgetSizes.sliverAppBarHeightLessons.value,
                     decoration: BoxDecoration(
@@ -55,13 +57,16 @@ class EditUserProfileView extends ConsumerWidget {
                     ),
                     child: CachedNetworkImage(
                       imageUrl: ApiConstants.imageURL + state.imagePath,
-                      imageBuilder: (context, imageProvider) => Container(
-                        decoration: BoxDecoration(
-                          image: DecorationImage(image: imageProvider),
+                      imageBuilder: (context, imageProvider) => ClipRRect(
+                        borderRadius: context.border.normalBorderRadius,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            image: DecorationImage(image: imageProvider),
+                          ),
                         ),
                       ),
                       placeholder: (context, url) => CustomWidgets.loader(),
-                      errorWidget: (context, url, error) => Icon(Icons.error),
+                      errorWidget: (context, url, error) => CustomWidgets.imagePlaceHolder(),
                     ),
                   ),
                   Positioned(
@@ -76,14 +81,14 @@ class EditUserProfileView extends ConsumerWidget {
             ),
           ),
           CustomTextField(
-            labelName: 'Username',
+            labelName: LocaleKeys.login_username,
             enabled: true,
             controller: usernameController,
             focusNode: FocusNode(),
             requestfocusNode: FocusNode(),
           ),
           CustomTextField(
-            labelName: 'Email',
+            labelName: LocaleKeys.userProfile_email_address,
             enabled: false,
             controller: emailController,
             focusNode: FocusNode(),
@@ -92,14 +97,14 @@ class EditUserProfileView extends ConsumerWidget {
           Padding(
             padding: context.padding.verticalNormal,
             child: CustomButton(
-              text: 'Change Password',
+              text: LocaleKeys.login_change_password,
               mini: true,
               showBorderStyle: true,
               onPressed: () => showChangePasswordDialog(context),
             ),
           ),
           CustomButton(
-            text: 'update_profile',
+            text: LocaleKeys.userProfile_update_profile,
             mini: true,
             onPressed: () async {
               userUpdate.updateProfile(
@@ -123,21 +128,21 @@ class ChangePasswordDialog extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return AlertDialog(
-      title: Text('Change Password'),
+      title: Text(LocaleKeys.login_change_password).tr(),
       alignment: Alignment.center,
       titleTextStyle: context.general.textTheme.titleLarge!.copyWith(color: Colors.black, fontWeight: FontWeight.bold),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           CustomTextField(
-            labelName: 'Current Password',
+            labelName: LocaleKeys.login_current_password,
             enabled: true,
             controller: currentPasswordController,
             focusNode: FocusNode(),
             requestfocusNode: FocusNode(),
           ),
           CustomTextField(
-            labelName: 'New Password',
+            labelName: LocaleKeys.login_new_password,
             enabled: true,
             controller: newPasswordController,
             focusNode: FocusNode(),
@@ -147,14 +152,14 @@ class ChangePasswordDialog extends ConsumerWidget {
       ),
       actions: [
         CustomButton(
-            text: 'agree',
+            text: LocaleKeys.general_agree,
             mini: true,
             onPressed: () {
               UserUpdateNotifier.changePassword(context: context, currentPassword: currentPasswordController.text, newPassword: newPasswordController.text);
             }),
         SizedBox(height: context.padding.low.vertical),
         CustomButton(
-            text: 'cancel',
+            text: LocaleKeys.general_cancel,
             showBorderStyle: true,
             mini: true,
             onPressed: () {

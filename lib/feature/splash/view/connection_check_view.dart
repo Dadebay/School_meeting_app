@@ -1,5 +1,6 @@
 // ignore_for_file: file_names, always_use_package_imports, inference_failure_on_instance_creation
 
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:auto_route/auto_route.dart';
@@ -32,6 +33,8 @@ class _ConnectionCheckViewState extends ConsumerState<ConnectionCheckView> {
       final result = await InternetAddress.lookup('google.com');
       if (result.isNotEmpty && result.first.rawAddress.isNotEmpty) {
         final isFirstLaunch = await ref.read(isFirstLaunchProvider.future);
+        log(isFirstLaunch.toString());
+        print("P)))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))");
         final isLoggedIn = await ref.read(authServiceProvider.future);
 
         if (isFirstLaunch) {

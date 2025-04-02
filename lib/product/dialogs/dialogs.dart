@@ -3,8 +3,12 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:okul_com_tm/feature/profil/components/custom_time_picker.dart';
+import 'package:okul_com_tm/feature/profil/service/free_time_service.dart';
 import 'package:okul_com_tm/product/init/language/locale_keys.g.dart';
 import 'package:okul_com_tm/product/widgets/index.dart';
+
+enum RecurrenceType { none, workweek, weekly, monthly }
 
 class Dialogs {
   static void showNoConnectionDialog({required VoidCallback onRetry, required BuildContext context}) {
@@ -100,19 +104,333 @@ class Dialogs {
                 Text(
                   title,
                   style: context.general.textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold, fontSize: 22),
-                ),
+                ).tr(),
                 Padding(
                   padding: context.padding.normal,
                   child: Text(
                     subtitle,
                     textAlign: TextAlign.center,
                     style: context.general.textTheme.bodyMedium!.copyWith(fontSize: 20),
-                  ),
+                  ).tr(),
                 ),
                 CustomButton(text: cancelText, mini: true, onPressed: ontap),
               ],
             ),
           ),
+        );
+      },
+    );
+  }
+
+  static showDateTimePicker(BuildContext context, WidgetRef ref) async {
+    final DateTimeRange? pickedDateRange = await showDateRangePicker(
+      context: context,
+      firstDate: DateTime(2015),
+      lastDate: DateTime.now().add(const Duration(days: 365)),
+    );
+
+    if (pickedDateRange == null) return;
+
+    TimeOfDay selectedStartTime = TimeOfDay.now();
+    TimeOfDay selectedEndTime = TimeOfDay.now().replacing(hour: TimeOfDay.now().hour + 1);
+
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Dialog(
+              insetPadding: context.padding.horizontalNormal,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: context.padding.medium,
+                    child: Text(LocaleKeys.userProfile_select_time, style: context.general.textTheme.headlineSmall!.copyWith(fontWeight: FontWeight.bold)).tr(),
+                  ),
+                  CustomTimePicker(
+                    initialTime: selectedStartTime,
+                    text: 'Starts',
+                    onTimeSelected: (time) => setState(() => selectedStartTime = time),
+                  ),
+                  CustomTimePicker(
+                    text: 'Ends',
+                    initialTime: selectedEndTime,
+                    onTimeSelected: (time) => setState(() => selectedEndTime = time),
+                  ),
+                  Padding(
+                    padding: context.padding.verticalNormal,
+                    child: ElevatedButton(
+                        onPressed: () {
+                          final DateTime startDateTime = DateTime(
+                            pickedDateRange.start.year,
+                            pickedDateRange.start.month,
+                            pickedDateRange.start.day,
+                            selectedStartTime.hour,
+                            selectedStartTime.minute,
+                          );
+
+                          final DateTime endDateTime = DateTime(
+                            pickedDateRange.end.year,
+                            pickedDateRange.end.month,
+                            pickedDateRange.end.day,
+                            selectedEndTime.hour,
+                            selectedEndTime.minute,
+                          );
+
+                          if (endDateTime.isBefore(startDateTime)) {
+                            CustomSnackbar.showCustomSnackbar(context, LocaleKeys.errors_title, LocaleKeys.userProfile_start_time_should_be_before_end_time, ColorConstants.redColor);
+                            return;
+                          }
+
+                          Navigator.pop(context);
+                          showRecurrenceDialog(context, ref, startDateTime, endDateTime);
+                        },
+                        style: ElevatedButton.styleFrom(backgroundColor: ColorConstants.primaryBlueColor, elevation: 0.0, padding: context.padding.normal, side: BorderSide(color: ColorConstants.primaryBlueColor), shape: RoundedRectangleBorder(borderRadius: context.border.lowBorderRadius)),
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width / 2,
+                          child: Text(
+                            LocaleKeys.general_confirm,
+                            textAlign: TextAlign.center,
+                            style: context.general.textTheme.bodyLarge!.copyWith(color: ColorConstants.whiteColor, fontWeight: FontWeight.bold),
+                          ).tr(),
+                        )),
+                  ),
+                  ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      style: ElevatedButton.styleFrom(backgroundColor: ColorConstants.greyColorwithOpacity, elevation: 0.0, padding: context.padding.normal, side: BorderSide(color: ColorConstants.greyColor), shape: RoundedRectangleBorder(borderRadius: context.border.lowBorderRadius)),
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width / 2,
+                        child: Text(
+                          LocaleKeys.general_cancel,
+                          textAlign: TextAlign.center,
+                          style: context.general.textTheme.bodyLarge!.copyWith(color: ColorConstants.greyColor, fontWeight: FontWeight.bold),
+                        ).tr(),
+                      )),
+                  SizedBox(
+                    height: 30,
+                  )
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  static showRecurrenceDialog(BuildContext context, WidgetRef ref, DateTime start, DateTime end) {
+    RecurrenceType recurrenceType = RecurrenceType.none;
+    List<int> selectedWeekDays = [];
+    List<int> selectedMonths = [];
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            Widget chipButton({
+              required BuildContext context,
+              required String text,
+              required RecurrenceType type,
+              required RecurrenceType selectedType,
+              required Function(RecurrenceType) onSelected,
+            }) {
+              return Padding(
+                padding: context.padding.verticalLow,
+                child: ChoiceChip(
+                  label: Text(
+                    text,
+                    style: context.general.textTheme.bodyLarge!.copyWith(
+                      fontWeight: type == selectedType ? FontWeight.bold : FontWeight.w300,
+                      color: type == selectedType ? ColorConstants.whiteColor : ColorConstants.blackColor,
+                    ),
+                  ).tr(),
+                  selected: type == selectedType,
+                  showCheckmark: false,
+                  disabledColor: ColorConstants.greenColorwithOpacity,
+                  selectedColor: ColorConstants.primaryBlueColor,
+                  onSelected: (selected) => onSelected(selectedType),
+                ),
+              );
+            }
+
+            return AlertDialog(
+              insetPadding: context.padding.horizontalNormal,
+              title: Center(
+                child: Text(
+                  LocaleKeys.userProfile_select_recurrence,
+                  style: context.general.textTheme.titleLarge!.copyWith(fontWeight: FontWeight.bold),
+                ).tr(),
+              ),
+              actionsAlignment: MainAxisAlignment.end,
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    "Start Date : ${DateFormat('yyyy-MM-dd hh:mm a').format(start)}",
+                    maxLines: 1,
+                    style: context.general.textTheme.bodyLarge!.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: ColorConstants.greyColor,
+                    ),
+                  ),
+                  Padding(
+                    padding: context.padding.verticalNormal,
+                    child: Text(
+                      "End Date :  ${DateFormat('yyyy-MM-dd hh:mm a').format(end)}",
+                      maxLines: 1,
+                      style: context.general.textTheme.bodyLarge!.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: ColorConstants.greyColor,
+                      ),
+                    ),
+                  ),
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      chipButton(
+                        context: context,
+                        text: LocaleKeys.userProfile_workweek_only,
+                        type: recurrenceType,
+                        selectedType: RecurrenceType.workweek,
+                        onSelected: (type) => setState(() => recurrenceType = type),
+                      ),
+                      chipButton(
+                        context: context,
+                        text: LocaleKeys.userProfile_repeat_weekly,
+                        type: recurrenceType,
+                        selectedType: RecurrenceType.weekly,
+                        onSelected: (type) => setState(() => recurrenceType = type),
+                      ),
+                      chipButton(
+                        context: context,
+                        text: LocaleKeys.userProfile_repeat_monthly,
+                        type: recurrenceType,
+                        selectedType: RecurrenceType.monthly,
+                        onSelected: (type) => setState(() => recurrenceType = type),
+                      ),
+                    ],
+                  ),
+                  if (recurrenceType == RecurrenceType.weekly)
+                    Padding(
+                      padding: context.padding.normal,
+                      child: Wrap(
+                        spacing: 5,
+                        alignment: WrapAlignment.center,
+                        runAlignment: WrapAlignment.center,
+                        children: List.generate(7, (index) {
+                          return ChoiceChip(
+                            label: Text(
+                              ["M", "T", "W", "T", "F", "S", "S"][index],
+                              style: context.general.textTheme.bodyLarge!.copyWith(
+                                fontWeight: selectedWeekDays.contains(index) ? FontWeight.bold : FontWeight.w300,
+                                color: selectedWeekDays.contains(index) ? ColorConstants.whiteColor : ColorConstants.blackColor,
+                              ),
+                            ),
+                            showCheckmark: false,
+                            disabledColor: ColorConstants.greenColorwithOpacity,
+                            selectedColor: ColorConstants.primaryBlueColor,
+                            selected: selectedWeekDays.contains(index),
+                            onSelected: (selected) {
+                              setState(() {
+                                if (selectedWeekDays.contains(index)) {
+                                  selectedWeekDays.remove(index);
+                                } else {
+                                  selectedWeekDays.add(index);
+                                }
+                              });
+                            },
+                          );
+                        }),
+                      ),
+                    ),
+                  if (recurrenceType == RecurrenceType.monthly)
+                    Padding(
+                      padding: context.padding.verticalLow,
+                      child: Wrap(
+                        spacing: 5,
+                        children: List.generate(12, (index) {
+                          int newIndex = index + 1;
+                          return ChoiceChip(
+                            label: Text(
+                              DateFormat('MMM').format(DateTime(0, newIndex)),
+                              style: context.general.textTheme.bodyLarge!.copyWith(
+                                fontWeight: selectedMonths.contains(newIndex) ? FontWeight.bold : FontWeight.w300,
+                                color: selectedMonths.contains(newIndex) ? ColorConstants.whiteColor : ColorConstants.blackColor,
+                              ),
+                            ),
+                            selected: selectedMonths.contains(newIndex),
+                            showCheckmark: false,
+                            disabledColor: ColorConstants.greenColorwithOpacity,
+                            selectedColor: ColorConstants.primaryBlueColor,
+                            onSelected: (selected) {
+                              setState(() {
+                                if (selectedMonths.contains(newIndex)) {
+                                  selectedMonths.remove(newIndex);
+                                } else {
+                                  selectedMonths.add(newIndex);
+                                }
+                              });
+                            },
+                          );
+                        }),
+                      ),
+                    ),
+                ],
+              ),
+              actions: [
+                CustomButton(
+                  text: "Submit",
+                  mini: true,
+                  onPressed: () async {
+                    final formattedStartTime = DateFormat('HH:mm').format(start);
+                    final formattedEndTime = DateFormat('HH:mm').format(end);
+                    final formattedStartDate = DateFormat('yyyy-MM-dd').format(start);
+                    final formattedEndDate = DateFormat('yyyy-MM-dd').format(end);
+
+                    Map<String, String> body = {
+                      "date1": formattedStartDate,
+                      "date2": formattedEndDate,
+                      "timestart": formattedStartTime,
+                      "timeend": formattedEndTime,
+                    };
+
+                    if (recurrenceType == RecurrenceType.workweek) {
+                      body["workweekonly"] = "true";
+                    } else if (recurrenceType == RecurrenceType.weekly) {
+                      List selectedWeekly = selectedWeekDays.map((index) => index + 1).toList();
+                      body["repeatweekly"] = selectedWeekly.join(",");
+                    } else if (recurrenceType == RecurrenceType.monthly) {
+                      body["repeatmonthly"] = selectedMonths.join(",");
+                    }
+
+                    ref.read(freeTimesProvider.notifier).submitFreeTime(context, body).then((value) async {
+                      if (value == 200) {
+                        Navigator.pop(context);
+                        CustomSnackbar.showCustomSnackbar(context, LocaleKeys.lessons_success, LocaleKeys.userProfile_times_submitted, ColorConstants.greenColor);
+                      } else {
+                        Navigator.pop(context);
+                        CustomSnackbar.showCustomSnackbar(context, LocaleKeys.errors_title, LocaleKeys.userProfile_failed_to_submit, ColorConstants.redColor);
+                      }
+                    });
+                    await FreeTimeNotifier().fetchFreeTimes(context);
+                  },
+                ),
+                SizedBox(height: 20),
+                CustomButton(
+                  text: LocaleKeys.general_cancel,
+                  showBorderStyle: true,
+                  mini: true,
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ],
+            );
+          },
         );
       },
     );

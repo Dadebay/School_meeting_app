@@ -1,9 +1,9 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:okul_com_tm/feature/home/components/lesson_card.dart';
 import 'package:okul_com_tm/feature/lesson_profil/model/lesson_model.dart';
 import 'package:okul_com_tm/feature/lesson_profil/service/lessons_service.dart';
+import 'package:okul_com_tm/product/init/language/locale_keys.g.dart';
 import 'package:okul_com_tm/product/widgets/custom_app_bar.dart';
 import 'package:okul_com_tm/product/widgets/widgets.dart';
 
@@ -14,7 +14,7 @@ class PassedLessons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: "past_lessons".tr(), showBackButton: true),
+      appBar: CustomAppBar(title: LocaleKeys.userProfile_past_lessons, showBackButton: true),
       body: FutureBuilder<List<LessonModel>>(
           future: LessonService.fetchPassedStudentLessons(),
           builder: (context, snapshot) {
