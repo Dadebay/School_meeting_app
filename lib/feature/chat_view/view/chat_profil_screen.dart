@@ -1,13 +1,19 @@
+import 'dart:developer';
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iconly/iconly.dart';
+import 'package:kartal/kartal.dart';
 import 'package:okul_com_tm/feature/chat_view/model/chat_student_model.dart';
 import 'package:okul_com_tm/feature/chat_view/service/chat_service.dart';
-import 'package:okul_com_tm/product/widgets/index.dart';
+import 'package:okul_com_tm/feature/login/service/auth_provider.dart';
+import 'package:okul_com_tm/product/constants/color_constants.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ChatScreen extends ConsumerStatefulWidget {
   final ChatStudentModel model;
-
-  ChatScreen({Key? key, required this.model}) : super(key: key);
+  const ChatScreen({Key? key, required this.model}) : super(key: key);
 
   @override
   _ChatScreenState createState() => _ChatScreenState();
@@ -17,99 +23,184 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   final TextEditingController _controller = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   final RefreshController _refreshController = RefreshController(initialRefresh: false);
-  String? myID = '';
-  int _currentPage = 1;
+  int? _myID;
 
   @override
   void initState() {
     super.initState();
-    _initializeChat();
-  }
-
-  void _scrollToBottom() {
-    _scrollController.animateTo(
-      _scrollController.position.maxScrollExtent,
-      duration: Duration(milliseconds: 100),
-      curve: Curves.easeOut,
-    );
+    log("ChatScreen initState for student ${widget.model.id}");
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _initializeChat();
+    });
   }
 
   Future<void> _initializeChat() async {
-    myID = await AuthServiceStorage.getUserID();
-    ref.read(chatProvider).messages.clear();
-    await _fetchInitialMessages();
-    ref.read(chatProvider.notifier).connectWebSocket(studentID: widget.model.id, myID: int.parse(myID!), scrollController: _scrollController);
+    log("Initializing chat...");
+    final userIDString = await AuthServiceStorage.getUserID();
+    if (userIDString == null) {
+      log("Error: Could not get User ID. Aborting chat initialization.");
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Error: Unable to verify user.")));
+        Navigator.of(context).pop();
+      }
+      return;
+    }
+    _myID = int.tryParse(userIDString);
+    if (_myID == null) {
+      log("Error: User ID '$userIDString' is not a valid integer.");
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Error: Invalid user data.")));
+        Navigator.of(context).pop();
+      }
+      return;
+    }
+    log("User ID: $_myID, Target Student ID: ${widget.model.id}, Conversation ID: ${widget.model.conversationID}");
+    final notifier = ref.read(chatProvider.notifier);
+    notifier.clearMessagesAndReset();
+    await notifier.fetchMessages(conversationID: widget.model.conversationID, page: 1);
+    notifier.connectWebSocket(studentID: widget.model.id, myID: _myID!);
     WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
+    log("Chat initialization complete.");
   }
 
-  Future<void> _fetchInitialMessages() async {
-    print("Mana geldi-------------------------------------------------");
-    _currentPage = 1;
-    await ref.read(chatProvider.notifier).fetchMessages(
-          conversationID: widget.model.conversationID,
-          page: _currentPage,
-        );
+  void _scrollToBottom() {
+    if (!_scrollController.hasClients) return;
+    _scrollController.animateTo(
+      0.0,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+    );
+    log("Scrolled to bottom (0.0)");
   }
 
   Future<void> _loadMoreMessages() async {
-    _currentPage++;
-    await ref.read(chatProvider.notifier).fetchMessages(
-          conversationID: widget.model.conversationID,
-          page: _currentPage,
-        );
-    _refreshController.refreshCompleted();
+    final notifier = ref.read(chatProvider.notifier);
+    final currentState = ref.read(chatProvider);
+    if (!currentState.hasMore) {
+      log("No more messages to load.");
+      _refreshController.loadNoData();
+      return;
+    }
+    log("Loading more messages, current page: ${currentState.currentPage}");
+    await notifier.fetchMessages(conversationID: widget.model.conversationID, page: currentState.currentPage + 1);
+    final newState = ref.read(chatProvider);
+    if (mounted) {
+      if (newState.hasMore) {
+        _refreshController.refreshCompleted();
+        log("Load more completed.");
+      } else {
+        _refreshController.loadNoData();
+        log("Load more completed, no more data found.");
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    log("Disposing ChatScreen");
+    _controller.dispose();
+    _scrollController.dispose();
+    _refreshController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final chatState = ref.watch(chatProvider);
+    final notifier = ref.read(chatProvider.notifier);
+    final sortedMessages = List<Message>.from(chatState.messages)..sort((a, b) => b.dateTime.compareTo(a.dateTime));
     final isConnected = chatState.connectionStatus == WebSocketStatus.connected;
-    final sortedMessages = List.of(chatState.messages)..sort((a, b) => DateTime.parse(a.createdAt).compareTo(DateTime.parse(b.createdAt)));
+    final isConnecting = chatState.connectionStatus == null;
+    final hasError = chatState.connectionStatus == WebSocketStatus.error;
+    ref.listen<ChatState>(chatProvider, (previous, next) {
+      if (previous != null && next.messages.length > previous.messages.length) {
+        if (_scrollController.hasClients && _scrollController.position.extentBefore < 100) {
+          WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
+        }
+      }
+    });
 
     return Scaffold(
-      appBar: _buildAppBar(context),
+      appBar: _buildAppBar(context, isConnected, hasError, isConnecting),
       body: Column(
         children: [
           Expanded(
             child: SmartRefresher(
               controller: _refreshController,
-              enablePullDown: true,
+              enablePullDown: chatState.hasMore,
               enablePullUp: false,
               onRefresh: _loadMoreMessages,
-              onLoading: _loadMoreMessages,
+              header: const WaterDropHeader(),
               child: ListView.builder(
                 controller: _scrollController,
+                reverse: true,
                 itemCount: sortedMessages.length,
                 itemBuilder: (context, index) {
                   final message = sortedMessages[index];
-                  final bool isCurrentUser = message.senderId.toString() == myID!;
+
+                  final bool isCurrentUser = _myID != null && message.senderId == _myID;
                   return ChatBubble(message: message, isCurrentUser: isCurrentUser);
                 },
               ),
             ),
           ),
-          _buildMessageInput(context, chatState, isConnected),
+          _buildMessageInput(context, notifier, chatState, isConnected),
         ],
       ),
     );
   }
 
-  AppBar _buildAppBar(BuildContext context) {
+  AppBar _buildAppBar(BuildContext context, bool isConnected, bool hasError, bool isConnecting) {
+    String statusText = '';
+    Color statusColor = Colors.white70;
+    if (isConnecting) {
+      statusText = 'Connecting...';
+    } else if (hasError) {
+      statusText = 'Connection error';
+      statusColor = Colors.orange;
+    } else if (!isConnected) {
+      statusText = 'Disconnected';
+      statusColor = Colors.red;
+    }
+
     return AppBar(
-      automaticallyImplyLeading: false,
-      leading: IconButton(
-        onPressed: () => Navigator.of(context).pop(),
-        icon: Icon(IconlyLight.arrow_left_circle, color: ColorConstants.whiteColor),
-      ),
-      backgroundColor: ColorConstants.primaryBlueColor,
-      title: Text(
-        widget.model.username,
-        style: context.general.textTheme.headlineMedium!.copyWith(color: ColorConstants.whiteColor, fontWeight: FontWeight.bold),
-      ),
-    );
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+          onPressed: () => Navigator.of(context).pop(),
+          icon: Icon(IconlyLight.arrow_left_circle, color: ColorConstants.whiteColor),
+        ),
+        backgroundColor: ColorConstants.primaryBlueColor,
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              widget.model.username,
+              style: context.general.textTheme.titleLarge?.copyWith(color: ColorConstants.whiteColor, fontWeight: FontWeight.bold),
+            ),
+            if (statusText.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.only(top: 2.0),
+                child: Text(
+                  statusText,
+                  style: context.general.textTheme.bodySmall?.copyWith(color: statusColor, fontWeight: FontWeight.bold),
+                ),
+              ),
+          ],
+        ));
   }
 
-  Widget _buildMessageInput(BuildContext context, ChatState chatState, bool isConnected) {
+  Widget _buildMessageInput(BuildContext context, ChatNotifier notifier, ChatState chatState, bool isConnected) {
+    if (_controller.text != chatState.messageText) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          _controller.text = chatState.messageText;
+
+          _controller.selection = TextSelection.fromPosition(TextPosition(offset: _controller.text.length));
+        }
+      });
+    }
+
     return Container(
       margin: context.padding.normal,
       padding: context.padding.low.copyWith(left: 20),
@@ -119,21 +210,27 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
           Expanded(
             child: TextField(
               controller: _controller,
-              onChanged: (text) => ref.read(chatProvider.notifier).updateMessageText(text),
-              style: context.general.textTheme.bodyLarge!.copyWith(color: ColorConstants.blackColor, fontSize: 20, fontWeight: FontWeight.w400),
+              onChanged: notifier.updateMessageText,
+              minLines: 1,
+              maxLines: 5,
+              textCapitalization: TextCapitalization.sentences,
+              style: context.general.textTheme.bodyLarge!.copyWith(color: ColorConstants.blackColor, fontWeight: FontWeight.w400),
               decoration: InputDecoration(
-                hintText: 'Message',
+                hintText: 'Message...',
                 hintStyle: context.general.textTheme.bodyLarge!.copyWith(color: ColorConstants.greyColor, fontWeight: FontWeight.w400),
                 border: InputBorder.none,
               ),
             ),
           ),
           IconButton(
-            icon: chatState.messageText.isNotEmpty ? Icon(IconlyBold.send, color: ColorConstants.primaryBlueColor) : Icon(IconlyLight.send, color: ColorConstants.greyColor),
-            onPressed: isConnected && chatState.messageText.isNotEmpty
+            icon: isConnected && chatState.messageText.trim().isNotEmpty ? Icon(IconlyBold.send, color: ColorConstants.primaryBlueColor) : Icon(IconlyLight.send, color: ColorConstants.greyColor),
+            onPressed: isConnected && chatState.messageText.trim().isNotEmpty && _myID != null
                 ? () {
-                    ref.read(chatProvider.notifier).sendMessage(_controller.text.trim(), int.parse(myID!));
-                    _controller.clear();
+                    final textToSend = chatState.messageText.trim();
+                    log("Send button pressed. Text: $textToSend");
+                    notifier.sendMessage(textToSend, _myID!);
+
+                    WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
                   }
                 : null,
           ),
@@ -154,32 +251,31 @@ class ChatBubble extends StatelessWidget {
     return Align(
       alignment: isCurrentUser ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+        margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
         padding: context.padding.low,
         constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.75),
         decoration: BoxDecoration(
-          color: isCurrentUser ? ColorConstants.primaryBlueColor : ColorConstants.greyColorwithOpacity,
+          color: isCurrentUser ? ColorConstants.primaryBlueColor : ColorConstants.greyColor.withOpacity(0.15),
           borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(15),
-            topRight: Radius.circular(15),
-            bottomLeft: isCurrentUser ? Radius.circular(15) : Radius.circular(0),
-            bottomRight: isCurrentUser ? Radius.circular(0) : Radius.circular(15),
+            topLeft: const Radius.circular(15),
+            topRight: const Radius.circular(15),
+            bottomLeft: isCurrentUser ? const Radius.circular(15) : const Radius.circular(0),
+            bottomRight: isCurrentUser ? const Radius.circular(0) : const Radius.circular(15),
           ),
         ),
-        child: Wrap(
-          alignment: isCurrentUser ? WrapAlignment.end : WrapAlignment.start,
-          crossAxisAlignment: WrapCrossAlignment.end,
+        child: Column(
+          crossAxisAlignment: isCurrentUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
           children: [
-            Text(message.content, maxLines: 10, style: context.general.textTheme.bodyLarge?.copyWith(color: isCurrentUser ? ColorConstants.whiteColor : ColorConstants.blackColor)),
-            Container(margin: EdgeInsets.only(left: 10), child: Text(_formatDate(message.createdAt), style: TextStyle(fontSize: 10, color: isCurrentUser ? Colors.white70 : Colors.black54))),
+            Text(message.content, style: context.general.textTheme.bodyMedium?.copyWith(color: isCurrentUser ? ColorConstants.whiteColor : ColorConstants.blackColor)),
+            const SizedBox(height: 4),
+            Text(_formatDate(message.dateTime), style: TextStyle(fontSize: 10, color: isCurrentUser ? Colors.white70 : Colors.black54)),
           ],
         ),
       ),
     );
   }
 
-  String _formatDate(String dateString) {
-    final dateTime = DateTime.parse(dateString);
-    return "${dateTime.hour}:${dateTime.minute.toString().padLeft(2, '0')}";
+  String _formatDate(DateTime dateTime) {
+    return DateFormat('HH:mm').format(dateTime);
   }
 }

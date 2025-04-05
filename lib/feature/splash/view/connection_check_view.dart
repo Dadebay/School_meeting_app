@@ -22,32 +22,71 @@ class ConnectionCheckView extends ConsumerStatefulWidget {
 }
 
 class _ConnectionCheckViewState extends ConsumerState<ConnectionCheckView> {
+  bool _checkPerformed = false;
+  bool _isShowingDialog = false;
+
   @override
   void initState() {
     super.initState();
-    checkConnection();
+
+    if (!_checkPerformed) {
+      _performCheck();
+    }
   }
 
-  void checkConnection() async {
+  Future<void> _performCheck() async {
+    await AuthNotifier.getAppleStoreStatus();
+    if (_checkPerformed || _isShowingDialog) return;
+    setState(() {
+      _checkPerformed = true;
+    });
+
     try {
-      final result = await InternetAddress.lookup('google.com');
+      final result = await InternetAddress.lookup('google.com').timeout(const Duration(seconds: 5)); // Zaman aşımı ekle
+
       if (result.isNotEmpty && result.first.rawAddress.isNotEmpty) {
         final isFirstLaunch = await ref.read(isFirstLaunchProvider.future);
-        log(isFirstLaunch.toString());
-        print("P)))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))");
-        final isLoggedIn = await ref.read(authServiceProvider.future);
+        final String? token = await AuthServiceStorage.getToken() ?? '';
+        log('Check Connection: isFirstLaunch=$isFirstLaunch, isLoggedIn=$token');
+        final String? appleStoreFake = await AuthServiceStorage.getAppleStoreStatus();
 
-        if (isFirstLaunch) {
-          context.router.replaceNamed('/splash');
-        } else if (!isLoggedIn) {
-          context.router.replaceNamed('/login');
-        } else {
-          context.router.replaceNamed('/bottomNavBar');
-        }
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (!mounted) return;
+          if (isFirstLaunch) {
+            context.router.replaceNamed('/splash');
+          } else if (token!.isEmpty && appleStoreFake!.isEmpty) {
+            context.router.replaceNamed('/login');
+          } else {
+            context.router.replaceNamed('/bottomNavBar');
+          }
+        });
+      } else {
+        _showNoConnectionDialog();
       }
     } on SocketException catch (_) {
-      Dialogs.showNoConnectionDialog(onRetry: () {}, context: context);
+      _showNoConnectionDialog();
+    } catch (e) {
+      _showNoConnectionDialog();
     }
+  }
+
+  void _showNoConnectionDialog() {
+    if (!mounted || _isShowingDialog) return;
+    setState(() {
+      _isShowingDialog = true;
+    });
+
+    Dialogs.showNoConnectionDialog(
+      context: context,
+      onRetry: () {
+        Navigator.of(context).pop();
+        setState(() {
+          _isShowingDialog = false;
+          _checkPerformed = false;
+        });
+        _performCheck();
+      },
+    );
   }
 
   @override
@@ -67,9 +106,14 @@ class _ConnectionCheckViewState extends ConsumerState<ConnectionCheckView> {
               ),
             ),
           ),
-          LinearProgressIndicator(
-            color: ColorConstants.primaryBlueColor,
-          ),
+          if (_checkPerformed && !_isShowingDialog)
+            LinearProgressIndicator(
+              color: ColorConstants.primaryBlueColor,
+            )
+          else if (!_checkPerformed)
+            LinearProgressIndicator(
+              color: ColorConstants.primaryBlueColor,
+            ),
         ],
       ),
     );

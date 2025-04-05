@@ -36,8 +36,6 @@ class AttendenceService {
       },
       body: jsonEncode({"students": selectedStudents}),
     );
-    print(response.body);
-    print(response.statusCode);
     if (response.statusCode == 200) {
       CustomSnackbar.showCustomSnackbar(context, LocaleKeys.lessons_success, LocaleKeys.lessons_attendent_students, ColorConstants.greenColor);
       context.route.pop();
@@ -55,9 +53,6 @@ class AttendenceService {
       url,
       headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'},
     );
-    print(lessonId);
-    print(response.body);
-    print(response.statusCode);
     if (response.statusCode == 200) {
       final utf8Body = utf8.decode(response.bodyBytes);
       final List<dynamic> data = json.decode(utf8Body) as List<dynamic>;

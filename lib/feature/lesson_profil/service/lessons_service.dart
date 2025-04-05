@@ -14,7 +14,6 @@ class LessonService {
 
     final url = Uri.parse(status == 'teacher' ? ApiConstants.teacherLessons : ApiConstants.getLessons);
     final response = await http.post(url, headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'}, body: json.encode({'date': '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}'}));
-    print(response.body);
     if (response.statusCode == 200) {
       final utf8Body = utf8.decode(response.bodyBytes);
       final List<dynamic> data = json.decode(utf8Body) as List<dynamic>;
@@ -28,12 +27,7 @@ class LessonService {
     final token = await AuthServiceStorage.getToken();
 
     final url = Uri.parse(ApiConstants.cancelAllLessons);
-    print(url);
-    print(token);
-    print(date.toString().substring(0, 10));
     final response = await http.post(url, headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'}, body: json.encode({'date': date.toString().substring(0, 10)}));
-    print(response.body);
-    print(response.statusCode.toString());
     return response.statusCode;
   }
 

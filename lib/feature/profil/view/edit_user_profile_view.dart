@@ -34,6 +34,7 @@ class EditUserProfileView extends ConsumerWidget {
             onTap: () async {
               final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
               if (image != null) {
+                CustomSnackbar.showCustomSnackbar(context, LocaleKeys.userProfile_change_image, LocaleKeys.general_wait, ColorConstants.greenColor);
                 state.image = File(image.path);
                 userUpdate.updateProfile(
                   context: context,
@@ -47,7 +48,7 @@ class EditUserProfileView extends ConsumerWidget {
               child: Stack(
                 children: [
                   Container(
-                    // padding: context.padding.medium,
+                    padding: context.padding.medium,
                     width: ImageSizes.large.value,
                     height: WidgetSizes.sliverAppBarHeightLessons.value,
                     decoration: BoxDecoration(
@@ -107,12 +108,18 @@ class EditUserProfileView extends ConsumerWidget {
             text: LocaleKeys.userProfile_update_profile,
             mini: true,
             onPressed: () async {
-              userUpdate.updateProfile(
+              await UserUpdateNotifier().updateProfile(
                 context: context,
                 userName: usernameController.text,
                 email: emailController.text,
                 image: state.image!,
               );
+
+              /// **Güncellenen bilgiyi çek**
+              ref.read(userUpdateProvider.notifier).setUserName(usernameController.text);
+
+              /// **Geri git**
+              context.route.pop();
             },
           ),
         ],
@@ -144,6 +151,7 @@ class ChangePasswordDialog extends ConsumerWidget {
           CustomTextField(
             labelName: LocaleKeys.login_new_password,
             enabled: true,
+            isPassword: true,
             controller: newPasswordController,
             focusNode: FocusNode(),
             requestfocusNode: FocusNode(),

@@ -2,7 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 enum Locales {
-  tr(Locale('tr', 'TR')),
   en(Locale('en', 'US'));
 
   final Locale locale;
@@ -21,7 +20,6 @@ class ProductLocalization extends EasyLocalization {
         );
 
   static final List<Locale> _supportedItems = [
-    Locales.tr.locale,
     Locales.en.locale,
   ];
 

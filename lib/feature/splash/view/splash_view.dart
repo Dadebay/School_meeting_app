@@ -1,13 +1,15 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:okul_com_tm/product/widgets/index.dart';
 
 import '../../../product/init/language/locale_keys.g.dart';
 
 @RoutePage()
 class SplashView extends StatelessWidget {
-  const SplashView({super.key});
+  SplashView({super.key});
+  final storage = FlutterSecureStorage();
 
   @override
   Widget build(BuildContext context) {
@@ -65,8 +67,15 @@ class SplashView extends StatelessWidget {
                   ).tr(),
                   CustomButton(
                     text: LocaleKeys.splash_button.toString(),
-                    onPressed: () {
-                      context.navigateNamedTo('/login');
+                    onPressed: () async {
+                      await storage.write(key: 'is_first_launch', value: 'false');
+                      final String? appleStoreFake = await AuthServiceStorage.getAppleStoreStatus();
+
+                      if (appleStoreFake!.isEmpty) {
+                        context.navigateNamedTo('/login');
+                      } else {
+                        context.router.replaceNamed('/bottomNavBar');
+                      }
                     },
                   ),
                 ],

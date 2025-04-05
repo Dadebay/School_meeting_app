@@ -12,26 +12,18 @@ import 'package:auto_route/auto_route.dart' as _i14;
 import 'package:flutter/material.dart' as _i15;
 import 'package:okul_com_tm/feature/home/view/bottom_nav_bar_view.dart' as _i1;
 import 'package:okul_com_tm/feature/home/view/home_view.dart' as _i5;
-import 'package:okul_com_tm/feature/lesson_profil/model/lesson_model.dart'
-    as _i17;
-import 'package:okul_com_tm/feature/lesson_profil/view/lessons_profil.dart'
-    as _i6;
-import 'package:okul_com_tm/feature/lesson_profil/view/student_attendence_view.dart'
-    as _i12;
+import 'package:okul_com_tm/feature/lesson_profil/model/lesson_model.dart' as _i17;
+import 'package:okul_com_tm/feature/lesson_profil/view/lessons_profil.dart' as _i6;
+import 'package:okul_com_tm/feature/lesson_profil/view/student_attendence_view.dart' as _i12;
 import 'package:okul_com_tm/feature/login/view/login_view.dart' as _i7;
 import 'package:okul_com_tm/feature/news_view/model/news_model.dart' as _i16;
-import 'package:okul_com_tm/feature/news_view/view/news_profile_view.dart'
-    as _i8;
+import 'package:okul_com_tm/feature/news_view/view/news_profile_view.dart' as _i8;
 import 'package:okul_com_tm/feature/news_view/view/news_view.dart' as _i9;
-import 'package:okul_com_tm/feature/profil/view/edit_user_profile_view.dart'
-    as _i3;
-import 'package:okul_com_tm/feature/profil/view/free_time_managament_view.dart'
-    as _i4;
-import 'package:okul_com_tm/feature/profil/view/get_passed_lessons.dart'
-    as _i10;
+import 'package:okul_com_tm/feature/profil/view/edit_user_profile_view.dart' as _i3;
+import 'package:okul_com_tm/feature/profil/view/free_time_managament_view.dart' as _i4;
+import 'package:okul_com_tm/feature/profil/view/get_passed_lessons.dart' as _i10;
 import 'package:okul_com_tm/feature/profil/view/user_profil_view.dart' as _i13;
-import 'package:okul_com_tm/feature/splash/view/connection_check_view.dart'
-    as _i2;
+import 'package:okul_com_tm/feature/splash/view/connection_check_view.dart' as _i2;
 import 'package:okul_com_tm/feature/splash/view/splash_view.dart' as _i11;
 
 /// generated route for
@@ -313,15 +305,14 @@ class SplashView extends _i14.PageRouteInfo<void> {
   static _i14.PageInfo page = _i14.PageInfo(
     name,
     builder: (data) {
-      return const _i11.SplashView();
+      return _i11.SplashView();
     },
   );
 }
 
 /// generated route for
 /// [_i12.StudentAttendancePageView]
-class StudentAttendanceRouteView
-    extends _i14.PageRouteInfo<StudentAttendanceRouteViewArgs> {
+class StudentAttendanceRouteView extends _i14.PageRouteInfo<StudentAttendanceRouteViewArgs> {
   StudentAttendanceRouteView({
     _i15.Key? key,
     required _i17.LessonModel lessonModel,

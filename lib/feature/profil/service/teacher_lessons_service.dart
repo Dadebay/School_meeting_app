@@ -24,10 +24,6 @@ class TeacherLessonsService {
         'noticeForStudents': 'Lesson confirmed: ${lesson.lessonName} - ${lesson.date} - ${lesson.content}',
       },
     );
-    print(token);
-    print(lesson.id.toString());
-    print(response.statusCode);
-    print(response.body);
     if (response.statusCode == 200) {
       CustomSnackbar.showCustomSnackbar(context, LocaleKeys.lessons_success, LocaleKeys.lessons_confirmed_lessons, ColorConstants.greenColor);
       return true;

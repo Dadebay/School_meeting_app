@@ -12,7 +12,8 @@ class ProfilSliverAppBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userModel = ref.watch(userUpdateProvider);
+    final userModel = ref.watch(userUpdateProvider); // ref.watch kullanıyoruz
+
     return SliverAppBar(
       pinned: true,
       automaticallyImplyLeading: false,
@@ -27,7 +28,9 @@ class ProfilSliverAppBar extends ConsumerWidget {
             )
           : null,
       leading: IconButton(
-        onPressed: () => context.navigateNamedTo('/updateProfile'),
+        onPressed: () {
+          context.navigateNamedTo('/updateProfile');
+        },
         icon: Icon(IconlyLight.edit_square, color: ColorConstants.greyColor),
       ),
       actions: [

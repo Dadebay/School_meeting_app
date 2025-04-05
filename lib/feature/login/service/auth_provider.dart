@@ -1,6 +1,6 @@
 import 'dart:convert';
+import 'dart:developer';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:okul_com_tm/product/widgets/index.dart';
@@ -8,52 +8,34 @@ import 'package:okul_com_tm/product/widgets/index.dart';
 class AuthServiceStorage {
   static const _storage = FlutterSecureStorage();
 
-  static Future<void> saveToken(String token) async {
-    await _storage.write(key: 'auth_token', value: token);
-  }
+  static Future<void> saveToken(String token) async => await _storage.write(key: 'auth_token', value: token);
+  static Future<void> saveUserID(int userID) async => await _storage.write(key: 'user_id', value: userID.toString());
+  static Future<void> saveStatus(String token) async => await _storage.write(key: 'status', value: token);
+  static Future<void> appleStoreStatus(String token) async => await _storage.write(key: 'appleStatus', value: token);
 
-  static Future<void> saveUserID(int userID) async {
-    await _storage.write(key: 'user_id', value: userID.toString());
-  }
+  static Future<String?> getAppleStoreStatus() async => await _storage.read(key: 'appleStatus');
+  static Future<String?> getUserID() async => await _storage.read(key: 'user_id');
+  static Future<String?> getStatus() async => await _storage.read(key: 'status');
+  static Future<String?> getToken() async => await _storage.read(key: 'auth_token');
 
-  static Future<String?> getUserID() async {
-    return await _storage.read(key: 'user_id');
-  }
-
-  static Future<void> saveStatus(String token) async {
-    await _storage.write(key: 'status', value: token);
-  }
-
-  static Future<String?> getStatus() async {
-    return await _storage.read(key: 'status');
-  }
-
-  static Future<String?> getToken() async {
-    return await _storage.read(key: 'auth_token');
-  }
-
-  static Future<void> clearToken() async {
-    await _storage.delete(key: 'auth_token');
-  }
-
-  static Future<void> clearStatus() async {
-    await _storage.delete(key: 'status');
-  }
+  static Future<void> clearToken() async => await _storage.delete(key: 'auth_token');
+  static Future<void> clearAppleStoreFake() async => await _storage.delete(key: 'appleStatus');
+  static Future<void> clearStatus() async => await _storage.delete(key: 'status');
 }
-
-final authServiceProvider = FutureProvider<bool>((ref) async {
-  final token = await AuthServiceStorage.getToken();
-  return token != null;
-});
 
 final isFirstLaunchProvider = FutureProvider<bool>((ref) async {
   const storage = FlutterSecureStorage();
 
-  final isFirstLaunch = await storage.read(key: 'is_first_launch') == null;
-  if (isFirstLaunch) {
+  final isFirstLaunchValue = await storage.read(key: 'is_first_launch');
+  final isFirst = isFirstLaunchValue == null;
+
+  if (isFirst) {
     await storage.write(key: 'is_first_launch', value: 'false');
+    log('isFirstLaunchProvider: First launch detected, setting flag to false.');
+  } else {
+    log('isFirstLaunchProvider: Not first launch.');
   }
-  return isFirstLaunch;
+  return isFirst;
 });
 
 class AuthState {
@@ -72,29 +54,38 @@ class AuthState {
 
 class AuthNotifier extends StateNotifier<AuthState> {
   AuthNotifier() : super(AuthState(isLoggedIn: false));
-
-  Future<void> login(String username, String password, BuildContext context) async {
+  Future<dynamic> login(String username, String password) async {
     const storage = FlutterSecureStorage();
+    final url = Uri.parse(ApiConstants.authUrl);
+    final response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+      body: json.encode({'username': username, 'password': password}),
+    );
+    if (response.statusCode == 200) {
+      final responseJson = json.decode(response.body);
+      await AuthServiceStorage.saveUserID(int.parse(responseJson['user_id'].toString()));
+      await AuthServiceStorage.saveToken(responseJson['access'].toString());
+      await AuthServiceStorage.saveStatus(responseJson['user_type'].toString());
+      await storage.write(key: 'is_first_launch', value: 'true');
+      state = state.copyWith(isLoggedIn: true, token: responseJson['access'].toString());
+      return responseJson;
+    } else {
+      return null;
+    }
+  }
 
-    try {
-      final response = await AuthService.login(username, password);
-      if (response != null) {
-        await AuthServiceStorage.saveToken(response['access'].toString());
-
-        await storage.write(key: 'is_first_launch', value: 'true');
-        await storage.read(key: 'is_first_launch').then((e) {
-          print(e);
-        });
-
-        await AuthServiceStorage.getToken().then((e) {
-          print(e);
-          print("{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}");
-        });
-
-        await AuthServiceStorage.saveStatus(response['user_type'].toString());
-        state = state.copyWith(isLoggedIn: true, token: response['access'].toString());
-      } else {}
-    } catch (e) {}
+  static Future<dynamic> getAppleStoreStatus() async {
+    final token = await AuthServiceStorage.getToken();
+    final url = Uri.parse(ApiConstants.appleStoreFakeAPI);
+    final response = await http.get(url, headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'});
+    if (response.statusCode == 200) {
+      final responseJson = json.decode(response.body);
+      await AuthServiceStorage.appleStoreStatus(responseJson[0]['title'].toString());
+      return responseJson;
+    } else {
+      return null;
+    }
   }
 
   Future<void> logout() async {
@@ -106,29 +97,3 @@ class AuthNotifier extends StateNotifier<AuthState> {
 final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
   return AuthNotifier();
 });
-
-class AuthService {
-  static Future<Map<String, dynamic>?> login(String username, String password) async {
-    final url = Uri.parse(ApiConstants.authUrl);
-    final response = await http.post(
-      url,
-      headers: {
-        'Content-Type': 'application/json', // API'nin istediği format
-        'Accept': 'application/json', // Yanıt formatı
-      },
-      body: json.encode({
-        'username': username,
-        'password': password,
-      }),
-    );
-    print(response.body);
-    print(response.statusCode);
-    if (response.statusCode == 200) {
-      final responseJson = json.decode(response.body);
-      await AuthServiceStorage.saveUserID(int.parse(responseJson['user_id'].toString()));
-      return json.decode(response.body) as Map<String, dynamic>;
-    } else {
-      return null;
-    }
-  }
-}

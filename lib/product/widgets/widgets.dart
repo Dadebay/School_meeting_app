@@ -76,6 +76,36 @@ class CustomWidgets {
     ));
   }
 
+  static Widget pageLocked(BuildContext context) {
+    return Container(
+      color: ColorConstants.whiteColor.withOpacity(.6),
+      padding: context.padding.normal,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(IconlyLight.lock, size: 250, color: ColorConstants.blackColor),
+          Padding(
+            padding: context.padding.verticalNormal,
+            child: Text(
+              "Page locked",
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: context.general.textTheme.titleLarge!.copyWith(fontWeight: FontWeight.bold, color: ColorConstants.blackColor),
+            ).tr(),
+          ),
+          Text(
+            "If you want to open this page please LOGIN the app",
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+            style: context.general.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500, fontSize: 20, color: ColorConstants.blackColor),
+          ).tr(),
+        ],
+      ),
+    );
+  }
+
   static Center emptyLessons(BuildContext context) {
     return Center(
         child: Padding(
@@ -104,16 +134,25 @@ class CustomWidgets {
     ));
   }
 
-  static Widget imageWidget(String url, bool fit) {
+  static Widget imageWidget(String? url, bool fit) {
+    if (url == null || url.isEmpty) {
+      return imagePlaceHolder();
+    }
+    final imageUrl = ApiConstants.imageURL + url;
     return CachedNetworkImage(
-      imageUrl: ApiConstants.imageURL + url,
+      imageUrl: imageUrl,
       imageBuilder: (context, imageProvider) => Container(
         decoration: BoxDecoration(
-          image: fit ? DecorationImage(image: imageProvider) : DecorationImage(image: imageProvider, fit: BoxFit.cover),
+          image: DecorationImage(
+            image: imageProvider,
+            fit: fit ? null : BoxFit.cover,
+          ),
         ),
       ),
       placeholder: (context, url) => loader(),
-      errorWidget: (context, url, error) => imagePlaceHolder(),
+      errorWidget: (context, url, error) {
+        return imagePlaceHolder();
+      },
     );
   }
 

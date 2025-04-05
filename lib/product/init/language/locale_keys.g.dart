@@ -34,6 +34,7 @@ abstract class  LocaleKeys {
   static const general_emptyData = 'general.emptyData';
   static const general_emptyDataSubtitle = 'general.emptyDataSubtitle';
   static const general_send = 'general.send';
+  static const general_wait = 'general.wait';
   static const general = 'general';
   static const errors_password = 'errors.password';
   static const errors_date_range = 'errors.date_range';

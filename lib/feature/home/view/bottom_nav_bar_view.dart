@@ -20,13 +20,17 @@ class BottomNavBar extends StatefulWidget {
 
 class _BottomNavBarState extends State<BottomNavBar> {
   bool isTeacher = false;
+  String appleStoreFake = "";
   @override
   void initState() {
     super.initState();
+
     getUserStatus();
   }
 
   dynamic getUserStatus() async {
+    appleStoreFake = await AuthServiceStorage.getAppleStoreStatus() ?? '';
+
     await AuthServiceStorage.getStatus().then((value) {
       if (value != null) {
         isTeacher = value == 'teacher';
@@ -43,7 +47,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> pages = [HomeView(isTeacher: isTeacher), NewsView(), ChatView(), UserProfilView(isTeacher: isTeacher)];
+    final List<Widget> pages = [HomeView(isTeacher: isTeacher), NewsView(), ChatView(isClosed: appleStoreFake.isEmpty ? false : true), UserProfilView(isTeacher: isTeacher)];
 
     return Scaffold(
         extendBody: true,

@@ -159,7 +159,7 @@ class _LessonsProfilState extends ConsumerState<LessonsProfil> {
           margin: context.padding.normal,
           height: WidgetSizes.iconContainerSize.value,
           child: CustomButton(
-            text: LocaleKeys.lessons_attendence_lesson,
+            text: lessonModel.past ? LocaleKeys.lessons_students : LocaleKeys.lessons_attendence_lesson,
             onPressed: () => _onFloatingButtonPressed(context, isLessonPassed),
           ),
         );

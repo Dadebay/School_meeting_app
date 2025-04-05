@@ -22,7 +22,7 @@ class StudentAttendancePageView extends ConsumerWidget {
     final studentList = ref.watch(studentProvider);
 
     final selectedStudents = ref.watch(attendanceProvider);
-    final appBarTitle = showAttendentStudents ? LocaleKeys.lessons_attendence_lesson : LocaleKeys.lessons_students;
+    final appBarTitle = showAttendentStudents ? LocaleKeys.lessons_students : LocaleKeys.lessons_attendence_lesson;
     return Scaffold(
       appBar: CustomAppBar(title: appBarTitle, showBackButton: true),
       body: showAttendentStudents

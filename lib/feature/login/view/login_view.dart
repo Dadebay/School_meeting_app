@@ -72,10 +72,11 @@ class LoginView extends ConsumerWidget {
                       onPressed: () async {
                         final username = userNameController.text;
                         final password = passwordController.text;
-                        await ref.read(authProvider.notifier).login(username, password, context);
+                        await ref.read(authProvider.notifier).login(username, password);
                         if (ref.read(authProvider).isLoggedIn) {
                           await FCMService.postFCMToken();
                           context.navigateTo(BottomNavBar());
+                          await AuthServiceStorage.clearAppleStoreFake();
                         } else {
                           userNameController.clear();
                           passwordController.clear();
