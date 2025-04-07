@@ -13,7 +13,15 @@ class AuthServiceStorage {
   static Future<void> saveStatus(String token) async => await _storage.write(key: 'status', value: token);
   static Future<void> appleStoreStatus(String token) async => await _storage.write(key: 'appleStatus', value: token);
 
-  static Future<String?> getAppleStoreStatus() async => await _storage.read(key: 'appleStatus');
+  Future<bool> getAppleStoreStatus() async {
+    String? token = await _storage.read(key: 'appleStatus') ?? '';
+    if (token.isEmpty) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   static Future<String?> getUserID() async => await _storage.read(key: 'user_id');
   static Future<String?> getStatus() async => await _storage.read(key: 'status');
   static Future<String?> getToken() async => await _storage.read(key: 'auth_token');
@@ -67,7 +75,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
       await AuthServiceStorage.saveUserID(int.parse(responseJson['user_id'].toString()));
       await AuthServiceStorage.saveToken(responseJson['access'].toString());
       await AuthServiceStorage.saveStatus(responseJson['user_type'].toString());
-      await storage.write(key: 'is_first_launch', value: 'true');
+      await storage.write(key: 'is_first_launch', value: 'false');
       state = state.copyWith(isLoggedIn: true, token: responseJson['access'].toString());
       return responseJson;
     } else {
@@ -75,16 +83,15 @@ class AuthNotifier extends StateNotifier<AuthState> {
     }
   }
 
-  static Future<dynamic> getAppleStoreStatus() async {
-    final token = await AuthServiceStorage.getToken();
+  static Future<String> getAppleStoreStatusFromAPI() async {
     final url = Uri.parse(ApiConstants.appleStoreFakeAPI);
-    final response = await http.get(url, headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'});
+    final response = await http.get(url, headers: {'Content-Type': 'application/json'});
     if (response.statusCode == 200) {
       final responseJson = json.decode(response.body);
       await AuthServiceStorage.appleStoreStatus(responseJson[0]['title'].toString());
-      return responseJson;
+      return responseJson[0]['title'].toString();
     } else {
-      return null;
+      return '';
     }
   }
 

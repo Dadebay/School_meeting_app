@@ -15,13 +15,15 @@ class LessonCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Color color = ColorConstants.getRandomColor();
+    final Size size = MediaQuery.of(context).size;
+
     return GestureDetector(
       onTap: () => context.navigateTo(LessonsProfil(lessonID: lessonModel.id, isTeacher: isTeacher)),
       child: Container(
         margin: context.padding.low,
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: context.border.highBorderRadius,
+          borderRadius: size.width > 800 ? context.border.normalBorderRadius : context.border.highBorderRadius,
           border: Border.all(color: color),
           boxShadow: [BoxShadow(color: color.withOpacity(.5), blurRadius: 5, spreadRadius: 2)],
         ),
@@ -29,8 +31,8 @@ class LessonCard extends StatelessWidget {
           children: [
             Positioned.fill(
               child: Container(
-                decoration: BoxDecoration(borderRadius: context.border.highBorderRadius, color: color.withOpacity(.5)),
-                child: ClipRRect(borderRadius: context.border.highBorderRadius, child: CustomWidgets.imageWidget(lessonModel.img, false)),
+                decoration: BoxDecoration(borderRadius: size.width > 800 ? context.border.normalBorderRadius : context.border.highBorderRadius, color: color.withOpacity(.5)),
+                child: ClipRRect(borderRadius: size.width > 800 ? context.border.normalBorderRadius : context.border.highBorderRadius, child: CustomWidgets.imageWidget(lessonModel.img, false)),
               ),
             ),
             _dateViewerCard(context),

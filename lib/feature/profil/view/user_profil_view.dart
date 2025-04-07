@@ -6,18 +6,27 @@ import 'package:okul_com_tm/product/widgets/index.dart';
 
 @RoutePage()
 class UserProfilView extends ConsumerWidget {
-  const UserProfilView({super.key, required this.isTeacher});
+  const UserProfilView({
+    super.key,
+    required this.isTeacher,
+    required this.isLoggedIn,
+  });
   final bool isTeacher;
+  final bool isLoggedIn;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return NestedScrollView(
       headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
         return <Widget>[
-          ProfilSliverAppBar(innerBoxIsScrolled: innerBoxIsScrolled, isTeacher: isTeacher),
+          ProfilSliverAppBar(
+            innerBoxIsScrolled: innerBoxIsScrolled,
+            isTeacher: isTeacher,
+            isLoggedIn: isLoggedIn,
+          ),
         ];
       },
-      body: PageButtons(isTeacher: isTeacher),
+      body: PageButtons(isTeacher: isTeacher, isLoggedIN: isLoggedIn),
     );
   }
 }

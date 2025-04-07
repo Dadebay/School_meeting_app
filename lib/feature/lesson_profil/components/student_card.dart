@@ -6,7 +6,7 @@ class StudentCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final studentList = ref.watch(studentProvider);
-
+    print(studentList);
     return Container(
       padding: context.padding.low,
       margin: context.padding.onlyBottomHigh,

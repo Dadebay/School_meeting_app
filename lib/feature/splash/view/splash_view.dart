@@ -7,12 +7,19 @@ import 'package:okul_com_tm/product/widgets/index.dart';
 import '../../../product/init/language/locale_keys.g.dart';
 
 @RoutePage()
-class SplashView extends StatelessWidget {
+class SplashView extends StatefulWidget {
   SplashView({super.key});
+
+  @override
+  State<SplashView> createState() => _SplashViewState();
+}
+
+class _SplashViewState extends State<SplashView> {
   final storage = FlutterSecureStorage();
 
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: Stack(
         children: [
@@ -53,6 +60,7 @@ class SplashView extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: context.general.textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.bold,
+                      fontSize: size.width > 800 ? 30 : 20,
                       color: ColorConstants.blackColor,
                     ),
                   ).tr(),
@@ -61,7 +69,7 @@ class SplashView extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: context.general.textTheme.bodyLarge?.copyWith(
                       fontWeight: FontWeight.w500,
-                      fontSize: 18,
+                      fontSize: size.width > 800 ? 25 : 18,
                       color: ColorConstants.greyColor,
                     ),
                   ).tr(),
@@ -69,12 +77,11 @@ class SplashView extends StatelessWidget {
                     text: LocaleKeys.splash_button.toString(),
                     onPressed: () async {
                       await storage.write(key: 'is_first_launch', value: 'false');
-                      final String? appleStoreFake = await AuthServiceStorage.getAppleStoreStatus();
-
-                      if (appleStoreFake!.isEmpty) {
+                      bool appleStoreFake = await AuthServiceStorage().getAppleStoreStatus();
+                      if (appleStoreFake == false) {
                         context.navigateNamedTo('/login');
                       } else {
-                        context.router.replaceNamed('/bottomNavBar');
+                        context.navigateNamedTo('/bottomNavBar');
                       }
                     },
                   ),

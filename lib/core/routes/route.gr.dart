@@ -12,18 +12,26 @@ import 'package:auto_route/auto_route.dart' as _i14;
 import 'package:flutter/material.dart' as _i15;
 import 'package:okul_com_tm/feature/home/view/bottom_nav_bar_view.dart' as _i1;
 import 'package:okul_com_tm/feature/home/view/home_view.dart' as _i5;
-import 'package:okul_com_tm/feature/lesson_profil/model/lesson_model.dart' as _i17;
-import 'package:okul_com_tm/feature/lesson_profil/view/lessons_profil.dart' as _i6;
-import 'package:okul_com_tm/feature/lesson_profil/view/student_attendence_view.dart' as _i12;
+import 'package:okul_com_tm/feature/lesson_profil/model/lesson_model.dart'
+    as _i17;
+import 'package:okul_com_tm/feature/lesson_profil/view/lessons_profil.dart'
+    as _i6;
+import 'package:okul_com_tm/feature/lesson_profil/view/student_attendence_view.dart'
+    as _i12;
 import 'package:okul_com_tm/feature/login/view/login_view.dart' as _i7;
 import 'package:okul_com_tm/feature/news_view/model/news_model.dart' as _i16;
-import 'package:okul_com_tm/feature/news_view/view/news_profile_view.dart' as _i8;
+import 'package:okul_com_tm/feature/news_view/view/news_profile_view.dart'
+    as _i8;
 import 'package:okul_com_tm/feature/news_view/view/news_view.dart' as _i9;
-import 'package:okul_com_tm/feature/profil/view/edit_user_profile_view.dart' as _i3;
-import 'package:okul_com_tm/feature/profil/view/free_time_managament_view.dart' as _i4;
-import 'package:okul_com_tm/feature/profil/view/get_passed_lessons.dart' as _i10;
+import 'package:okul_com_tm/feature/profil/view/edit_user_profile_view.dart'
+    as _i3;
+import 'package:okul_com_tm/feature/profil/view/free_time_managament_view.dart'
+    as _i4;
+import 'package:okul_com_tm/feature/profil/view/get_passed_lessons.dart'
+    as _i10;
 import 'package:okul_com_tm/feature/profil/view/user_profil_view.dart' as _i13;
-import 'package:okul_com_tm/feature/splash/view/connection_check_view.dart' as _i2;
+import 'package:okul_com_tm/feature/splash/view/connection_check_view.dart'
+    as _i2;
 import 'package:okul_com_tm/feature/splash/view/splash_view.dart' as _i11;
 
 /// generated route for
@@ -293,10 +301,13 @@ class PassedLessons extends _i14.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i11.SplashView]
-class SplashView extends _i14.PageRouteInfo<void> {
-  const SplashView({List<_i14.PageRouteInfo>? children})
-      : super(
+class SplashView extends _i14.PageRouteInfo<SplashViewArgs> {
+  SplashView({
+    _i15.Key? key,
+    List<_i14.PageRouteInfo>? children,
+  }) : super(
           SplashView.name,
+          args: SplashViewArgs(key: key),
           initialChildren: children,
         );
 
@@ -305,14 +316,28 @@ class SplashView extends _i14.PageRouteInfo<void> {
   static _i14.PageInfo page = _i14.PageInfo(
     name,
     builder: (data) {
-      return _i11.SplashView();
+      final args =
+          data.argsAs<SplashViewArgs>(orElse: () => const SplashViewArgs());
+      return _i11.SplashView(key: args.key);
     },
   );
 }
 
+class SplashViewArgs {
+  const SplashViewArgs({this.key});
+
+  final _i15.Key? key;
+
+  @override
+  String toString() {
+    return 'SplashViewArgs{key: $key}';
+  }
+}
+
 /// generated route for
 /// [_i12.StudentAttendancePageView]
-class StudentAttendanceRouteView extends _i14.PageRouteInfo<StudentAttendanceRouteViewArgs> {
+class StudentAttendanceRouteView
+    extends _i14.PageRouteInfo<StudentAttendanceRouteViewArgs> {
   StudentAttendanceRouteView({
     _i15.Key? key,
     required _i17.LessonModel lessonModel,
@@ -368,12 +393,14 @@ class UserProfilView extends _i14.PageRouteInfo<UserProfilViewArgs> {
   UserProfilView({
     _i15.Key? key,
     required bool isTeacher,
+    required bool isLoggedIn,
     List<_i14.PageRouteInfo>? children,
   }) : super(
           UserProfilView.name,
           args: UserProfilViewArgs(
             key: key,
             isTeacher: isTeacher,
+            isLoggedIn: isLoggedIn,
           ),
           initialChildren: children,
         );
@@ -387,6 +414,7 @@ class UserProfilView extends _i14.PageRouteInfo<UserProfilViewArgs> {
       return _i13.UserProfilView(
         key: args.key,
         isTeacher: args.isTeacher,
+        isLoggedIn: args.isLoggedIn,
       );
     },
   );
@@ -396,14 +424,17 @@ class UserProfilViewArgs {
   const UserProfilViewArgs({
     this.key,
     required this.isTeacher,
+    required this.isLoggedIn,
   });
 
   final _i15.Key? key;
 
   final bool isTeacher;
 
+  final bool isLoggedIn;
+
   @override
   String toString() {
-    return 'UserProfilViewArgs{key: $key, isTeacher: $isTeacher}';
+    return 'UserProfilViewArgs{key: $key, isTeacher: $isTeacher, isLoggedIn: $isLoggedIn}';
   }
 }

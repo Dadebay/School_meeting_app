@@ -20,57 +20,77 @@ class BottomNavBar extends StatefulWidget {
 
 class _BottomNavBarState extends State<BottomNavBar> {
   bool isTeacher = false;
-  String appleStoreFake = "";
+  bool isLoggedIn = false;
+  int selectedIndex = 0;
+
   @override
   void initState() {
     super.initState();
-
     getUserStatus();
   }
 
   dynamic getUserStatus() async {
-    appleStoreFake = await AuthServiceStorage.getAppleStoreStatus() ?? '';
-
+    isLoggedIn = await AuthServiceStorage().getAppleStoreStatus();
     await AuthServiceStorage.getStatus().then((value) {
-      if (value != null) {
-        isTeacher = value == 'teacher';
-      } else {
-        isTeacher = false;
-      }
+      isTeacher = value == 'teacher';
       setState(() {});
     });
   }
 
-  int selectedIndex = 0;
-  List<IconData> studentIcons = [IconlyLight.home, IconlyLight.discovery, IconlyLight.chat, IconlyLight.profile];
-  List<IconData> studentSelectedIcons = [IconlyBold.home, IconlyBold.discovery, IconlyBold.chat, IconlyBold.profile];
-
   @override
   Widget build(BuildContext context) {
-    final List<Widget> pages = [HomeView(isTeacher: isTeacher), NewsView(), ChatView(isClosed: appleStoreFake.isEmpty ? false : true), UserProfilView(isTeacher: isTeacher)];
+    final List<IconData> unselectedIcons = [
+      IconlyLight.home,
+      IconlyLight.discovery,
+      if (!isLoggedIn) IconlyLight.chat,
+      IconlyLight.profile,
+    ];
+
+    final List<IconData> selectedIcons = [
+      IconlyBold.home,
+      IconlyBold.discovery,
+      if (!isLoggedIn) IconlyBold.chat,
+      IconlyBold.profile,
+    ];
+
+    final List<Widget> pages = [
+      HomeView(isTeacher: isTeacher),
+      NewsView(),
+      if (!isLoggedIn) ChatView(),
+      UserProfilView(isTeacher: isTeacher, isLoggedIn: isLoggedIn),
+    ];
+
+    // index sınır aşımına karşı kontrol
+    if (selectedIndex >= pages.length) {
+      selectedIndex = 0;
+    }
 
     return Scaffold(
-        extendBody: true,
-        appBar: selectedIndex == 1
-            ? AppBar(
-                automaticallyImplyLeading: false,
-                backgroundColor: ColorConstants.primaryBlueColor,
-                title: Text(
-                  LocaleKeys.lessons_news,
-                  style: context.general.textTheme.headlineMedium!.copyWith(color: ColorConstants.whiteColor, fontWeight: FontWeight.bold),
-                ).tr(),
-              )
-            : null,
-        body: pages[selectedIndex],
-        bottomNavigationBar: CustomBottomNavBar(
-          selectedIcons: studentSelectedIcons,
-          unselectedIcons: studentIcons,
-          currentIndex: selectedIndex,
-          onTap: (index) async {
+      extendBody: true,
+      appBar: selectedIndex == 1
+          ? AppBar(
+              automaticallyImplyLeading: false,
+              backgroundColor: ColorConstants.primaryBlueColor,
+              title: Text(
+                LocaleKeys.lessons_news,
+                style: context.general.textTheme.headlineMedium!.copyWith(
+                  color: ColorConstants.whiteColor,
+                  fontWeight: FontWeight.bold,
+                ),
+              ).tr(),
+            )
+          : null,
+      body: pages[selectedIndex],
+      bottomNavigationBar: CustomBottomNavBar(
+        selectedIcons: selectedIcons,
+        unselectedIcons: unselectedIcons,
+        currentIndex: selectedIndex,
+        onTap: (index) {
+          setState(() {
             selectedIndex = index;
-
-            setState(() {});
-          },
-        ));
+          });
+        },
+      ),
+    );
   }
 }

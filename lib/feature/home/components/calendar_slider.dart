@@ -12,7 +12,9 @@ class CalendarSlider extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedDate = ref.watch(calendarProvider);
-    final pageController = ref.watch(pageControllerProvider);
+    final Size size = MediaQuery.of(context).size;
+
+    final pageController = PageController(initialPage: calculateInitialPage(selectedDate), viewportFraction: size.width > 800 ? 0.2 : 0.3);
 
     return Container(
       height: WidgetSizes.calendarSliderWidth.value + 10,

@@ -10,6 +10,7 @@ import 'package:okul_com_tm/product/widgets/index.dart';
 
 class PageButtons extends ConsumerWidget {
   final bool isTeacher;
+  final bool isLoggedIN;
 
   final List<String> buttonNames = [
     LocaleKeys.userProfile_set_free_time,
@@ -25,19 +26,28 @@ class PageButtons extends ConsumerWidget {
     IconlyLight.time_circle,
   ];
 
-  PageButtons({super.key, required this.isTeacher});
+  PageButtons({
+    super.key,
+    required this.isTeacher,
+    required this.isLoggedIN,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    print(isLoggedIN);
     return ListView.builder(
       itemCount: buttonNames.length,
       padding: context.padding.normal,
       itemBuilder: (context, index) {
-        return isTeacher == true
-            ? _buttons(context, index, ref)
-            : buttonNames[index] == LocaleKeys.userProfile_set_free_time
-                ? SizedBox.shrink()
-                : _buttons(context, index, ref);
+        if (!isTeacher && buttonNames[index] == LocaleKeys.userProfile_set_free_time) {
+          return SizedBox.shrink();
+        }
+
+        if (index == buttonNames.length - 1 && isLoggedIN) {
+          return _loginButton(context);
+        }
+
+        return _buttons(context, index, ref);
       },
     );
   }
@@ -50,14 +60,14 @@ class PageButtons extends ConsumerWidget {
           if (buttonNames[index] == LocaleKeys.userProfile_set_free_time) {
             ref.read(freeTimesProvider.notifier).fetchFreeTimes(context);
             context.route.navigateToPage(FreeTimeManagamentView());
+          } else if (buttonNames[index] == LocaleKeys.userProfile_past_lessons) {
+            context.navigateNamedTo('/pastLessons');
           } else {
-            if (buttonNames[index] == LocaleKeys.userProfile_past_lessons) {
-              context.navigateNamedTo('/pastLessons');
-            } else {
-              context.route.navigateToPage(AboutUsView(
-                privacyPolicy: buttonNames[index] == LocaleKeys.userProfile_privacy_policy ? true : false,
-              ));
-            }
+            context.route.navigateToPage(
+              AboutUsView(
+                privacyPolicy: buttonNames[index] == LocaleKeys.userProfile_privacy_policy,
+              ),
+            );
           }
         },
         shape: RoundedRectangleBorder(borderRadius: context.border.normalBorderRadius),
@@ -76,6 +86,35 @@ class PageButtons extends ConsumerWidget {
           buttonNames[index],
           style: context.general.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w500),
         ).tr(),
+        trailing: Icon(IconlyLight.arrow_right_circle, color: ColorConstants.greyColor),
+      ),
+    );
+  }
+
+  // 🔒 Login Button
+  Padding _loginButton(BuildContext context) {
+    return Padding(
+      padding: context.padding.verticalLow,
+      child: ListTile(
+        onTap: () {
+          context.navigateNamedTo('/login');
+        },
+        shape: RoundedRectangleBorder(borderRadius: context.border.normalBorderRadius),
+        tileColor: ColorConstants.greyColorwithOpacity.withOpacity(.8),
+        contentPadding: context.padding.normal,
+        leading: Container(
+          padding: context.padding.normal.copyWith(top: 15),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: ColorConstants.whiteColor.withOpacity(.6),
+            border: Border.all(color: ColorConstants.greyColor.withOpacity(.3), width: 1),
+          ),
+          child: Icon(IconlyLight.login, color: ColorConstants.primaryBlueColor),
+        ),
+        title: Text(
+          'Login',
+          style: context.general.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w500),
+        ),
         trailing: Icon(IconlyLight.arrow_right_circle, color: ColorConstants.greyColor),
       ),
     );

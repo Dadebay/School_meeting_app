@@ -5,41 +5,31 @@ import 'package:okul_com_tm/feature/chat_view/view/chat_profil_screen.dart';
 import 'package:okul_com_tm/product/widgets/index.dart';
 
 class ChatView extends ConsumerWidget {
-  final bool isClosed;
-
-  ChatView({super.key, required this.isClosed});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
         appBar: CustomAppBar(title: "Chat", showBackButton: false),
-        body: Stack(
-          children: [
-            Positioned.fill(
-              child: FutureBuilder<List<ChatStudentModel>>(
-                future: ChatNotifier.fetchStudents(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CustomWidgets.loader();
-                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return CustomWidgets.emptyData(context);
-                  } else {
-                    final students = snapshot.data!;
-                    return ListView.builder(
-                      itemCount: students.length,
-                      padding: context.padding.onlyBottomHigh,
-                      shrinkWrap: true,
-                      physics: BouncingScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        final student = students[index];
-                        return studentCard(student, context);
-                      },
-                    );
-                  }
+        body: FutureBuilder<List<ChatStudentModel>>(
+          future: ChatNotifier.fetchStudents(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return CustomWidgets.loader();
+            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return CustomWidgets.emptyData(context);
+            } else {
+              final students = snapshot.data!;
+              return ListView.builder(
+                itemCount: students.length,
+                padding: context.padding.onlyBottomHigh,
+                shrinkWrap: true,
+                physics: BouncingScrollPhysics(),
+                itemBuilder: (context, index) {
+                  final student = students[index];
+                  return studentCard(student, context);
                 },
-              ),
-            ),
-            Positioned.fill(child: CustomWidgets.pageLocked(context)),
-          ],
+              );
+            }
+          },
         ));
   }
 

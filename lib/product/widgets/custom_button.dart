@@ -14,10 +14,11 @@ class CustomButton extends StatelessWidget {
   final VoidCallback onPressed;
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
     return ElevatedButton(
       onPressed: onPressed,
       style: ButtonStyle(
-        padding: mini == true ? WidgetStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.symmetric(vertical: 13, horizontal: 15)) : WidgetStateProperty.all<EdgeInsetsGeometry>(context.padding.normal),
+        padding: mini == true ? WidgetStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.symmetric(vertical: 13, horizontal: 15)) : WidgetStateProperty.all<EdgeInsetsGeometry>(size.width > 800 ? context.padding.low : context.padding.normal),
         elevation: WidgetStateProperty.all<double>(2),
         backgroundColor: showBorderStyle == true ? WidgetStateProperty.all<Color>(Colors.transparent) : WidgetStateProperty.all<Color>(ColorConstants.primaryBlueColor),
         shadowColor: showBorderStyle == true || removeShadow == true ? WidgetStateProperty.all<Color>(Colors.transparent) : WidgetStateProperty.all<Color>(ColorConstants.primaryBlueColor),

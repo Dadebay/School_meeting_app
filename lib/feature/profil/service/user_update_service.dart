@@ -126,7 +126,7 @@ class UserUpdateState {
   File? image;
   String imagePath;
 
-  UserUpdateState({this.email = '', this.username = '', this.image, this.imagePath = ''});
+  UserUpdateState({this.email = '', this.username = 'User', this.image, this.imagePath = ''});
 
   UserUpdateState copyWith({String? email, String? username, File? image, String? imagePath}) {
     return UserUpdateState(

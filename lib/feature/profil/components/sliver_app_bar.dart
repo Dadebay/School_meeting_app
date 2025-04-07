@@ -6,13 +6,14 @@ import 'package:okul_com_tm/product/widgets/index.dart';
 import '../../../product/dialogs/dialogs.dart';
 
 class ProfilSliverAppBar extends ConsumerWidget {
-  const ProfilSliverAppBar({super.key, required this.innerBoxIsScrolled, required this.isTeacher});
+  const ProfilSliverAppBar({super.key, required this.innerBoxIsScrolled, required this.isTeacher, required this.isLoggedIn});
   final bool innerBoxIsScrolled;
   final bool isTeacher;
+  final bool isLoggedIn;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userModel = ref.watch(userUpdateProvider); // ref.watch kullanıyoruz
+    final userModel = ref.watch(userUpdateProvider);
 
     return SliverAppBar(
       pinned: true,
@@ -34,13 +35,15 @@ class ProfilSliverAppBar extends ConsumerWidget {
         icon: Icon(IconlyLight.edit_square, color: ColorConstants.greyColor),
       ),
       actions: [
-        Padding(
-          padding: context.padding.low,
-          child: IconButton(
-            onPressed: () => Dialogs.logOut(context: context),
-            icon: Icon(IconlyLight.logout, color: ColorConstants.greyColor),
-          ),
-        )
+        isLoggedIn == false
+            ? Padding(
+                padding: context.padding.low,
+                child: IconButton(
+                  onPressed: () => Dialogs.logOut(context: context),
+                  icon: Icon(IconlyLight.logout, color: ColorConstants.greyColor),
+                ),
+              )
+            : SizedBox.shrink()
       ],
       flexibleSpace: FlexibleSpaceBar(
         titlePadding: EdgeInsets.zero,

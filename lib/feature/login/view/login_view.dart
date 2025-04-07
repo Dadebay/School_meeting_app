@@ -3,6 +3,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:okul_com_tm/core/routes/route.gr.dart';
 import 'package:okul_com_tm/feature/splash/service/fcm_provider.dart';
 import 'package:okul_com_tm/product/init/language/locale_keys.g.dart';
@@ -73,10 +74,17 @@ class LoginView extends ConsumerWidget {
                         final username = userNameController.text;
                         final password = passwordController.text;
                         await ref.read(authProvider.notifier).login(username, password);
+                        bool appleStoreFake = await AuthServiceStorage().getAppleStoreStatus();
+                        final _storage = FlutterSecureStorage();
+
                         if (ref.read(authProvider).isLoggedIn) {
                           await FCMService.postFCMToken();
                           context.navigateTo(BottomNavBar());
                           await AuthServiceStorage.clearAppleStoreFake();
+                          if (appleStoreFake) {
+                            Restart.restartApp();
+                            await _storage.delete(key: 'appleStatus');
+                          }
                         } else {
                           userNameController.clear();
                           passwordController.clear();

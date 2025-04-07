@@ -35,7 +35,7 @@ class _ConnectionCheckViewState extends ConsumerState<ConnectionCheckView> {
   }
 
   Future<void> _performCheck() async {
-    await AuthNotifier.getAppleStoreStatus();
+    String? loginValue = await AuthNotifier.getAppleStoreStatusFromAPI();
     if (_checkPerformed || _isShowingDialog) return;
     setState(() {
       _checkPerformed = true;
@@ -48,13 +48,17 @@ class _ConnectionCheckViewState extends ConsumerState<ConnectionCheckView> {
         final isFirstLaunch = await ref.read(isFirstLaunchProvider.future);
         final String? token = await AuthServiceStorage.getToken() ?? '';
         log('Check Connection: isFirstLaunch=$isFirstLaunch, isLoggedIn=$token');
-        final String? appleStoreFake = await AuthServiceStorage.getAppleStoreStatus();
-
+        print(token);
+        print(loginValue);
+        if (token!.isNotEmpty) {
+          await AuthServiceStorage.clearAppleStoreFake();
+        }
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (!mounted) return;
+
           if (isFirstLaunch) {
             context.router.replaceNamed('/splash');
-          } else if (token!.isEmpty && appleStoreFake!.isEmpty) {
+          } else if (token.isEmpty && loginValue.isEmpty) {
             context.router.replaceNamed('/login');
           } else {
             context.router.replaceNamed('/bottomNavBar');
