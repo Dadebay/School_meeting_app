@@ -36,6 +36,7 @@ class ChatView extends ConsumerWidget {
   GestureDetector studentCard(ChatStudentModel student, BuildContext context) {
     return GestureDetector(
       onTap: () async {
+        print(student);
         context.route.navigateToPage(ChatScreen(model: student));
       },
       child: Padding(

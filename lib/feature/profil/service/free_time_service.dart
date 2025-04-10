@@ -45,6 +45,7 @@ class FreeTimeNotifier extends StateNotifier<List<FreeTimeModel>> {
   Future<dynamic> _postData(String url, Map<String, String> body) async {
     final token = await AuthServiceStorage.getToken();
     log(body.toString());
+    print(token);
     return http.post(Uri.parse(url), headers: {'Authorization': 'Bearer $token'}, body: body);
   }
 

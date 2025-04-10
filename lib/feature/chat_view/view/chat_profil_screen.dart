@@ -58,7 +58,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     final notifier = ref.read(chatProvider.notifier);
     notifier.clearMessagesAndReset();
     await notifier.fetchMessages(conversationID: widget.model.conversationID, page: 1);
-    notifier.connectWebSocket(studentID: widget.model.id, myID: _myID!);
+    notifier.connectWebSocket(studentID: widget.model.id, myID: _myID!, student: widget.model);
     WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
     log("Chat initialization complete.");
   }

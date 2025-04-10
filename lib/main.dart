@@ -12,8 +12,18 @@ Future<void> main() async {
   runApp(ProviderScope(child: ProductLocalization(child: _MyApp())));
 }
 
-class _MyApp extends StatelessWidget {
+class _MyApp extends StatefulWidget {
   const _MyApp();
+
+  @override
+  State<_MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<_MyApp> {
+  initState() {
+    super.initState();
+    AppStartInit.getNotification();
+  }
 
   @override
   Widget build(BuildContext context) {

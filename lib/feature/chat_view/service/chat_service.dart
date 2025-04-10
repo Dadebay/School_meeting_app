@@ -82,6 +82,8 @@ class ChatNotifier extends StateNotifier<ChatState> {
         Uri.parse(ApiConstants.getMessages),
         headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'},
       );
+      print(response.body);
+      print(response.statusCode);
       if (response.statusCode == 200) {
         final utf8Body = utf8.decode(response.bodyBytes);
         final dynamic decodedData = json.decode(utf8Body);
@@ -156,7 +158,7 @@ class ChatNotifier extends StateNotifier<ChatState> {
 
   String? _lastSentMessage;
 
-  Future<void> connectWebSocket({required int studentID, required int myID}) async {
+  Future<void> connectWebSocket({required int studentID, required int myID, required ChatStudentModel student}) async {
     if (state.connectionStatus == WebSocketStatus.connected && state.currentStudentID == studentID) {
       log('WebSocket already connected to student $studentID');
       return;
@@ -164,9 +166,18 @@ class ChatNotifier extends StateNotifier<ChatState> {
     log('Attempting to connect WebSocket for student $studentID...');
     _disconnectWebSocket();
     String wsUrl = "";
-    String? status = await AuthServiceStorage.getStatus();
-    if (status == 'teacher') {
+    print(student.type);
+    print(student.type);
+    print(student.type);
+    print(student.type);
+    print(student.type);
+    print(myID);
+    print(studentID);
+
+    if (student.type == 'teacher') {
       wsUrl = 'ws://157.173.194.79:9000/ws/chat/$myID/$studentID/$myID/';
+    } else if (student.type == 'admin') {
+      wsUrl = 'ws://157.173.194.79:9000/ws/admin/$myID/$studentID/$myID/';
     } else {
       wsUrl = 'ws://157.173.194.79:9000/ws/chat/$myID/$myID/$studentID/';
     }

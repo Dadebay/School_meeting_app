@@ -1,7 +1,5 @@
 // ignore_for_file: must_be_immutable, inference_failure_on_function_invocation
 
-import 'dart:io';
-
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -32,17 +30,7 @@ class EditUserProfileView extends ConsumerWidget {
         children: [
           GestureDetector(
             onTap: () async {
-              final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-              if (image != null) {
-                CustomSnackbar.showCustomSnackbar(context, LocaleKeys.userProfile_change_image, LocaleKeys.general_wait, ColorConstants.greenColor);
-                state.image = File(image.path);
-                userUpdate.updateProfile(
-                  context: context,
-                  userName: usernameController.text,
-                  email: emailController.text,
-                  image: state.image!,
-                );
-              }
+              showAvatarDialog(context, ref);
             },
             child: Center(
               child: Stack(
@@ -112,13 +100,10 @@ class EditUserProfileView extends ConsumerWidget {
                 context: context,
                 userName: usernameController.text,
                 email: emailController.text,
-                image: state.image!,
               );
 
-              /// **Güncellenen bilgiyi çek**
               ref.read(userUpdateProvider.notifier).setUserName(usernameController.text);
 
-              /// **Geri git**
               context.route.pop();
             },
           ),

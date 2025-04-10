@@ -326,7 +326,7 @@ class Dialogs {
                         children: List.generate(7, (index) {
                           return ChoiceChip(
                             label: Text(
-                              ["M", "T", "W", "T", "F", "S", "S"][index],
+                              ["Mon", "Tue", "Wen", "Thr", "Fri", "Sun", "Sat"][index],
                               style: context.general.textTheme.bodyLarge!.copyWith(
                                 fontWeight: selectedWeekDays.contains(index) ? FontWeight.bold : FontWeight.w300,
                                 color: selectedWeekDays.contains(index) ? ColorConstants.whiteColor : ColorConstants.blackColor,
