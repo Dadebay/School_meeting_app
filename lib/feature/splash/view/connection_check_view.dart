@@ -5,13 +5,9 @@ import 'dart:io';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kartal/kartal.dart';
-import 'package:okul_com_tm/feature/login/service/auth_provider.dart';
-import 'package:okul_com_tm/product/constants/color_constants.dart';
-import 'package:okul_com_tm/product/constants/icon_constants.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:okul_com_tm/product/dialogs/dialogs.dart';
-import 'package:okul_com_tm/product/sizes/image_sizes.dart';
+import 'package:okul_com_tm/product/widgets/index.dart';
 
 @RoutePage()
 class ConnectionCheckView extends ConsumerStatefulWidget {
@@ -22,48 +18,30 @@ class ConnectionCheckView extends ConsumerStatefulWidget {
 }
 
 class _ConnectionCheckViewState extends ConsumerState<ConnectionCheckView> {
-  bool _checkPerformed = false;
-  bool _isShowingDialog = false;
-
   @override
   void initState() {
     super.initState();
-
-    if (!_checkPerformed) {
-      _performCheck();
-    }
+    _performCheck();
   }
 
+  final storage = FlutterSecureStorage();
+
   Future<void> _performCheck() async {
-    String? loginValue = await AuthNotifier.getAppleStoreStatusFromAPI();
-    if (_checkPerformed || _isShowingDialog) return;
-    setState(() {
-      _checkPerformed = true;
-    });
+    final storage = const FlutterSecureStorage();
 
     try {
-      final result = await InternetAddress.lookup('google.com').timeout(const Duration(seconds: 5)); // Zaman aşımı ekle
-
+      final result = await InternetAddress.lookup('google.com').timeout(const Duration(seconds: 5));
       if (result.isNotEmpty && result.first.rawAddress.isNotEmpty) {
-        final isFirstLaunch = await ref.read(isFirstLaunchProvider.future);
-        final String? token = await AuthServiceStorage.getToken() ?? '';
+        final isFirstLaunch = await storage.read(key: 'is_first_launch') == null;
+        final String? token = await AuthServiceStorage.getToken();
         log('Check Connection: isFirstLaunch=$isFirstLaunch, isLoggedIn=$token');
-        print(token);
-        print(loginValue);
-        if (token!.isNotEmpty) {
-          await AuthServiceStorage.clearAppleStoreFake();
-        }
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (!mounted) return;
 
-          if (isFirstLaunch) {
-            context.router.replaceNamed('/splash');
-          } else if (token.isEmpty && loginValue.isEmpty) {
-            context.router.replaceNamed('/login');
-          } else {
-            context.router.replaceNamed('/bottomNavBar');
-          }
-        });
+        if (isFirstLaunch) {
+          await storage.write(key: 'is_first_launch', value: 'false');
+          context.router.replaceNamed('/splash');
+        } else {
+          context.router.replaceNamed('/bottomNavBar');
+        }
       } else {
         _showNoConnectionDialog();
       }
@@ -75,19 +53,10 @@ class _ConnectionCheckViewState extends ConsumerState<ConnectionCheckView> {
   }
 
   void _showNoConnectionDialog() {
-    if (!mounted || _isShowingDialog) return;
-    setState(() {
-      _isShowingDialog = true;
-    });
-
     Dialogs.showNoConnectionDialog(
       context: context,
       onRetry: () {
         Navigator.of(context).pop();
-        setState(() {
-          _isShowingDialog = false;
-          _checkPerformed = false;
-        });
         _performCheck();
       },
     );
@@ -110,14 +79,9 @@ class _ConnectionCheckViewState extends ConsumerState<ConnectionCheckView> {
               ),
             ),
           ),
-          if (_checkPerformed && !_isShowingDialog)
-            LinearProgressIndicator(
-              color: ColorConstants.primaryBlueColor,
-            )
-          else if (!_checkPerformed)
-            LinearProgressIndicator(
-              color: ColorConstants.primaryBlueColor,
-            ),
+          LinearProgressIndicator(
+            color: ColorConstants.primaryBlueColor,
+          )
         ],
       ),
     );

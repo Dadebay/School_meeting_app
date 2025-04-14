@@ -1,0 +1,188 @@
+TERMS & CONDITIONS (T&C)
+Last Updated: 4/10/2025
+
+1. Introduction
+These Terms & Conditions (“T&C”) govern your use of the Music Academy of Kansas City (“MAKC,” “we,” “us,” or “our”) App (“the App”). By creating an account, logging in, or otherwise using the App, you acknowledge that you have read, understood, and agree to be bound by these T&C. If you do not agree, do not use the App.
+
+2. Purpose of the App
+The App is designed to help students, parents/guardians, teachers, and administrative staff manage lesson schedules, communicate with one another, track attendance, request rescheduling, and enhance educational/administrative experiences at MAKC.
+
+3. User Eligibility and Accounts
+Eligibility: You must be a currently enrolled student or parent/guardian of a student, or a teacher/employee at MAKC to access the App.
+
+Account Creation: MAKC will provide account credentials or allow self-registration for authorized individuals.
+
+Account Security: You are responsible for safeguarding your login credentials and for any activities under your account.
+
+4. Acceptable Use
+Permitted Use: You may only use the App for purposes consistent with MAKC’s educational and administrative objectives.
+
+Prohibited Activities: You must not use the App to engage in unlawful, abusive, or fraudulent behavior. You also agree not to submit content that is harassing, offensive, or infringes on intellectual property or privacy rights of others.
+
+5. No In-App Payments
+The App does not facilitate or display any payment information, invoices, or balances. All tuition and lesson fee transactions are handled separately through MAKC’s established payment channels outside the App.
+
+6. User-Generated Content
+Ownership and License: Any content you submit (e.g., chat messages, uploaded files) remains your property. However, you grant MAKC a non-exclusive license to display and use that content within the App for educational or administrative purposes.
+
+Reporting and Moderation: Users can report inappropriate or offensive content through the App or by contacting MAKC. We reserve the right to remove or review user-submitted content if it violates these T&C or any applicable law.
+
+7. Privacy and Data Collection
+Your use of the App is also governed by our Privacy Policy. By using the App, you agree to the data practices described therein.
+
+8. Intellectual Property
+MAKC Trademarks: Names, logos, and service marks related to MAKC or the App are the property of MAKC. You may not use these without prior written consent.
+
+App Content: Any text, graphics, images, or other materials furnished by MAKC within the App are protected by intellectual property laws. You may not copy, distribute, or create derivative works without our permission.
+
+9. Incorporation of EULA
+Use of the software portion of the App (including installation, updates, and licensing terms) is governed by our separate End User License Agreement (EULA). In the event of a conflict between these T&C and the EULA regarding software licensing matters, the EULA controls.
+
+10. Term and Termination
+Termination by MAKC: We may suspend or terminate your account if you violate these T&C or any other MAKC policies.
+
+User Termination: You may stop using the App at any time by deactivating your account or uninstalling the App.
+
+Survival: Provisions regarding liability, ownership, and dispute resolution will survive any termination of these T&C.
+
+11. Disclaimers and Limitations of Liability
+As-Is Basis: The App is provided on an “as is” and “as available” basis without warranties of any kind.
+
+Limitation of Liability: MAKC shall not be liable for indirect, incidental, or consequential damages arising from your use of the App.
+
+12. Governing Law
+These T&C are governed by the laws of the State of Kansas, United States. Any disputes shall be resolved in the courts located in Johnson County, Kansas.
+
+13. Changes to These T&C
+We may update these T&C from time to time. We will notify you of significant changes (e.g., via in-app alert or email). Continued use of the App constitutes acceptance of any updated T&C.
+
+14. Contact Information
+If you have questions, please contact:
+Music Academy of Kansas City
+9339 W. 87th St., Overland Park, KS 66212
+Phone: (913) 735-9507
+Email: info@musicacademykc.com
+
+------------------------------------------------------------
+
+END USER LICENSE AGREEMENT (EULA)
+Last Updated: 4/10/2025
+
+1. Introduction
+This End User License Agreement (“EULA”) is a legal agreement between you (“User”) and Music Academy of Kansas City (“MAKC,” “we,” “us,” or “our”) governing your use of the MAKC App (“the App”). By installing or using the App, you agree to be bound by this EULA. If you do not agree, do not use or install the App.
+
+2. License Grant
+Limited License: Subject to this EULA, MAKC grants you a personal, non-exclusive, non-transferable, revocable license to use the App for your own educational and administrative purposes in connection with MAKC.
+
+Restrictions: You shall not copy, modify, distribute, sell, or lease any part of the App, or reverse engineer or attempt to extract the source code unless expressly permitted by law or with our written consent.
+
+3. Ownership and Intellectual Property
+MAKC (or its licensors) retains all right, title, and interest in and to the App, including any associated intellectual property rights. No rights or licenses are granted except those explicitly stated in this EULA.
+
+4. Updates and Modifications
+We may periodically release updates, bug fixes, or enhancements (“Updates”) to improve functionality or address security concerns. By installing the App, you consent to such Updates. Continued use of the App after an Update signifies your acceptance of any modified terms.
+
+5. No In-App Payments
+The App does not process or display any payments, invoices, or balances. All financial transactions (lesson fees, tuition, etc.) occur offline or through MAKC’s separate payment channels.
+
+6. Termination
+Termination by MAKC: We may terminate this EULA immediately if you violate its terms, the T&C, or if we discontinue the App.
+
+Effect of Termination: Upon termination, you must cease all use of the App and uninstall it. Provisions related to intellectual property, disclaimer, and limitation of liability survive termination.
+
+7. Disclaimer of Warranties
+To the extent permitted by law, the App is provided “as is” and “as available,” without warranty of any kind, whether express or implied, including but not limited to implied warranties of merchantability or fitness for a particular purpose.
+
+8. Limitation of Liability
+MAKC shall not be liable for indirect, incidental, or consequential damages arising from or related to this EULA or your use of the App. In no event shall MAKC’s total liability exceed the amount you paid (if any) to MAKC for the license to use this App.
+
+9. Governing Law
+This EULA is governed by the laws of the State of Kansas, United States. You consent to the exclusive jurisdiction of the state or federal courts located in Johnson County, Kansas for any disputes arising hereunder.
+
+10. Incorporation by Reference
+This EULA incorporates by reference MAKC’s Terms & Conditions and Privacy Policy. In case of any conflict specifically regarding software license terms, this EULA controls.
+
+11. Contact Information
+If you have questions about this EULA, please contact us at:
+Music Academy of Kansas City
+9339 W. 87th St., Overland Park, KS 66212
+Phone: (913) 735-9507
+Email: info@musicacademykc.com
+
+
+
+------------------------------------
+
+PRIVACY POLICY
+Last Updated: 4/10/2025
+
+1. Introduction
+Music Academy of Kansas City (“MAKC,” “we,” “us,” or “our”) values your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use the MAKC App (“the App”). By using the App, you consent to the data practices described in this Privacy Policy.
+
+2. Information We Collect
+Personal Information:
+Includes names, contact details (email, phone), login credentials, and any additional profile information you choose to provide.
+
+Automatic Data:
+We may collect device information (e.g., IP address, operating system) and usage data (e.g., pages viewed, time spent) to improve the App’s functionality and performance.
+
+User-Generated Content:
+Messages, chat logs, or other content you submit within the App (e.g., when communicating with teachers or other users).
+
+3. How We Use Your Information
+App Functionality:
+To manage scheduling, communication, attendance tracking, or other Academy-related activities.
+
+Communication:
+To send necessary notifications (e.g., lesson reminders, cancellations) and respond to inquiries or feedback.
+
+Analytics and Improvements:
+To analyze user behavior and improve the App’s performance or user experience.
+
+4. No In-App Payments or Financial Data
+The App does not handle, process, or display any payment information or invoices. All financial transactions for lesson fees or tuition are conducted outside the App.
+
+5. Disclosure of Your Information
+Within MAKC:
+Teachers, administrators, and relevant staff may access your information for educational or administrative purposes.
+
+Service Providers:
+We may share information with third-party vendors who help operate the App (e.g., hosting). They are contractually required to keep your data confidential.
+
+Legal Requirements:
+We may disclose information if required by law, subpoena, or a government request.
+
+6. Data Security
+We implement reasonable measures to protect your data from unauthorized access, alteration, or disclosure. However, no method of internet transmission or electronic storage is entirely secure. We cannot guarantee absolute security.
+
+7. Children’s Privacy
+We recognize that many of our users may be minors. We collect personal information of children under 13 (or the applicable age of majority) only with parental or guardian consent. If you believe we have collected such information without the necessary consent, please contact us, and we will address it promptly.
+
+8. Retention of Data
+We keep your personal information only as long as necessary to fulfill the purposes outlined in this Privacy Policy or comply with legal obligations.
+
+9. Your Rights and Choices
+Account Updates: You can review or update your account information within the App or by contacting MAKC.
+
+Opt-Out of Communications: You may opt out of certain communications (e.g., email notifications) by adjusting your settings.
+
+Deletion Requests: If you wish to delete your personal data, please contact us. We will make reasonable efforts to comply, subject to legal or administrative requirements.
+
+10. External Links
+The App may contain links to external websites or services not operated by MAKC. We are not responsible for the privacy practices of those sites. We encourage you to read the privacy policies of any external service you visit.
+
+11. Governing Documents
+This Privacy Policy should be read in conjunction with our Terms & Conditions and End User License Agreement (EULA), which govern your use of the App.
+
+12. Updates to This Policy
+We may update this Privacy Policy from time to time. If we make significant changes, we will notify you via an in-app alert or email. Your continued use of the App after such changes indicates your acceptance of the revised policy.
+
+13. Contact Us
+If you have any questions about this Privacy Policy or wish to exercise any of your rights, please contact:
+
+
+Music Academy of Kansas City
+9339 W. 87th St., Overland Park, KS 66212
+Phone: (913) 735-9507
+Email: info@musicacademykc.com
+

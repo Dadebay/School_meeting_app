@@ -1,16 +1,73 @@
 // ignore_for_file: inference_failure_on_function_return_type, inference_failure_on_function_invocation, duplicate_ignore
 
+import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:okul_com_tm/core/routes/route.gr.dart';
 import 'package:okul_com_tm/feature/profil/components/custom_time_picker.dart';
 import 'package:okul_com_tm/feature/profil/service/free_time_service.dart';
+import 'package:okul_com_tm/feature/profil/service/user_update_service.dart';
 import 'package:okul_com_tm/product/init/language/locale_keys.g.dart';
 import 'package:okul_com_tm/product/widgets/index.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 enum RecurrenceType { none, workweek, weekly, monthly }
 
 class Dialogs {
+  Future<void> showReportDialog(BuildContext context, String username) async {
+    final TextEditingController _reportController = TextEditingController();
+
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Report User'),
+          content: TextField(
+            controller: _reportController,
+            maxLines: 5,
+            decoration: InputDecoration(
+              hintText: 'Please describe why you are reporting this user...',
+              border: OutlineInputBorder(),
+            ),
+          ),
+          actions: [
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () => Navigator.pop(context),
+            ),
+            ElevatedButton(
+              child: Text('Send'),
+              onPressed: () async {
+                final reason = _reportController.text.trim();
+                if (reason.isNotEmpty) {
+                  final emailUri = Uri(
+                    scheme: 'mailto',
+                    path: 'info@musicacademykc.com',
+                    query: Uri.encodeFull('subject=Report User ${username}&body=$reason'),
+                  );
+                  if (await canLaunchUrl(emailUri)) {
+                    await launchUrl(emailUri);
+                  } else {
+                    Clipboard.setData(ClipboardData(text: reason));
+                    CustomSnackbar.showCustomSnackbar(
+                      context,
+                      LocaleKeys.errors_title,
+                      "Could not open email app. Message copied to clipboard.",
+                      ColorConstants.redColor,
+                    );
+                  }
+                  Navigator.pop(context);
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   static void showNoConnectionDialog({required VoidCallback onRetry, required BuildContext context}) {
     showDialog(
       context: context,
@@ -326,7 +383,7 @@ class Dialogs {
                         children: List.generate(7, (index) {
                           return ChoiceChip(
                             label: Text(
-                              ["Mon", "Tue", "Wen", "Thr", "Fri", "Sun", "Sat"][index],
+                              ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"][index],
                               style: context.general.textTheme.bodyLarge!.copyWith(
                                 fontWeight: selectedWeekDays.contains(index) ? FontWeight.bold : FontWeight.w300,
                                 color: selectedWeekDays.contains(index) ? ColorConstants.whiteColor : ColorConstants.blackColor,
@@ -481,7 +538,13 @@ class Dialogs {
                       onPressed: () async {
                         await AuthServiceStorage.clearToken();
                         await AuthServiceStorage.clearStatus();
-                        await Restart.restartApp();
+                        context.router.replaceAll([const ConnectionCheckView()]);
+
+                        await UserUpdateNotifier().updateProfile(
+                          context: context,
+                          userName: "Username",
+                          email: "username@gmail.com",
+                        );
                         CustomSnackbar.showCustomSnackbar(context, LocaleKeys.lessons_success, LocaleKeys.userProfile_log_out_subtitle, ColorConstants.greenColor);
                       },
                       showBorderStyle: true),

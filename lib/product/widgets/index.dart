@@ -11,7 +11,6 @@ export 'package:okul_com_tm/product/constants/icon_constants.dart';
 export 'package:okul_com_tm/product/constants/string_constants.dart';
 export 'package:okul_com_tm/product/sizes/image_sizes.dart';
 export 'package:okul_com_tm/product/widgets/custom_button.dart';
-export 'package:restart_app/restart_app.dart';
 
 export "custom_app_bar.dart";
 export "custom_text_field.dart";

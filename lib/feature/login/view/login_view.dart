@@ -1,9 +1,8 @@
-// ignore_for_file: must_be_immutable
-
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:okul_com_tm/core/routes/route.gr.dart';
 import 'package:okul_com_tm/feature/splash/service/fcm_provider.dart';
 import 'package:okul_com_tm/product/init/language/locale_keys.g.dart';
@@ -11,10 +10,41 @@ import 'package:okul_com_tm/product/widgets/index.dart';
 
 @RoutePage()
 class LoginView extends ConsumerWidget {
-  TextEditingController userNameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  FocusNode userNameFocusNode = FocusNode();
-  FocusNode passwordFocusNode = FocusNode();
+  final TextEditingController userNameController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final FocusNode userNameFocusNode = FocusNode();
+  final FocusNode passwordFocusNode = FocusNode();
+
+  final ValueNotifier<bool> hasAgreed = ValueNotifier(false);
+
+  Future<void> showTermsDialog(BuildContext context) async {
+    final terms = await rootBundle.loadString('assets/terms.txt');
+    await showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Terms & Conditions'),
+          content: SizedBox(
+            height: MediaQuery.of(context).size.height * 0.5,
+            width: double.maxFinite,
+            child: SingleChildScrollView(
+              child: MarkdownBody(data: terms),
+            ),
+          ),
+          actions: [
+            CustomButton(
+              text: LocaleKeys.general_agree,
+              onPressed: () {
+                hasAgreed.value = true;
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -63,7 +93,7 @@ class LoginView extends ConsumerWidget {
                     focusNode: passwordFocusNode,
                     requestfocusNode: userNameFocusNode,
                   ),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   Padding(
                     padding: context.padding.verticalNormal,
                     child: CustomButton(
@@ -71,33 +101,38 @@ class LoginView extends ConsumerWidget {
                       mini: true,
                       removeShadow: true,
                       onPressed: () async {
+                        if (!hasAgreed.value) {
+                          await showTermsDialog(context);
+                          if (!hasAgreed.value) return;
+                        }
+
                         final username = userNameController.text;
                         final password = passwordController.text;
                         await ref.read(authProvider.notifier).login(username, password);
-                        bool appleStoreFake = await AuthServiceStorage().getAppleStoreStatus();
-                        final _storage = FlutterSecureStorage();
-
                         if (ref.read(authProvider).isLoggedIn) {
                           await FCMService.postFCMToken();
-                          context.navigateTo(BottomNavBar());
-                          await AuthServiceStorage.clearAppleStoreFake();
-                          if (appleStoreFake) {
-                            Restart.restartApp();
-                            await _storage.delete(key: 'appleStatus');
-                          }
+                          context.router.replaceAll([const ConnectionCheckView()]);
                         } else {
                           userNameController.clear();
                           passwordController.clear();
-                          CustomSnackbar.showCustomSnackbar(context, LocaleKeys.errors_title, LocaleKeys.errors_login, ColorConstants.redColor);
+                          CustomSnackbar.showCustomSnackbar(
+                            context,
+                            LocaleKeys.errors_title,
+                            LocaleKeys.errors_login,
+                            ColorConstants.redColor,
+                          );
                         }
                       },
                     ),
                   ),
                   TextButton(
-                      onPressed: () {
-                        CustomSnackbar.showCustomSnackbar(context, LocaleKeys.general_contact, LocaleKeys.login_forgot_password_subtitle, ColorConstants.redColor);
-                      },
-                      child: Text(LocaleKeys.login_forgot_password, style: context.general.textTheme.bodyLarge?.copyWith(color: ColorConstants.greyColor)).tr())
+                    onPressed: () async => await showTermsDialog(context),
+                    child: Text(
+                      "I agree to the T&C, EULA, and Privacy Policy.",
+                      textAlign: TextAlign.center,
+                      style: context.general.textTheme.bodyLarge?.copyWith(color: ColorConstants.primaryBlueColor),
+                    ),
+                  )
                 ],
               ),
             ),

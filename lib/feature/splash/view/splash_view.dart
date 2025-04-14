@@ -77,12 +77,8 @@ class _SplashViewState extends State<SplashView> {
                     text: LocaleKeys.splash_button.toString(),
                     onPressed: () async {
                       await storage.write(key: 'is_first_launch', value: 'false');
-                      bool appleStoreFake = await AuthServiceStorage().getAppleStoreStatus();
-                      if (appleStoreFake == false) {
-                        context.navigateNamedTo('/login');
-                      } else {
-                        context.navigateNamedTo('/bottomNavBar');
-                      }
+
+                      context.navigateNamedTo('/bottomNavBar');
                     },
                   ),
                 ],

@@ -24,7 +24,7 @@ if (flutterVersionName == null) {
 }
 
 android {
-    namespace = "com.gurbanov.okul"
+    namespace = "com.gurbanov.makc"
     compileSdk = 35
     ndkVersion = flutter.ndkVersion
 
@@ -38,7 +38,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.gurbanov.okul"
+        applicationId = "com.gurbanov.makc"
         minSdk = 23
         targetSdk = 35
         versionCode = localProperties.getProperty('flutter.versionCode').toInteger()

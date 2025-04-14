@@ -9,6 +9,7 @@ import 'package:okul_com_tm/feature/chat_view/model/chat_student_model.dart';
 import 'package:okul_com_tm/feature/chat_view/service/chat_service.dart';
 import 'package:okul_com_tm/feature/login/service/auth_provider.dart';
 import 'package:okul_com_tm/product/constants/color_constants.dart';
+import 'package:okul_com_tm/product/dialogs/dialogs.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ChatScreen extends ConsumerStatefulWidget {
@@ -170,6 +171,12 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
           icon: Icon(IconlyLight.arrow_left_circle, color: ColorConstants.whiteColor),
         ),
         backgroundColor: ColorConstants.primaryBlueColor,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.flag_outlined, color: Colors.white),
+            onPressed: () => Dialogs().showReportDialog(context, widget.model.username),
+          )
+        ],
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -228,7 +235,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                 ? () {
                     final textToSend = chatState.messageText.trim();
                     log("Send button pressed. Text: $textToSend");
-                    notifier.sendMessage(textToSend, _myID!);
+                    notifier.sendMessage(textToSend, _myID!, context);
 
                     WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
                   }

@@ -36,14 +36,14 @@ class ProfilSliverAppBar extends ConsumerWidget {
       ),
       actions: [
         isLoggedIn == false
-            ? Padding(
+            ? SizedBox.shrink()
+            : Padding(
                 padding: context.padding.low,
                 child: IconButton(
                   onPressed: () => Dialogs.logOut(context: context),
                   icon: Icon(IconlyLight.logout, color: ColorConstants.greyColor),
                 ),
               )
-            : SizedBox.shrink()
       ],
       flexibleSpace: FlexibleSpaceBar(
         titlePadding: EdgeInsets.zero,

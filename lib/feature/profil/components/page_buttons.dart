@@ -34,7 +34,6 @@ class PageButtons extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    print(isLoggedIN);
     return ListView.builder(
       itemCount: buttonNames.length,
       padding: context.padding.normal,
@@ -43,7 +42,7 @@ class PageButtons extends ConsumerWidget {
           return SizedBox.shrink();
         }
 
-        if (index == buttonNames.length - 1 && isLoggedIN) {
+        if (index == buttonNames.length - 1 && !isLoggedIN) {
           return _loginButton(context);
         }
 
