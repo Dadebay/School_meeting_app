@@ -75,6 +75,13 @@ abstract class  LocaleKeys {
   static const lessons_not_found_subtitle = 'lessons.not_found_subtitle';
   static const lessons = 'lessons';
   static const userProfile_about_us = 'userProfile.about_us';
+  static const userProfile_accept = 'userProfile.accept';
+  static const userProfile_userProfile_push_notifications = 'userProfile.userProfile_push_notifications';
+  static const userProfile_userProfile_notification_settings_updated = 'userProfile.userProfile_notification_settings_updated';
+  static const userProfile_userProfile_notification_enabled = 'userProfile.userProfile_notification_enabled';
+  static const userProfile_userProfile_notification_disabled = 'userProfile.userProfile_notification_disabled';
+  static const userProfile_userProfile_failed_to_update_settings = 'userProfile.userProfile_failed_to_update_settings';
+  static const userProfile_errors_anErrorOccurred = 'userProfile.errors_anErrorOccurred';
   static const userProfile_start_time = 'userProfile.start_time';
   static const userProfile_select_recurrence = 'userProfile.select_recurrence';
   static const userProfile_workweek_only = 'userProfile.workweek_only';
@@ -107,6 +114,7 @@ abstract class  LocaleKeys {
   static const userProfile_select_date_range = 'userProfile.select_date_range';
   static const userProfile_select_image = 'userProfile.select_image';
   static const userProfile_select_time = 'userProfile.select_time';
+  static const userProfile_delete_account = 'userProfile.delete_account';
   static const userProfile_select_time_range_end = 'userProfile.select_time_range_end';
   static const userProfile_select_time_range_start = 'userProfile.select_time_range_start';
   static const userProfile = 'userProfile';

@@ -4,22 +4,39 @@ import 'dart:io';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:okul_com_tm/feature/login/model/user_model.dart';
 import 'package:okul_com_tm/product/init/language/locale_keys.g.dart';
 import 'package:okul_com_tm/product/widgets/index.dart';
 
-/// --------------------------
-/// USER UPDATE STATE & NOTIFIER
-/// --------------------------
+const String _securePrefsPushNotificationKey = 'pushNotificationsEnabledSecure';
 
 final userUpdateProvider = StateNotifierProvider<UserUpdateNotifier, UserUpdateState>((ref) {
-  return UserUpdateNotifier();
+  return UserUpdateNotifier().._loadNotificationPreference();
 });
 
 class UserUpdateNotifier extends StateNotifier<UserUpdateState> {
+  final _storage = const FlutterSecureStorage();
+
   UserUpdateNotifier() : super(UserUpdateState());
+
+  Future<void> _loadNotificationPreference() async {
+    try {
+      final String? storedValue = await _storage.read(key: _securePrefsPushNotificationKey);
+
+      final bool isEnabled = storedValue == null ? true : (storedValue == 'true');
+
+      print("Loaded secure notification preference: $isEnabled");
+
+      if (mounted && state.pushNotificationsEnabled != isEnabled) {
+        state = state.copyWith(pushNotificationsEnabled: isEnabled);
+      }
+    } catch (e) {
+      print("Error loading secure notification preference: $e");
+    }
+  }
 
   Future<UserModel?> getUserProfile() async {
     final token = await AuthServiceStorage.getToken();
@@ -31,19 +48,29 @@ class UserUpdateNotifier extends StateNotifier<UserUpdateState> {
     print(response.body);
     if (response.statusCode == 200) {
       final utf8Body = utf8.decode(response.bodyBytes);
-      final UserModel data = UserModel.fromJson(json.decode(utf8Body)[0] as Map<String, dynamic>);
-      setDetails(
-        email: data.email ?? '',
-        userName: data.username ?? '',
-        image: File(data.imagePath ?? ''),
-      );
-      state = state.copyWith(
-        email: data.email ?? '',
-        username: data.username ?? '',
-        imagePath: data.imagePath ?? '',
-      );
-      return data;
+      final jsonData = json.decode(utf8Body);
+      if (jsonData is List && jsonData.isNotEmpty) {
+        final UserModel data = UserModel.fromJson(jsonData[0] as Map<String, dynamic>);
+
+        setDetails(
+          email: data.email ?? '',
+          userName: data.username ?? '',
+          image: File(data.imagePath ?? ''),
+        );
+
+        state = state.copyWith(
+          email: data.email ?? state.email,
+          username: data.username ?? state.username,
+          imagePath: data.imagePath ?? state.imagePath,
+        );
+
+        return data;
+      } else {
+        print("Error: Unexpected JSON format or empty list received.");
+        return null;
+      }
     } else {
+      print("Error fetching profile: ${response.statusCode}");
       return null;
     }
   }
@@ -78,6 +105,30 @@ class UserUpdateNotifier extends StateNotifier<UserUpdateState> {
         LocaleKeys.login_incorrect_password,
         Colors.red,
       );
+      Navigator.pop(context);
+    }
+  }
+
+  Future<void> setLocalPushNotificationStatus(bool enabled, BuildContext context) async {
+    state = state.copyWith(pushNotificationsEnabled: enabled);
+    try {
+      await _storage.write(key: _securePrefsPushNotificationKey, value: enabled.toString());
+      print("Saved secure notification preference: $enabled");
+      final messageKey = enabled ? LocaleKeys.userProfile_userProfile_notification_enabled : LocaleKeys.userProfile_userProfile_notification_disabled;
+      CustomSnackbar.showCustomSnackbar(
+        context,
+        LocaleKeys.lessons_success,
+        messageKey,
+        enabled ? ColorConstants.greenColor : ColorConstants.redColor,
+      );
+    } catch (e) {
+      print("Error saving secure notification preference: $e");
+      CustomSnackbar.showCustomSnackbar(
+        context,
+        LocaleKeys.errors_title,
+        LocaleKeys.userProfile_userProfile_notification_disabled,
+        ColorConstants.redColor,
+      );
     }
   }
 
@@ -107,7 +158,6 @@ class UserUpdateNotifier extends StateNotifier<UserUpdateState> {
       request.fields['username'] = userName;
       request.headers['Authorization'] = 'Bearer $token';
 
-      // Asset avatar dosyasını Multipart olarak gönder
       if (state.avatarIndex != null) {
         final avatarPath = 'assets/icons/user${state.avatarIndex! + 1}.png';
         final byteData = await rootBundle.load(avatarPath);
@@ -158,6 +208,7 @@ class UserUpdateState {
   final File? image;
   final String imagePath;
   final int? avatarIndex;
+  final bool pushNotificationsEnabled;
 
   UserUpdateState({
     this.email = '',
@@ -165,6 +216,7 @@ class UserUpdateState {
     this.image,
     this.imagePath = '',
     this.avatarIndex,
+    this.pushNotificationsEnabled = true,
   });
 
   UserUpdateState copyWith({
@@ -173,6 +225,7 @@ class UserUpdateState {
     File? image,
     String? imagePath,
     int? avatarIndex,
+    bool? pushNotificationsEnabled,
   }) {
     return UserUpdateState(
       email: email ?? this.email,
@@ -180,13 +233,10 @@ class UserUpdateState {
       image: image ?? this.image,
       imagePath: imagePath ?? this.imagePath,
       avatarIndex: avatarIndex ?? this.avatarIndex,
+      pushNotificationsEnabled: pushNotificationsEnabled ?? this.pushNotificationsEnabled,
     );
   }
 }
-
-/// --------------------------
-/// AVATAR STATE (RIVERPOD)
-/// --------------------------
 
 final avatarProvider = StateNotifierProvider<AvatarNotifier, int>((ref) => AvatarNotifier());
 
@@ -195,10 +245,6 @@ class AvatarNotifier extends StateNotifier<int> {
 
   void setAvatar(int index) => state = index;
 }
-
-/// --------------------------
-/// AVATAR DIALOG
-/// --------------------------
 
 void showAvatarDialog(BuildContext context, WidgetRef ref) {
   final List<String> avatars = List.generate(12, (index) => 'assets/icons/user${index + 1}.png');
@@ -248,7 +294,7 @@ void showAvatarDialog(BuildContext context, WidgetRef ref) {
                     text: "Set avatar",
                     onPressed: () async {
                       final userUpdate = ref.read(userUpdateProvider.notifier);
-                      userUpdate.setAvatarIndex(ref.read(avatarProvider)); // seçilen index'i aktar
+                      userUpdate.setAvatarIndex(ref.read(avatarProvider));
 
                       await userUpdate.updateProfile(
                         context: context,

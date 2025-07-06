@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:auto_route/auto_route.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:okul_com_tm/product/dialogs/dialogs.dart';
@@ -18,10 +19,24 @@ class ConnectionCheckView extends ConsumerStatefulWidget {
 }
 
 class _ConnectionCheckViewState extends ConsumerState<ConnectionCheckView> {
+  Future<void> printFcmToken() async {
+    try {
+      String? token = await FirebaseMessaging.instance.getToken();
+      if (token != null) {
+        print("📱 FCM Token: $token");
+      } else {
+        print("⚠️ FCM Token alınamadı. Null döndü.");
+      }
+    } catch (e) {
+      print("❌ FCM token alınırken hata oluştu: $e");
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     _performCheck();
+    printFcmToken();
   }
 
   final storage = FlutterSecureStorage();

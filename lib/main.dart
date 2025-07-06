@@ -9,39 +9,54 @@ import 'package:okul_com_tm/product/init/product_localization.dart';
 
 Future<void> main() async {
   await AppStartInit.init();
-  runApp(ProviderScope(child: ProductLocalization(child: _MyApp())));
+  final appRouter = AppRouter();
+  runApp(
+    ProviderScope(
+      child: ProductLocalization(
+        child: MyApp(appRouter: appRouter),
+      ),
+    ),
+  );
 }
 
-class _MyApp extends StatefulWidget {
-  const _MyApp();
+class MyApp extends StatefulWidget {
+  final AppRouter appRouter;
+
+  const MyApp({super.key, required this.appRouter});
 
   @override
-  State<_MyApp> createState() => _MyAppState();
+  State<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<_MyApp> {
-  initState() {
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
     super.initState();
-    AppStartInit.getNotification();
+    doFunction();
+  }
+
+  doFunction() async {
+    await AppStartInit.setupForegroundNotificationListener();
   }
 
   @override
   Widget build(BuildContext context) {
-    final appRouter = AppRouter();
     return MaterialApp.router(
       title: StringConstants.appName,
-      builder: (context, child) => MediaQuery(
-        data: MediaQuery.of(context).copyWith(
-          textScaler: TextScaler.linear(1.0),
-        ),
-        child: child!,
-      ),
+      builder: (context, child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(
+            textScaler: TextScaler.linear(1.0),
+          ),
+          child: child!,
+        );
+      },
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
       locale: context.locale,
       theme: AppThemes.lightTheme,
       debugShowCheckedModeBanner: false,
-      routerConfig: appRouter.config(),
+      routerConfig: widget.appRouter.config(),
     );
   }
 }

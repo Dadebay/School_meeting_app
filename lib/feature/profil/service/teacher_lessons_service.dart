@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -24,6 +23,8 @@ class TeacherLessonsService {
         'noticeForStudents': 'Lesson confirmed: ${lesson.lessonName} - ${lesson.date} - ${lesson.content}',
       },
     );
+    print(response.body);
+    print(response.statusCode);
     if (response.statusCode == 200) {
       CustomSnackbar.showCustomSnackbar(context, LocaleKeys.lessons_success, LocaleKeys.lessons_confirmed_lessons, ColorConstants.greenColor);
       return true;
@@ -33,9 +34,8 @@ class TeacherLessonsService {
     }
   }
 
-  Future<Map<String, String>> cancelLesson(int lessonId, String reason, BuildContext context) async {
+  Future<bool> cancelLesson(int lessonId, String reason) async {
     final token = await AuthServiceStorage.getToken();
-    Navigator.pop(context);
     final response = await http.post(
       Uri.parse(ApiConstants.cancelLessonTeacher + lessonId.toString() + "/"),
       headers: {
@@ -44,13 +44,10 @@ class TeacherLessonsService {
       },
       body: {'why_canceled': reason},
     );
-    log(ApiConstants.cancelLessonTeacher + lessonId.toString() + "/");
     if (response.statusCode == 200 || response.statusCode == 423) {
-      return {};
+      return true;
     } else {
-      CustomSnackbar.showCustomSnackbar(context, 'Error', 'Confirmation failed with status: ${response.statusCode}', ColorConstants.redColor);
-
-      return {};
+      return false;
     }
   }
 

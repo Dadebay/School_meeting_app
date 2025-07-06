@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:okul_com_tm/core/routes/route.gr.dart';
+import 'package:okul_com_tm/feature/lesson_profil/service/lessons_service.dart';
 import 'package:okul_com_tm/feature/profil/components/custom_time_picker.dart';
 import 'package:okul_com_tm/feature/profil/service/free_time_service.dart';
 import 'package:okul_com_tm/feature/profil/service/user_update_service.dart';
@@ -245,7 +246,12 @@ class Dialogs {
                           Navigator.pop(context);
                           showRecurrenceDialog(context, ref, startDateTime, endDateTime);
                         },
-                        style: ElevatedButton.styleFrom(backgroundColor: ColorConstants.primaryBlueColor, elevation: 0.0, padding: context.padding.normal, side: BorderSide(color: ColorConstants.primaryBlueColor), shape: RoundedRectangleBorder(borderRadius: context.border.lowBorderRadius)),
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: ColorConstants.primaryBlueColor,
+                            elevation: 0.0,
+                            padding: context.padding.normal,
+                            side: BorderSide(color: ColorConstants.primaryBlueColor),
+                            shape: RoundedRectangleBorder(borderRadius: context.border.lowBorderRadius)),
                         child: SizedBox(
                           width: MediaQuery.of(context).size.width / 2,
                           child: Text(
@@ -259,7 +265,12 @@ class Dialogs {
                       onPressed: () {
                         Navigator.pop(context);
                       },
-                      style: ElevatedButton.styleFrom(backgroundColor: ColorConstants.greyColorwithOpacity, elevation: 0.0, padding: context.padding.normal, side: BorderSide(color: ColorConstants.greyColor), shape: RoundedRectangleBorder(borderRadius: context.border.lowBorderRadius)),
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: ColorConstants.greyColorwithOpacity,
+                          elevation: 0.0,
+                          padding: context.padding.normal,
+                          side: BorderSide(color: ColorConstants.greyColor),
+                          shape: RoundedRectangleBorder(borderRadius: context.border.lowBorderRadius)),
                       child: SizedBox(
                         width: MediaQuery.of(context).size.width / 2,
                         child: Text(
@@ -495,49 +506,61 @@ class Dialogs {
 
   static logOut({required BuildContext context}) {
     return showModalBottomSheet(
-        context: context,
-        builder: (BuildContext bc) {
-          return Container(
-            decoration: const BoxDecoration(color: Colors.white),
-            child: Wrap(
-              alignment: WrapAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const SizedBox.shrink(),
-                      Text(
-                        LocaleKeys.login_log_out,
-                        style: context.general.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
-                      ).tr(),
-                      GestureDetector(
-                        onTap: () => Navigator.of(context).pop(),
-                        child: Padding(
-                          padding: context.padding.onlyRightLow,
-                          child: const Icon(CupertinoIcons.xmark_circle, color: ColorConstants.blackColor),
+      context: context,
+      builder: (BuildContext bc) {
+        return Consumer(
+          builder: (context, ref, _) {
+            return Container(
+              decoration: const BoxDecoration(color: Colors.white),
+              child: Wrap(
+                alignment: WrapAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const SizedBox.shrink(),
+                        Text(
+                          LocaleKeys.login_log_out,
+                          style: context.general.textTheme.titleMedium!.copyWith(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ).tr(),
+                        GestureDetector(
+                          onTap: () => Navigator.of(context).pop(),
+                          child: Padding(
+                            padding: context.padding.onlyRightLow,
+                            child: const Icon(CupertinoIcons.xmark_circle, color: ColorConstants.blackColor),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: context.padding.normal,
-                  child: Text(
-                    LocaleKeys.userProfile_log_out_title,
-                    textAlign: TextAlign.center,
-                    style: context.general.textTheme.bodyLarge!.copyWith(color: ColorConstants.blackColor, fontSize: 19),
-                  ).tr(),
-                ),
-                Padding(
-                  padding: context.padding.normal,
-                  child: CustomButton(
+                  Padding(
+                    padding: context.padding.normal,
+                    child: Text(
+                      LocaleKeys.userProfile_log_out_title,
+                      textAlign: TextAlign.center,
+                      style: context.general.textTheme.bodyLarge!.copyWith(
+                        color: ColorConstants.blackColor,
+                        fontSize: 19,
+                      ),
+                    ).tr(),
+                  ),
+                  Padding(
+                    padding: context.padding.normal,
+                    child: CustomButton(
                       text: LocaleKeys.general_yes,
                       mini: true,
                       onPressed: () async {
                         await AuthServiceStorage.clearToken();
                         await AuthServiceStorage.clearStatus();
+
+                        LessonNotifier lessonNotifier = ref.read(lessonProvider.notifier);
+                        lessonNotifier.clearLessons([]);
+
                         context.router.replaceAll([const ConnectionCheckView()]);
 
                         await UserUpdateNotifier().updateProfile(
@@ -545,17 +568,32 @@ class Dialogs {
                           userName: "Username",
                           email: "username@gmail.com",
                         );
-                        CustomSnackbar.showCustomSnackbar(context, LocaleKeys.lessons_success, LocaleKeys.userProfile_log_out_subtitle, ColorConstants.greenColor);
+
+                        CustomSnackbar.showCustomSnackbar(
+                          context,
+                          LocaleKeys.lessons_success,
+                          LocaleKeys.userProfile_log_out_subtitle,
+                          ColorConstants.greenColor,
+                        );
                       },
-                      showBorderStyle: true),
-                ),
-                Padding(
-                  padding: context.padding.normal.copyWith(top: 0),
-                  child: CustomButton(text: LocaleKeys.general_no, mini: true, onPressed: () => Navigator.of(context).pop(), showBorderStyle: false),
-                ),
-              ],
-            ),
-          );
-        });
+                      showBorderStyle: true,
+                    ),
+                  ),
+                  Padding(
+                    padding: context.padding.normal.copyWith(top: 0),
+                    child: CustomButton(
+                      text: LocaleKeys.general_no,
+                      mini: true,
+                      onPressed: () => Navigator.of(context).pop(),
+                      showBorderStyle: false,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 }

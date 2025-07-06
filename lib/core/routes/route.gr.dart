@@ -48,7 +48,7 @@ class BottomNavBar extends _i14.PageRouteInfo<void> {
   static _i14.PageInfo page = _i14.PageInfo(
     name,
     builder: (data) {
-      return _i1.BottomNavBar();
+      return const _i1.BottomNavBar();
     },
   );
 }

@@ -25,7 +25,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
   bool isLoggedIn = false;
   int selectedIndex = 0;
 
-@override
+  @override
   void initState() {
     super.initState();
     _getUserStatus();
@@ -35,6 +35,10 @@ class _BottomNavBarState extends State<BottomNavBar> {
     final token = await const FlutterSecureStorage().read(key: 'auth_token');
     setState(() {
       isLoggedIn = token != null && token.isNotEmpty;
+    });
+    await AuthServiceStorage.getStatus().then((value) {
+      isTeacher = value == 'teacher';
+      setState(() {});
     });
     print(isLoggedIn);
     print(token);

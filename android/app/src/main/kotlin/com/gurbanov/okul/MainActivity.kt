@@ -1,4 +1,4 @@
-package com.gurbanov.makc
+package com.gurbanov.okul
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -125,8 +125,11 @@ class LessonCard extends StatelessWidget {
     bool isLessonCanceled = lessonModel.whyCanceled != 'null' && lessonModel.whyCanceled.isNotEmpty;
     bool isTeacherConfirmed = lessonModel.teacherConfirmation;
     bool isNotConfirmed = !lessonModel.teacherConfirmation;
-    Color buttonColor = _getButtonColor(isLessonCanceled, isTeacherConfirmed, isNotConfirmed);
-    String buttonText = _getButtonText(isLessonCanceled, isNotConfirmed);
+    bool lessonPassed = CustomWidgets.compareTime("${lessonModel.date} ${lessonModel.endTime}");
+
+    Color buttonColor = _getButtonColor(isLessonCanceled, isTeacherConfirmed, isNotConfirmed, lessonPassed);
+    String buttonText = _getButtonText(isLessonCanceled, isNotConfirmed, lessonPassed);
+
     return ElevatedButton(
       onPressed: () => context.navigateTo(LessonsProfil(lessonID: lessonModel.id, isTeacher: isTeacher)),
       style: ButtonStyle(
@@ -147,44 +150,46 @@ class LessonCard extends StatelessWidget {
           buttonText.tr(),
           style: context.general.textTheme.bodyLarge?.copyWith(
             fontWeight: FontWeight.w700,
-            color: _getTextColor(isLessonCanceled, isTeacherConfirmed, isNotConfirmed),
+            color: _getTextColor(isLessonCanceled, isTeacherConfirmed, isNotConfirmed, lessonPassed),
           ),
         ),
       ),
     );
   }
 
-  Color _getButtonColor(bool isLessonCanceled, bool isTeacherConfirmed, bool isNotConfirmed) {
+  String _getButtonText(bool isLessonCanceled, bool isNotConfirmed, bool lessonPassed) {
+    if (isLessonCanceled) {
+      return LocaleKeys.lessons_lesson_canceled;
+    } else if (lessonPassed) {
+      return LocaleKeys.lessons_past;
+    } else if (isNotConfirmed) {
+      return isTeacher ? LocaleKeys.lessons_confirm : LocaleKeys.lessons_view_lesson;
+    } else {
+      return LocaleKeys.lessons_view_lesson;
+    }
+  }
+
+  Color _getTextColor(bool isLessonCanceled, bool isTeacherConfirmed, bool isNotConfirmed, bool lessonPassed) {
+    if (isLessonCanceled) {
+      return ColorConstants.whiteColor;
+    } else if (lessonPassed) {
+      return ColorConstants.primaryBlueColor;
+    } else if (isNotConfirmed) {
+      return isTeacher ? ColorConstants.whiteColor : ColorConstants.primaryBlueColor;
+    } else {
+      return ColorConstants.primaryBlueColor;
+    }
+  }
+
+  Color _getButtonColor(bool isLessonCanceled, bool isTeacherConfirmed, bool isNotConfirmed, bool lessonPassed) {
     if (isLessonCanceled) {
       return ColorConstants.redColor;
+    } else if (lessonPassed) {
+      return Colors.grey.withOpacity(.4);
     } else if (isNotConfirmed) {
       return isTeacher ? ColorConstants.primaryBlueColor : Colors.transparent;
     } else {
       return Colors.transparent;
-    }
-  }
-
-  String _getButtonText(bool isLessonCanceled, bool isNotConfirmed) {
-    if (isLessonCanceled) {
-      return LocaleKeys.lessons_lesson_canceled;
-    } else if (isNotConfirmed) {
-      return isTeacher
-          ? LocaleKeys.lessons_confirm
-          : CustomWidgets.compareTime(lessonModel.date.toString() + " " + lessonModel.endTime.toString())
-              ? LocaleKeys.lessons_past
-              : LocaleKeys.lessons_view_lesson;
-    } else {
-      return CustomWidgets.compareTime(lessonModel.date.toString() + " " + lessonModel.endTime.toString()) ? LocaleKeys.lessons_past : LocaleKeys.lessons_view_lesson;
-    }
-  }
-
-  Color _getTextColor(bool isLessonCanceled, bool isTeacherConfirmed, bool isNotConfirmed) {
-    if (isLessonCanceled) {
-      return ColorConstants.whiteColor;
-    } else if (isNotConfirmed) {
-      return isTeacher ? ColorConstants.whiteColor : ColorConstants.primaryBlueColor;
-    } else {
-      return CustomWidgets.compareTime(lessonModel.date.toString() + " " + lessonModel.endTime.toString()) ? ColorConstants.greyColor : ColorConstants.primaryBlueColor;
     }
   }
 }

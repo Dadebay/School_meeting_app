@@ -2,6 +2,7 @@
 
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:okul_com_tm/feature/profil/service/user_update_service.dart';
@@ -19,13 +20,39 @@ class EditUserProfileView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final userUpdate = ref.watch(userUpdateProvider.notifier);
     final state = ref.watch(userUpdateProvider);
+    final userModel = ref.watch(userUpdateProvider);
 
-    emailController.text = state.email;
-    usernameController.text = state.username;
-
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (emailController.text != state.email) emailController.text = state.email;
+      if (usernameController.text != state.username) usernameController.text = state.username;
+    });
     return Scaffold(
       appBar: CustomAppBar(title: LocaleKeys.userProfile_edit_profile, showBackButton: true),
-      body: ListView(
+      body: Column(
+        children: [
+          _page(context, ref, state, userUpdate),
+          Padding(
+            padding: context.padding.normal,
+            child: CustomButton(
+              text: LocaleKeys.userProfile_delete_account,
+              mini: true,
+              showBorderStyle: true,
+              onPressed: () async {
+                await AuthServiceStorage.clearToken();
+                await AuthServiceStorage.clearStatus();
+                UserUpdateNotifier().setUserName("");
+                context.router.replaceNamed('/connectionCheckPage');
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Expanded _page(BuildContext context, WidgetRef ref, UserUpdateState state, UserUpdateNotifier userUpdate) {
+    return Expanded(
+      child: ListView(
         padding: context.padding.normal,
         children: [
           GestureDetector(
@@ -83,6 +110,30 @@ class EditUserProfileView extends ConsumerWidget {
             focusNode: FocusNode(),
             requestfocusNode: FocusNode(),
           ),
+          Container(
+            padding: context.padding.low.copyWith(left: 20),
+            margin: context.padding.onlyTopNormal,
+            decoration: BoxDecoration(
+              border: Border.all(color: ColorConstants.primaryBlueColor.withOpacity(.2)),
+              borderRadius: context.border.normalBorderRadius,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  LocaleKeys.userProfile_userProfile_push_notifications,
+                  style: context.general.textTheme.titleMedium!.copyWith(color: ColorConstants.greyColor),
+                ).tr(),
+                CupertinoSwitch(
+                  value: state.pushNotificationsEnabled, // Bind to the local state field
+                  activeColor: ColorConstants.primaryBlueColor, // Or your theme's active color
+                  onChanged: (bool value) {
+                    userUpdate.setLocalPushNotificationStatus(value, context);
+                  },
+                ),
+              ],
+            ),
+          ),
           Padding(
             padding: context.padding.verticalNormal,
             child: CustomButton(
@@ -119,46 +170,54 @@ class ChangePasswordDialog extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return AlertDialog(
-      title: Text(LocaleKeys.login_change_password).tr(),
+    return Dialog(
+      insetPadding: EdgeInsets.all(15),
       alignment: Alignment.center,
-      titleTextStyle: context.general.textTheme.titleLarge!.copyWith(color: Colors.black, fontWeight: FontWeight.bold),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          CustomTextField(
-            labelName: LocaleKeys.login_current_password,
-            enabled: true,
-            controller: currentPasswordController,
-            focusNode: FocusNode(),
-            requestfocusNode: FocusNode(),
-          ),
-          CustomTextField(
-            labelName: LocaleKeys.login_new_password,
-            enabled: true,
-            isPassword: true,
-            controller: newPasswordController,
-            focusNode: FocusNode(),
-            requestfocusNode: FocusNode(),
-          ),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              LocaleKeys.login_change_password,
+              style: context.general.textTheme.titleLarge!.copyWith(color: Colors.black, fontWeight: FontWeight.bold),
+            ).tr(),
+            SizedBox(height: 20),
+            CustomTextField(
+              labelName: LocaleKeys.login_current_password,
+              enabled: true,
+              controller: currentPasswordController,
+              focusNode: FocusNode(),
+              requestfocusNode: FocusNode(),
+            ),
+            CustomTextField(
+              labelName: LocaleKeys.login_new_password,
+              enabled: true,
+              isPassword: true,
+              controller: newPasswordController,
+              focusNode: FocusNode(),
+              requestfocusNode: FocusNode(),
+            ),
+            SizedBox(height: 20),
+            Padding(
+              padding: context.padding.verticalLow,
+              child: CustomButton(
+                  text: LocaleKeys.userProfile_accept,
+                  mini: true,
+                  onPressed: () {
+                    UserUpdateNotifier.changePassword(context: context, currentPassword: currentPasswordController.text, newPassword: newPasswordController.text);
+                  }),
+            ),
+            CustomButton(
+                text: LocaleKeys.general_cancel,
+                showBorderStyle: true,
+                mini: true,
+                onPressed: () {
+                  Navigator.of(context).pop();
+                })
+          ],
+        ),
       ),
-      actions: [
-        CustomButton(
-            text: LocaleKeys.general_agree,
-            mini: true,
-            onPressed: () {
-              UserUpdateNotifier.changePassword(context: context, currentPassword: currentPasswordController.text, newPassword: newPasswordController.text);
-            }),
-        SizedBox(height: context.padding.low.vertical),
-        CustomButton(
-            text: LocaleKeys.general_cancel,
-            showBorderStyle: true,
-            mini: true,
-            onPressed: () {
-              Navigator.of(context).pop();
-            })
-      ],
     );
   }
 }

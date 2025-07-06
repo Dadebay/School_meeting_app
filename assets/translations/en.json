@@ -77,6 +77,13 @@
   },
   "userProfile": {
     "about_us": "About Us",
+    "accept": "Accept",
+    "userProfile_push_notifications": "Push Notifications",
+    "userProfile_notification_settings_updated": "Notification settings updated.",
+    "userProfile_notification_enabled": "Notifications enabled.",
+    "userProfile_notification_disabled": "Notifications disabled.",
+    "userProfile_failed_to_update_settings": "Failed to update notification settings.",
+    "errors_anErrorOccurred": "An error occurred. Please try again.",  
     "start_time": "Start Time",
     "select_recurrence": "Select Recurrence",
     "workweek_only": "Weekdays Only",
@@ -109,6 +116,7 @@
     "select_date_range": "Please select your available date range.",
     "select_image": "Select Image",
     "select_time": "Select Time",
+    "delete_account": "Delete account",
     "select_time_range_end": "Select the end time.",
     "select_time_range_start": "Select the start time."
   }
